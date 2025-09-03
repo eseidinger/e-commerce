@@ -1,0 +1,13 @@
+# Payara Micro Dockerfile
+FROM payara/micro:6.2025.8-jdk21
+
+# Copy application artifacts (WAR or EAR) to deployments folder
+COPY ./deploy /opt/payara/deployments
+
+# Optionally set JVM options for debugging, memory, etc.
+ENV JVM_ARGS="-Djdk.util.zip.disableZip64ExtraFieldValidation=true"
+
+# Expose HTTP and debug ports
+EXPOSE 8080 9009
+
+# Entrypoint is inherited from payara/micro
