@@ -17,17 +17,48 @@ services:
       timeout: 5s
       retries: 5
 
+  nginx:
+    image: nginx:1.29.1
+    container_name: ecommerce-nginx
+    ports:
+      - "8088:80"
+    depends_on:
+      - payara
+      - payara2
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
   payara:
     build: .
     container_name: ecommerce-payara
+    hostname: payara
     environment:
       DB_HOST: db
       JDBC_USER: postgres
       JDBC_PASSWORD: password
       JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:9009"
+    command: ["--deploydir", "/opt/payara/deployments", "--clustermode", "dns:payara:6900,payara2:6900"]
     ports:
       - "8080:8080"
       - "9009:9009"
+    volumes:
+      - ./deploy:/opt/payara/deployments
+    depends_on:
+      - db
+
+  payara2:
+    build: .
+    container_name: ecommerce-payara-2
+    hostname: payara2
+    environment:
+      DB_HOST: db
+      JDBC_USER: postgres
+      JDBC_PASSWORD: password
+      JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:9009"
+    command: ["--deploydir", "/opt/payara/deployments", "--clustermode", "dns:payara:6900,payara2:6900"]
+    ports:
+      - "8081:8080"
+      - "9010:9009"
     volumes:
       - ./deploy:/opt/payara/deployments
     depends_on:
