@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+    <title>Payara Instance Info</title>
+</h:head>
+<h:body>
+    <h:panelGrid columns="2" style="margin-top:2em;">
+        <h:outputLabel value="Hostname:" />
+        <h:outputText value="#{instanceInfoBean.hostname}" />
+        <h:outputLabel value="IP Address:" />
+        <h:outputText value="#{instanceInfoBean.ipAddress}" />
+        <h:outputLabel value="Instance ID:" />
+        <h:outputText value="#{instanceInfoBean.instanceId}" />
+        <h:outputLabel value="Session ID:" />
+        <h:outputText value="#{instanceInfoBean.sessionId}" />
+        <h:outputLabel value="Session Created:" />
+        <h:outputText value="#{instanceInfoBean.sessionCreationTime}" />
+        <h:outputLabel value="Session Request Count:" />
+        <h:outputText value="#{instanceInfoBean.sessionRequestCount}" />
+    </h:panelGrid>
+</h:body>
+
+</html>
