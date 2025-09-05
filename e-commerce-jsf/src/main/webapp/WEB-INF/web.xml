@@ -4,6 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
   version="3.1">
+  <distributable />
   <session-config>
     <session-timeout>
       30
@@ -33,7 +34,11 @@
     </property>
     <property>
       <name>fish.payara.log-jdbc-calls</name>
-      <value>true</value>
+      <value>false</value>
+    </property>
+    <property>
+      <name>fish.payara.sql-trace-listeners</name>
+      <value>com.ecommerce.jsf.listener.DummySqlTraceListener</value>
     </property>
     <!-- <property>
       <name>fish.payara.is-connection-validation-required</name>

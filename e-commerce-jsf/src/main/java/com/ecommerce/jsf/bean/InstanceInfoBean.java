@@ -27,7 +27,8 @@ public class InstanceInfoBean {
         if (context != null && context.getExternalContext().getSession(true) != null) {
             HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
             Integer count = (Integer) session.getAttribute("sessionRequestCount");
-            if (count == null) count = 0;
+            if (count == null)
+                count = 0;
             session.setAttribute("sessionRequestCount", count + 1);
         }
     }
@@ -48,12 +49,6 @@ public class InstanceInfoBean {
         } catch (Exception e) {
             return "Unknown";
         }
-    }
-
-    public String getInstanceId() {
-        // You can set a custom env variable in docker-compose and read it here
-        String id = System.getenv("PAYARA_INSTANCE_ID");
-        return id != null ? id : "Not set";
     }
 
     public String getSessionId() {
