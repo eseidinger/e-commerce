@@ -13,12 +13,12 @@
   <data-source>
     <name>java:global/ecommerceDS</name>
     <class-name>org.postgresql.ds.PGSimpleDataSource</class-name>
-    <server-name>${ENV=DB_HOST}</server-name>
+    <server-name>${ENV=DB_HOST:localhost}</server-name>
     <port-number>5432</port-number>
     <database-name>ecommerce</database-name>
-    <user>${ENV=JDBC_USER}</user>
+    <user>${ENV=JDBC_USER:postgres}</user>
     <!-- Example of using a Payara password alias in the datasource definition -->
-    <password>${ENV=JDBC_PASSWORD}</password>
+    <password>${ENV=JDBC_PASSWORD:password}</password>
     <!-- Example of how to use a Payara specific custom connection pool setting -->
     <property>
       <name>fish.payara.steady-pool-size</name>

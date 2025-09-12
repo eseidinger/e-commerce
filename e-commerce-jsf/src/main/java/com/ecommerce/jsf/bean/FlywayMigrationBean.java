@@ -12,10 +12,9 @@ public class FlywayMigrationBean {
     @PostConstruct
     public void migrate() {
         try {
-            String dbHost = System.getenv("DB_HOST");
-            String dbUser = System.getenv("JDBC_USER");
-            String dbPassword = System.getenv("JDBC_PASSWORD");
-            if (dbPassword == null) dbPassword = "password";
+            String dbHost = System.getenv().getOrDefault("DB_HOST", "localhost");
+            String dbUser = System.getenv().getOrDefault("JDBC_USER", "postgres");
+            String dbPassword = System.getenv().getOrDefault("JDBC_PASSWORD", "password");
             Flyway flyway = Flyway.configure()
                 .dataSource(
                     "jdbc:postgresql://" + dbHost + ":5432/ecommerce",

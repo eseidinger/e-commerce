@@ -2,67 +2,194 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>de.eseidinger</groupId>
   <artifactId>e-commerce-jsf</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
+
   <name>e-commerce-jsf Maven Webapp</name>
   <url>http://maven.apache.org</url>
+
+  <properties>
+    <flyway.version>11.11.2</flyway.version>
+    <jakartaee.version>10.0.0</jakartaee.version>
+    <postgresql.version>42.7.7</postgresql.version>
+    <junit.jupiter.version>5.13.4</junit.jupiter.version>
+    <payara.micro.version>6.2025.9</payara.micro.version>
+    <hazelcast.version>5.5.0</hazelcast.version>
+    <glassfish.version>6.2.5</glassfish.version>
+    <quartz.version>2.5.0</quartz.version>
+    <slf4j.version>2.0.17</slf4j.version>
+    <!-- Plugin versions -->
+    <payara.micro.maven.plugin.version>2.5</payara.micro.maven.plugin.version>
+    <maven.clean.plugin.version>3.3.2</maven.clean.plugin.version>
+    <flyway.maven.plugin.version>10.13.0</flyway.maven.plugin.version>
+    <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
-      <version>11.11.2</version>
+      <version>${flyway.version}</version>
     </dependency>
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-database-postgresql</artifactId>
-      <version>11.11.2</version>
+      <version>${flyway.version}</version>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.platform</groupId>
-      <artifactId>jakarta.jakartaee-api</artifactId>
-      <version>10.0.0</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.7.7</version>
+      <version>${postgresql.version}</version>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.quartz-scheduler</groupId>
+      <artifactId>quartz</artifactId>
+      <version>${quartz.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.13.4</version>
+      <version>${junit.jupiter.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.hazelcast</groupId>
       <artifactId>hazelcast</artifactId>
-      <version>5.5.0</version>
+      <version>${hazelcast.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.platform</groupId>
+      <artifactId>jakarta.jakartaee-api</artifactId>
+      <version>${jakartaee.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.glassfish.main.common</groupId>
       <artifactId>glassfish-api</artifactId>
-      <version>6.2.5</version>
+      <version>${glassfish.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.quartz-scheduler</groupId>
-      <artifactId>quartz</artifactId>
-      <version>2.5.0</version>
-    </dependency>
   </dependencies>
+
   <build>
     <finalName>e-commerce-jsf</finalName>
+
     <plugins>
+
+      <plugin>
+        <groupId>fish.payara.maven.plugins</groupId>
+        <artifactId>payara-micro-maven-plugin</artifactId>
+        <version>${payara.micro.maven.plugin.version}</version>
+        <executions>
+
+          <execution>
+            <id>bundle</id>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+            <configuration>
+              <payaraMicroVersion>${payara.micro.version}</payaraMicroVersion>
+              <deployArtifacts>
+                <artifactItem>
+                  <groupId>de.eseidinger</groupId>
+                  <artifactId>e-commerce-jsf</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <type>war</type>
+                </artifactItem>
+              </deployArtifacts>
+              <customJars>
+                <artifactItem>
+                  <groupId>org.flywaydb</groupId>
+                  <artifactId>flyway-core</artifactId>
+                  <version>${flyway.version}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.flywaydb</groupId>
+                  <artifactId>flyway-database-postgresql</artifactId>
+                  <version>${flyway.version}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.postgresql</groupId>
+                  <artifactId>postgresql</artifactId>
+                  <version>${postgresql.version}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.quartz-scheduler</groupId>
+                  <artifactId>quartz</artifactId>
+                  <version>${quartz.version}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.slf4j</groupId>
+                  <artifactId>slf4j-api</artifactId>
+                  <version>${slf4j.version}</version>
+                </artifactItem>
+              </customJars>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>start</id>
+            <goals>
+              <goal>start</goal>
+            </goals>
+            <configuration>
+              <useUberJar>true</useUberJar>
+              <payaraMicroVersion>${payara.micro.version}</payaraMicroVersion>
+              <artifactItem>
+                <groupId>fish.payara.extras</groupId>
+                <artifactId>payara-micro</artifactId>
+                <version>${payara.micro.version}</version>
+              </artifactItem>
+              <daemon>true</daemon>
+              <javaCommandLineOptions>
+                <option>
+                  <value>-Xdebug</value>
+                </option>
+                <option>
+                  <key>-Xrunjdwp:transport</key>
+                  <value>dt_socket,server=y,suspend=n,address=5005</value>
+                </option>
+              </javaCommandLineOptions>
+              <commandLineOptions>
+                <option>
+                  <key>--nocluster</key>
+                </option>
+              </commandLineOptions>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>stop</id>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+            <configuration>
+              <artifactItem>
+                <groupId>de.eseidinger</groupId>
+                <artifactId>e-commerce-jsf</artifactId>
+                <version>1.0-SNAPSHOT</version>
+              </artifactItem>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-clean-plugin</artifactId>
-        <version>3.3.2</version>
+        <version>${maven.clean.plugin.version}</version>
         <configuration>
           <filesets>
             <fileset>
@@ -75,20 +202,22 @@
           </filesets>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.flywaydb</groupId>
         <artifactId>flyway-maven-plugin</artifactId>
-        <version>10.13.0</version>
+        <version>${flyway.maven.plugin.version}</version>
         <configuration>
           <url>jdbc:postgresql://localhost:5432/ecommerce</url>
           <user>postgres</user>
           <password>password</password>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>${maven.antrun.plugin.version}</version>
         <executions>
           <execution>
             <phase>package</phase>
