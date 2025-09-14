@@ -59,6 +59,7 @@ services:
       JDBC_USER: postgres
       JDBC_PASSWORD: password
       HAZELCAST_MEMBERS: "payara:4900,payara2:4900"
+      PAYARA_ARGS: "--debug"
     ports:
       - "8080:8080"
       - "4848:4848"
@@ -77,6 +78,7 @@ services:
       JDBC_USER: postgres
       JDBC_PASSWORD: password
       HAZELCAST_MEMBERS: "payara:4900,payara2:4900"
+      PAYARA_ARGS: "--debug"
     ports:
       - "8081:8080"
       - "4849:4848"
