@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.0">
+    <persistence-unit name="ecommercePU" transaction-type="JTA">
+        <class>com.ecommerce.jsf.model.Customer</class>
+        <class>com.ecommerce.jsf.model.Product</class>
+        <class>com.ecommerce.jsf.model.Order</class>
+        <class>com.ecommerce.jsf.model.OrderItem</class>
+        <class>com.ecommerce.jsf.model.Review</class>
+        <jta-data-source>jdbc/ecommerceDS</jta-data-source>
+    </persistence-unit>
+</persistence>

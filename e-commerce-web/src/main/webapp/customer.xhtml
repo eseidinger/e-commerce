@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Customer CRUD</title>
+</h:head>
+<h:body>
+    <h:form>
+        <h:messages globalOnly="true" style="color:red; margin-bottom:1em;"/>
+        <h:panelGrid columns="2">
+            <h:outputLabel value="Name:" />
+            <h:inputText value="#{customerBean.customer.name}" />
+            <h:outputLabel value="Email:" />
+            <h:inputText value="#{customerBean.customer.email}" />
+            <h:outputLabel value="Address:" />
+            <h:inputText value="#{customerBean.customer.address}" />
+        </h:panelGrid>
+        <h:commandButton value="Save" action="#{customerBean.save}" />
+    </h:form>
+    <h:form>
+        <h:form>
+            <h:dataTable value="#{customerBean.customers}" var="c" border="1">
+                <h:column>
+                    <f:facet name="header">Customer ID</f:facet>
+                    #{c.customerId}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    #{c.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Email</f:facet>
+                    #{c.email}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Address</f:facet>
+                    #{c.address}
+                </h:column>
+                <h:column>
+                    <h:commandButton value="Edit" action="#{customerBean.edit(c)}" />
+                    <h:commandButton value="Delete" action="#{customerBean.delete(c)}" />
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </h:form>
+</h:body>
+
+</html>
