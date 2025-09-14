@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>de.eseidinger</groupId>
-  <artifactId>e-commerce-jsf</artifactId>
+  <artifactId>e-commerce-micro</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
 
-  <name>e-commerce-jsf Maven Webapp</name>
+  <name>e-commerce-micro Maven Webapp</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -83,7 +83,7 @@
   </dependencies>
 
   <build>
-    <finalName>e-commerce-jsf</finalName>
+    <finalName>e-commerce-micro</finalName>
 
     <plugins>
 
@@ -103,7 +103,7 @@
               <deployArtifacts>
                 <artifactItem>
                   <groupId>de.eseidinger</groupId>
-                  <artifactId>e-commerce-jsf</artifactId>
+                  <artifactId>e-commerce-micro</artifactId>
                   <version>1.0-SNAPSHOT</version>
                   <type>war</type>
                 </artifactItem>
@@ -177,7 +177,7 @@
             <configuration>
               <artifactItem>
                 <groupId>de.eseidinger</groupId>
-                <artifactId>e-commerce-jsf</artifactId>
+                <artifactId>e-commerce-micro</artifactId>
                 <version>1.0-SNAPSHOT</version>
               </artifactItem>
             </configuration>

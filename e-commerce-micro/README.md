@@ -1,4 +1,4 @@
-# E-Commerce JSF
+# E-Commerce Micro
 
 ## Run Native
 
@@ -12,7 +12,7 @@ or
 
 ```bash
 mvn clean install
-java -jar target/e-commerce-jsf-microbundle.jar --nocluster
+java -jar target/e-commerce-micro-microbundle.jar --nocluster
 ```
 
 ## Run in Docker

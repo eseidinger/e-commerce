@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: payara
-        image: localhost:32000/ecommerce-jsf:latest
+        image: localhost:32000/ecommerce-micro:latest
         ports:
         - containerPort: 8080
         args: ["--deploydir", "/opt/payara/deployments", "--clustermode", "dns:payara-headless:6900"]
