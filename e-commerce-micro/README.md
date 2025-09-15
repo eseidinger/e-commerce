@@ -3,6 +3,7 @@
 ## Run Native
 
 ```bash
+docker compose --profile dev up
 mvn clean install
 mvn payara-micro:start@start
 mvn payara-micro:stop@stop
