@@ -80,6 +80,12 @@
       <version>${glassfish.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>fish.payara.api</groupId>
+      <artifactId>payara-api</artifactId>
+      <version>${payara.micro.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
