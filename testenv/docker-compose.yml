@@ -1,0 +1,47 @@
+services:
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.3.4-0
+    command: start-dev --import-realm --http-port 8084
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_HEALTH_ENABLED=true
+    ports:
+      - "8084:8084"
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+
+  keycloak-health:
+    image: nginx:1.28.0
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f -s http://keycloak:8084/health | grep -q '\"status\": \"UP\"'" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    network_mode: host
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  
+  grafana:
+    image: grafana/grafana-oss:12.1.1
+    network_mode: host
+    environment:
+      - GF_PATHS_PROVISIONING=/var/lib/grafana/provisioning
+      - GF_SERVER_HTTP_PORT=3001
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./grafana/provisioning:/var/lib/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.73.0
+    ports:
+      - "16686:16686"
+      - "4317:4317"
