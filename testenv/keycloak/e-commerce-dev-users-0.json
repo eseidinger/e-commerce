@@ -19,7 +19,7 @@
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-e-commerce-dev" ],
     "notBefore" : 0,
-    "groups" : [ ]
+    "groups" : [ "admin" ]
   }, {
     "id" : "ed01ca27-fe69-4e17-b72f-45166a032c3c",
     "createdTimestamp" : 1701254009115,
@@ -39,6 +39,6 @@
     "requiredActions" : [ "UPDATE_PASSWORD" ],
     "realmRoles" : [ "default-roles-e-commerce-dev" ],
     "notBefore" : 0,
-    "groups" : [ ]
+    "groups" : [ "guest" ]
   } ]
 }

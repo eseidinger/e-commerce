@@ -3,8 +3,6 @@ package com.ecommerce.jsf.servlet;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import com.ecommerce.jsf.bean.QuartzLoggerBean;
-
 import fish.payara.security.openid.api.OpenIdContext;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.authentication.mechanism.http.openid.OpenIdConstant;
@@ -35,6 +33,7 @@ public class CallbackServlet extends HttpServlet {
         logger.info(context.getIdentityToken().toString());
         //Here's the user claims
         logger.info(context.getClaimsJson().toString());
+        //Redirect back to the original request URL
         response.sendRedirect(request.getSession().getAttribute(OpenIdConstant.ORIGINAL_REQUEST).toString());
     }
 }

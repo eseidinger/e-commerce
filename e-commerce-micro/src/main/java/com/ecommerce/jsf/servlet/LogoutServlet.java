@@ -3,6 +3,8 @@ package com.ecommerce.jsf.servlet;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+import com.ecommerce.jsf.bean.OpenIdConfigBean;
+
 import fish.payara.security.openid.api.IdentityToken;
 import fish.payara.security.openid.api.OpenIdContext;
 import jakarta.inject.Inject;
@@ -17,15 +19,19 @@ public class LogoutServlet extends HttpServlet {
     @Inject
     OpenIdContext context;
 
+    @Inject
+    OpenIdConfigBean openIdConfigBean;
+
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         // Invalidate local session
         req.getSession().invalidate();
 
         // Build OIDC logout URL
-        String endSessionEndpoint = "http://localhost:8084/realms/e-commerce-dev/protocol/openid-connect/logout";
+        String endSessionEndpoint = openIdConfigBean.getLogoutUrl();
         IdentityToken idToken = context.getIdentityToken(); // Optional but recommended
-        String postLogoutRedirectUri = "http://localhost:8080/instance-info.xhtml";
+        String postLogoutRedirectUri = openIdConfigBean.getBaseUrl() + "/instance-info.xhtml";
 
         String logoutUrl = endSessionEndpoint +
             "?id_token_hint=" + URLEncoder.encode(idToken.getToken(), "UTF-8") +
