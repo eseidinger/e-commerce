@@ -93,14 +93,11 @@ public class JwtCookieFilter implements Filter {
         return null;
     }
 
-    private HttpServletRequestWrapper handleExtractUserInfo(String jwt,
+    private HttpServletRequestWrapper handleExtractUserInfo(TokenInfo tokenInfo,
             HttpServletRequest req) throws Exception {
         // Extract user info from JWT payload
-        Map<String, Object> header = JwtUtils.decodeJwtHeader(jwt);
-        TokenInfo userInfo = JwtUtils.verifyAndExtract(jwt, openIdConfigBean.getJwksUrl(),
-                header.get("kid").toString());
-        String username = userInfo.getUsername();
-        Set<String> roles = new HashSet<>(userInfo.getRoles());
+        String username = tokenInfo.getUsername();
+        Set<String> roles = new HashSet<>(tokenInfo.getRoles());
 
         return new HttpServletRequestWrapper(req) {
             @Override
@@ -123,6 +120,17 @@ public class JwtCookieFilter implements Filter {
         String jwt = getCookie("JWT", req.getCookies());
         if (jwt == null) {
             logger.debug("No JWT cookie found");
+            // allow access to index.html and base url without authentication
+            if (req.getRequestURI().equals("/") || req.getRequestURI().equals("/index.html")) {
+                chain.doFilter(request, response);
+                return;
+            }
+            // redirect to login if not already on login or callback path
+            if (!req.getRequestURI().endsWith("/login") && !req.getRequestURI().endsWith("/callback")
+                    && !req.getRequestURI().endsWith("/logout") && !req.getRequestURI().endsWith("/logout-callback")) {
+                ((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/api/auth/login");
+                return;
+            }
             chain.doFilter(request, response);
             return;
         }
@@ -145,13 +153,21 @@ public class JwtCookieFilter implements Filter {
                 chain.doFilter(request, response);
                 return;
             }
+            try {
+                tokenInfo = JwtUtils.verifyAndExtract(jwt, openIdConfigBean.getJwksUrl(),
+                        JwtUtils.decodeJwtHeader(jwt).get("kid").toString());
+            } catch (Exception e) {
+                logger.error("Failed to verify refreshed JWT", e);
+                chain.doFilter(request, response);
+                return;
+            }
         } else if (tokenExpired && refreshToken == null) {
             logger.debug("Token expired and no refresh token available");
             chain.doFilter(request, response);
             return;
         }
         try {
-            HttpServletRequestWrapper wrapped = handleExtractUserInfo(jwt, req);
+            HttpServletRequestWrapper wrapped = handleExtractUserInfo(tokenInfo, req);
             chain.doFilter(wrapped, response);
             return;
         } catch (Exception e) {
