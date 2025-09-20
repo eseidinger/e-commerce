@@ -59,9 +59,6 @@ services:
       DB_HOST: db
       JDBC_USER: postgres
       JDBC_PASSWORD: password
-      MP_JWT_VERIFY_ISSUER: https://keycloak.eseidinger.de/realms/e-commerce-dev
-      MP_JWT_VERIFY_PUBLICKEY_LOCATION: https://keycloak.eseidinger.de/realms/e-commerce-dev/protocol/openid-connect/certs
-      # MP_JWT_VERIFY_AUDIENCES: e-commerce
       AUTH_CLIENT_ID: e-commerce
       AUTH_REALM: e-commerce-dev
       AUTH_HOST: https://keycloak.eseidinger.de
@@ -84,9 +81,6 @@ services:
       DB_HOST: db
       JDBC_USER: postgres
       JDBC_PASSWORD: password
-      MP_JWT_VERIFY_ISSUER: https://keycloak.eseidinger.de/realms/e-commerce-dev
-      MP_JWT_VERIFY_PUBLICKEY_LOCATION: https://keycloak.eseidinger.de/realms/e-commerce-dev/protocol/openid-connect/certs
-      # MP_JWT_VERIFY_AUDIENCES: e-commerce
       AUTH_CLIENT_ID: e-commerce
       AUTH_REALM: e-commerce-dev
       AUTH_HOST: https://keycloak.eseidinger.de

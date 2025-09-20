@@ -22,6 +22,7 @@
     <quartz.version>2.5.0</quartz.version>
     <slf4j.version>2.0.17</slf4j.version>
     <microprofile.jwt.version>2.1</microprofile.jwt.version>
+    <jjwt.version>0.13.0</jjwt.version>
     <!-- Plugin versions -->
     <payara.micro.maven.plugin.version>2.5</payara.micro.maven.plugin.version>
     <maven.clean.plugin.version>3.3.2</maven.clean.plugin.version>
@@ -58,6 +59,21 @@
       <version>${slf4j.version}</version>
     </dependency>
     <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-api</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-impl</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-jackson</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <version>${junit.jupiter.version}</version>
@@ -86,11 +102,6 @@
       <artifactId>payara-api</artifactId>
       <version>${payara.micro.version}</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.microprofile.jwt</groupId>
-      <artifactId>microprofile-jwt-auth-api</artifactId>
-      <version>${microprofile.jwt.version}</version>
     </dependency>
   </dependencies>
 
@@ -147,9 +158,19 @@
                   <version>${slf4j.version}</version>
                 </artifactItem>
                 <artifactItem>
-                  <groupId>org.eclipse.microprofile.jwt</groupId>
-                  <artifactId>microprofile-jwt-auth-api</artifactId>
-                  <version>${microprofile.jwt.version}</version>
+                  <groupId>io.jsonwebtoken</groupId>
+                  <artifactId>jjwt-api</artifactId>
+                  <version>${jjwt.version}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>io.jsonwebtoken</groupId>
+                  <artifactId>jjwt-impl</artifactId>
+                  <version>${jjwt.version}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>io.jsonwebtoken</groupId>
+                  <artifactId>jjwt-jackson</artifactId>
+                  <version>${jjwt.version}</version>
                 </artifactItem>
               </customJars>
             </configuration>

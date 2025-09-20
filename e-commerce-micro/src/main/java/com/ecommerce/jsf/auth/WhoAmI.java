@@ -1,14 +1,15 @@
 package com.ecommerce.jsf.auth;
 
+import java.security.Principal;
+
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.Path;
 
-import java.security.Principal;
-
-@Path("/whoami")
+@Path("/auth")
 @RequestScoped
 public class WhoAmI {
 
@@ -16,8 +17,9 @@ public class WhoAmI {
     Principal principal;
 
     @GET
+    @Path("/whoami")
     @RolesAllowed({"guest", "admin"})
-    public String me() {
+    public String me(@HeaderParam("Authorization") String authHeader) {
         if (principal == null) {
             return "No token!";
         }

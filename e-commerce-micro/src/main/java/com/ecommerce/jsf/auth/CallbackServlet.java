@@ -59,15 +59,15 @@ public class CallbackServlet extends HttpServlet {
         // Parse JSON response
         try (JsonReader reader = Json.createReader(new StringReader(tokenJson))) {
             JsonObject json = reader.readObject();
-            String accessToken = json.getString("access_token");
+            String idToken = json.getString("id_token");
 
             // Store JWT in secure, HttpOnly cookie
-            Cookie jwtCookie = new Cookie("JWT", accessToken);
+            Cookie jwtCookie = new Cookie("JWT", idToken);
             jwtCookie.setHttpOnly(true);
             jwtCookie.setPath("/");
             // Optional: set max age to token lifetime if you like
             resp.addCookie(jwtCookie);
         }
-        resp.sendRedirect(req.getContextPath() + "/index.xhtml");
+        resp.sendRedirect(req.getContextPath() + "/index.html");
     }
 }
