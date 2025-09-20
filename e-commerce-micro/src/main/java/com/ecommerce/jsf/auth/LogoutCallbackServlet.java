@@ -17,6 +17,11 @@ public class LogoutCallbackServlet extends HttpServlet {
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(0); // Expire immediately
         resp.addCookie(jwtCookie);
+        // Clear JWT_REFRESH cookie
+        Cookie jwtRefreshCookie = new Cookie("JWT_REFRESH", "");
+        jwtRefreshCookie.setPath("/");
+        jwtRefreshCookie.setMaxAge(0); // Expire immediately
+        resp.addCookie(jwtRefreshCookie);
         // Redirect to index.html
         resp.sendRedirect(req.getContextPath() + "/index.html");
     }
