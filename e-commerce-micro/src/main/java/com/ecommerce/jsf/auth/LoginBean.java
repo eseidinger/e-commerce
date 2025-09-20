@@ -21,7 +21,7 @@ public class LoginBean {
     public Response startOidcLogin() throws IOException {
         String authorizationEndpoint = openIdConfigBean.getAuthorizationUrl();
         String clientId = openIdConfigBean.getClientId();
-        String redirectUri = openIdConfigBean.getRedirectUri();
+        String redirectUri = openIdConfigBean.getLoginRedirectUri();
         String state = java.util.UUID.randomUUID().toString();
         String url = authorizationEndpoint +
                 "?response_type=code" +
@@ -35,7 +35,7 @@ public class LoginBean {
     @Path("/logout")
     @GET
     public Response logout(@CookieParam("JWT") String idTokenHint) throws IOException {
-        String redirectUri = openIdConfigBean.getBaseUrl() + "/logout-callback";
+        String redirectUri = openIdConfigBean.getLogoutRedirectUri();
         String logoutUrl = openIdConfigBean.getLogoutUrl() + "?post_logout_redirect_uri="
                 + URLEncoder.encode(redirectUri, "UTF-8") + "&id_token_hint="
                 + URLEncoder.encode(idTokenHint, "UTF-8");

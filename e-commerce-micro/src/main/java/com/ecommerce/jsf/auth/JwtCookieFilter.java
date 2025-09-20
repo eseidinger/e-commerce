@@ -14,6 +14,8 @@ import jakarta.json.JsonReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ecommerce.jsf.auth.JwtUtils.TokenInfo;
+
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -51,8 +53,7 @@ public class JwtCookieFilter implements Filter {
         return null;
     }
 
-    private boolean isTokenExpired(Map<String, Object> payload) {
-        Long exp = payload.get("exp") != null ? ((Number) payload.get("exp")).longValue() : null;
+    private boolean isTokenExpired(Long exp) {
         Long now = System.currentTimeMillis() / 1000;
         return exp != null && exp < now;
     }
@@ -92,19 +93,14 @@ public class JwtCookieFilter implements Filter {
         return null;
     }
 
-    private HttpServletRequestWrapper handleExtractUserInfo(Map<String, Object> payload, HttpServletRequest req) {
+    private HttpServletRequestWrapper handleExtractUserInfo(String jwt,
+            HttpServletRequest req) throws Exception {
         // Extract user info from JWT payload
-        String username = (String) payload.get("preferred_username");
-        Set<String> roles = new HashSet<>();
-        Object rolesClaim = payload.get("groups");
-
-        if (rolesClaim instanceof Iterable<?>) {
-            for (Object r : (Iterable<?>) rolesClaim) {
-                roles.add(r.toString());
-            }
-        } else if (rolesClaim instanceof String) {
-            roles.add((String) rolesClaim);
-        }
+        Map<String, Object> header = JwtUtils.decodeJwtHeader(jwt);
+        TokenInfo userInfo = JwtUtils.verifyAndExtract(jwt, openIdConfigBean.getJwksUrl(),
+                header.get("kid").toString());
+        String username = userInfo.getUsername();
+        Set<String> roles = new HashSet<>(userInfo.getRoles());
 
         return new HttpServletRequestWrapper(req) {
             @Override
@@ -119,7 +115,6 @@ public class JwtCookieFilter implements Filter {
         };
     }
 
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -131,9 +126,10 @@ public class JwtCookieFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        Map<String, Object> payload;
+        TokenInfo tokenInfo;
         try {
-            payload = JwtUtils.decodeJwtPayload(jwt);
+            Map<String, Object> header = JwtUtils.decodeJwtHeader(jwt);
+            tokenInfo = JwtUtils.verifyAndExtract(jwt, openIdConfigBean.getJwksUrl(), header.get("kid").toString());
         } catch (Exception e) {
             logger.error("Failed to decode JWT payload", e);
             chain.doFilter(request, response);
@@ -141,18 +137,11 @@ public class JwtCookieFilter implements Filter {
         }
 
         String refreshToken = getCookie("JWT_REFRESH", req.getCookies());
-        boolean tokenExpired = isTokenExpired(payload);
+        boolean tokenExpired = isTokenExpired(tokenInfo.getExp());
         if (tokenExpired && refreshToken != null) {
             jwt = handleTokenRefresh(refreshToken, (HttpServletResponse) response);
             if (jwt == null) {
                 logger.debug("Failed to refresh JWT");
-                chain.doFilter(request, response);
-                return;
-            }
-            try {
-                payload = JwtUtils.decodeJwtPayload(jwt);
-            } catch (Exception e) {
-                logger.error("Failed to decode JWT payload", e);
                 chain.doFilter(request, response);
                 return;
             }
@@ -161,8 +150,14 @@ public class JwtCookieFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        HttpServletRequestWrapper wrapped = handleExtractUserInfo(payload, req);
-        chain.doFilter(wrapped, response);
-        return;
+        try {
+            HttpServletRequestWrapper wrapped = handleExtractUserInfo(jwt, req);
+            chain.doFilter(wrapped, response);
+            return;
+        } catch (Exception e) {
+            logger.error("Failed to verify JWT", e);
+            chain.doFilter(request, response);
+            return;
+        }
     }
 }

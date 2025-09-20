@@ -46,7 +46,7 @@ public class CallbackServlet extends HttpServlet {
         form.param("code", code);
         form.param("client_id", openIdConfigBean.getClientId());
         // form.param("client_secret", clientSecret);
-        form.param("redirect_uri", openIdConfigBean.getRedirectUri());
+        form.param("redirect_uri", openIdConfigBean.getLoginRedirectUri());
 
         Response tokenResponse = client.target(openIdConfigBean.getTokenUrl())
                 .request(MediaType.APPLICATION_JSON_TYPE)

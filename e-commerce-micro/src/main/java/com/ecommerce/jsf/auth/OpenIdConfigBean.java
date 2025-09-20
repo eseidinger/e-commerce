@@ -27,20 +27,16 @@ public class OpenIdConfigBean {
         return getProviderUri() + "/protocol/openid-connect/logout";
     }
 
-    public String getProxyHost() {
-        return System.getenv().getOrDefault("PROXY_HOST", "");
-    }
-
-    public String getProxyPort() {
-        return System.getenv().getOrDefault("PROXY_PORT", "");
-    }
-
     public String getBaseUrl() {
         return System.getenv().getOrDefault("BASE_URL", "http://localhost:8080");
     }
 
-    public String getRedirectUri() {
+    public String getLoginRedirectUri() {
         return getBaseUrl() + "/callback";
+    }
+
+    public String getLogoutRedirectUri() {
+        return getBaseUrl() + "/logout-callback";
     }
 
     public String getAuthorizationUrl() {
@@ -49,5 +45,9 @@ public class OpenIdConfigBean {
 
     public String getTokenUrl() {
         return getProviderUri() + "/protocol/openid-connect/token";
+    }
+
+    public String getJwksUrl() {
+        return getProviderUri() + "/protocol/openid-connect/certs";
     }
 }
