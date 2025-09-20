@@ -1,0 +1,73 @@
+package com.ecommerce.jsf.auth;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.logging.Logger;
+
+import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.Form;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+@WebServlet("/callback")
+public class CallbackServlet extends HttpServlet {
+
+    private static final Logger logger = Logger.getLogger(CallbackServlet.class.getName());
+
+    @Inject
+    private OpenIdConfigBean openIdConfigBean;
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        String code = req.getParameter("code");
+        if (code == null || code.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing authorization code");
+            return;
+        }
+
+        // Exchange code for JWT access token using Jakarta Client
+        Client client = ClientBuilder.newClient();
+        Form form = new Form();
+        form.param("grant_type", "authorization_code");
+        form.param("code", code);
+        form.param("client_id", openIdConfigBean.getClientId());
+        // form.param("client_secret", clientSecret);
+        form.param("redirect_uri", openIdConfigBean.getRedirectUri());
+
+        Response tokenResponse = client.target(openIdConfigBean.getTokenUrl())
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+        String tokenJson = tokenResponse.readEntity(String.class);
+        tokenResponse.close();
+        client.close();
+
+        // Parse JSON response
+        try (JsonReader reader = Json.createReader(new StringReader(tokenJson))) {
+            JsonObject json = reader.readObject();
+            String accessToken = json.getString("access_token");
+
+            // Store JWT in secure, HttpOnly cookie
+            Cookie jwtCookie = new Cookie("JWT", accessToken);
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setPath("/");
+            // Optional: set max age to token lifetime if you like
+            resp.addCookie(jwtCookie);
+        }
+        resp.sendRedirect(req.getContextPath() + "/index.xhtml");
+    }
+}

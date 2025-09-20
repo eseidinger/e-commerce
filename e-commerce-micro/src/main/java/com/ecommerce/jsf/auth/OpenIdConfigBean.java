@@ -1,4 +1,4 @@
-package com.ecommerce.jsf.bean;
+package com.ecommerce.jsf.auth;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
@@ -41,5 +41,13 @@ public class OpenIdConfigBean {
 
     public String getRedirectUri() {
         return getBaseUrl() + "/callback";
+    }
+
+    public String getAuthorizationUrl() {
+        return getProviderUri() + "/protocol/openid-connect/auth";
+    }
+
+    public String getTokenUrl() {
+        return getProviderUri() + "/protocol/openid-connect/token";
     }
 }

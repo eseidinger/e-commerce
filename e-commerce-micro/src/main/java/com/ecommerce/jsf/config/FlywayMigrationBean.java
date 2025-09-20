@@ -1,4 +1,4 @@
-package com.ecommerce.jsf.bean;
+package com.ecommerce.jsf.config;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;

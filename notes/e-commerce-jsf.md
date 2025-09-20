@@ -19,6 +19,8 @@ What needed fixing:
 
 ## Configuration
 
+https://download.eclipse.org/microprofile/microprofile-config-3.1/microprofile-config-spec-3.1.html#default_configsources
+
 https://docs.payara.fish/community/docs/6.2025.9/Technical%20Documentation/Payara%20Server%20Documentation/General%20Administration/Configuration%20Variables%20Reference.html
 
 https://docs.payara.fish/community/docs/6.2025.9/Technical%20Documentation/MicroProfile/Config/Overview.html

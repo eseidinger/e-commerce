@@ -21,6 +21,7 @@
     <glassfish.version>6.2.5</glassfish.version>
     <quartz.version>2.5.0</quartz.version>
     <slf4j.version>2.0.17</slf4j.version>
+    <microprofile.jwt.version>2.1</microprofile.jwt.version>
     <!-- Plugin versions -->
     <payara.micro.maven.plugin.version>2.5</payara.micro.maven.plugin.version>
     <maven.clean.plugin.version>3.3.2</maven.clean.plugin.version>
@@ -86,6 +87,11 @@
       <version>${payara.micro.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.microprofile.jwt</groupId>
+      <artifactId>microprofile-jwt-auth-api</artifactId>
+      <version>${microprofile.jwt.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -139,6 +145,11 @@
                   <groupId>org.slf4j</groupId>
                   <artifactId>slf4j-api</artifactId>
                   <version>${slf4j.version}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.microprofile.jwt</groupId>
+                  <artifactId>microprofile-jwt-auth-api</artifactId>
+                  <version>${microprofile.jwt.version}</version>
                 </artifactItem>
               </customJars>
             </configuration>

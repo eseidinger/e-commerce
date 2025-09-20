@@ -1,4 +1,4 @@
-package com.ecommerce.jsf.bean;
+package com.ecommerce.jsf.config;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

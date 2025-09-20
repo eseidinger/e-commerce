@@ -3,6 +3,7 @@ package com.ecommerce.jsf.bean;
 import com.ecommerce.jsf.model.Customer;
 import jakarta.inject.Named;
 import jakarta.faces.view.ViewScoped;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.transaction.Transactional;
@@ -16,6 +17,7 @@ import com.ecommerce.jsf.util.InputValidator;
 
 @Named("customerBean")
 @ViewScoped
+@RolesAllowed("admin")
 @Transactional
 public class CustomerBean implements Serializable {
     private static final Logger logger = Logger.getLogger(CustomerBean.class.getName());
