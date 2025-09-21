@@ -76,6 +76,32 @@ public class JwtUtils {
      * @param token             The JWT string
      * @param keycloakPublicKey The Keycloak public key in Base64 (from realm
      *                          settings -> Keys -> RS256)
+     * @return Claims
+     */
+    public static Claims verify(String token, String jwksUrl, String kid) throws Exception {
+        PublicKey publicKey = getPublicKeyFromJwks(jwksUrl, kid);
+
+        try {
+            Jws<Claims> jws = Jwts.parser()
+                    .verifyWith(publicKey)
+                    .build()
+                    .parseSignedClaims(token);
+
+            Claims claims = jws.getPayload();
+
+            return claims;
+        } catch (SignatureException e) {
+            throw new SecurityException("Invalid JWT signature", e);
+        }
+    }
+
+    /**
+     * Verifies a JWT using the public key from Keycloak, and extracts username and
+     * roles.
+     *
+     * @param token             The JWT string
+     * @param keycloakPublicKey The Keycloak public key in Base64 (from realm
+     *                          settings -> Keys -> RS256)
      * @return UserInfo containing username and roles
      */
     public static TokenInfo verifyAndExtract(String token, String jwksUrl, String kid) throws Exception {
