@@ -21,7 +21,6 @@ public class JwtConfigResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"guest", "admin"})
     public Response getJwtConfig() {
         Map<String, Object> config = new HashMap<>();
         config.put("authHost", openIdConfigBean.getAuthHost());
