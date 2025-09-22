@@ -1,4 +1,4 @@
-package com.ecommerce.jsf.auth;
+package com.ecommerce.jsf.auth.jsf;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -15,7 +15,8 @@ import jakarta.json.JsonReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ecommerce.jsf.auth.JwtUtils.TokenInfo;
+import com.ecommerce.jsf.auth.OpenIdConfigBean;
+import com.ecommerce.jsf.auth.jsf.JwtUtils.TokenInfo;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -36,7 +37,7 @@ import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@WebFilter("/*")
+@WebFilter("/jsf/*")
 public class JwtCookieFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtCookieFilter.class);
@@ -101,9 +102,10 @@ public class JwtCookieFilter implements Filter {
 
     private String handleTokenRefresh(String refreshToken, HttpServletResponse response,
             ServletRequest request) throws IOException, ServletException {
+        HttpServletRequest req = (HttpServletRequest) request;
         if (isRefreshTokenExpired(refreshToken)) {
             logger.debug("Refresh token expired");
-            handleLoginRedirect(request, response);
+            response.sendRedirect(req.getContextPath() + "/login");
             return null;
         }
         TokenPair tokenPair = refreshTokenPair(refreshToken, (HttpServletResponse) response);
@@ -114,16 +116,16 @@ public class JwtCookieFilter implements Filter {
         Cookie newJwtCookie = new Cookie("JWT", tokenPair.getIdToken());
         newJwtCookie.setPath("/");
         newJwtCookie.setHttpOnly(true);
-        ((HttpServletResponse) response).addCookie(newJwtCookie);
+        response.addCookie(newJwtCookie);
         Cookie newRefreshCookie = new Cookie("JWT_REFRESH", tokenPair.getRefreshToken());
         newRefreshCookie.setPath("/");
         newRefreshCookie.setHttpOnly(true);
-        ((HttpServletResponse) response).addCookie(newRefreshCookie);
+        response.addCookie(newRefreshCookie);
         return tokenPair.getIdToken();
     }
 
     private HttpServletRequestWrapper handleExtractUserInfo(TokenInfo tokenInfo,
-            HttpServletRequest req) throws Exception {
+            HttpServletRequest req) {
         // Extract user info from JWT payload
         String username = tokenInfo.getUsername();
         Set<String> roles = new HashSet<>(tokenInfo.getRoles());
@@ -141,18 +143,19 @@ public class JwtCookieFilter implements Filter {
         };
     }
 
-    private void handleLoginRedirect(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
-        // allow access to index.html and base url without authentication
-        if (req.getRequestURI().equals("/") || req.getRequestURI().equals("/index.html")) {
-            return;
-        }
-        // redirect to login if not already on login or callback path
-        if (!req.getRequestURI().endsWith("/login") && !req.getRequestURI().endsWith("/callback")
-                && !req.getRequestURI().endsWith("/logout") && !req.getRequestURI().endsWith("/logout-callback")) {
-            ((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/api/auth/login");
-        }
+    private HttpServletRequestWrapper handleGuestInfo(HttpServletRequest req) {
+        // Extract user info from JWT payload
+        return new HttpServletRequestWrapper(req) {
+            @Override
+            public Principal getUserPrincipal() {
+                return () -> "guest";
+            }
+
+            @Override
+            public boolean isUserInRole(String role) {
+                return "guest".equals(role);
+            }
+        };
     }
 
     private TokenInfo extractIdTokenInfo(String jwt) throws Exception {
@@ -166,7 +169,7 @@ public class JwtCookieFilter implements Filter {
     }
 
     private boolean isRefreshTokenExpired(String jwt) {
-        Map<String,Object> payload;
+        Map<String, Object> payload;
         try {
             payload = JwtUtils.decodeJwtPayload(jwt);
         } catch (Exception e) {
@@ -189,8 +192,8 @@ public class JwtCookieFilter implements Filter {
         String refreshToken = getCookie("JWT_REFRESH", req.getCookies());
         if (jwt == null) {
             logger.debug("No JWT cookie found");
-            handleLoginRedirect(request, response);
-            chain.doFilter(request, response);
+            HttpServletRequestWrapper wrapped = handleGuestInfo(req);
+            chain.doFilter(wrapped, response);
             return;
         }
         try {
@@ -206,8 +209,7 @@ public class JwtCookieFilter implements Filter {
                 }
             } else {
                 logger.debug("Token expired and no refresh token available");
-                handleLoginRedirect(request, response);
-                chain.doFilter(request, response);
+                ((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/login");
                 return;
             }
         } catch (Exception e) {

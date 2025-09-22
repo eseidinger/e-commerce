@@ -48,7 +48,7 @@ public class QuartzLoggerBean {
                     .build();
             Trigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity("hostnameLoggerTrigger", "loggerGroup")
-                    .withSchedule(org.quartz.CronScheduleBuilder.cronSchedule("0,10,20,30,40,50 * * * * ?"))
+                    .withSchedule(org.quartz.CronScheduleBuilder.cronSchedule("0 * * * * ?"))
                     .build();
             scheduler.scheduleJob(job, trigger);
             scheduler.start();

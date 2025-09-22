@@ -1,0 +1,14 @@
+<main>
+  <h1>Hello, e-commerce-ng</h1>
+  <p>Username: {{ username }}</p>
+  @if (auth.isLoggedIn()) {
+  <p>Welcome, you are logged in!</p>
+  <button (click)="auth.logout()">Logout</button>
+  }
+  @else {
+  <button (click)="auth.login()">Login</button>
+  }
+  <router-outlet></router-outlet>
+</main>
+
+<router-outlet />

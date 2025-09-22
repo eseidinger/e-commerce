@@ -63,8 +63,19 @@ services:
       AUTH_REALM: e-commerce-dev
       AUTH_HOST: https://keycloak.eseidinger.de
       BASE_URL: http://localhost:8088
+      MP_JWT_VERIFY_PUBLICKEY: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwrpPX861eLWVX3Z7c2qhs3MB9wP4+Yf/rW8yMkIXvn52kaETdzP4tk5LotTPPyn4+4nVYbIiRCJ/koD2HqKZuORpuMeBaJrYFLQnePzfsOONd6b8giXZ8n4fPRDGrkB2KeXDUaXUBsI55tBprK79ul168rThfhkUJ7JbGoBE1ZYUF8/P5lFAOArmUaGJo9TrrbcMVK8zS1nvwBnu6m2EY5jrvD2xlt6ZfK/oFfUoud/Cgr0yynKcuR6IBn1nHAPjUiy1pQ90H/wAG87cYuwxegDfJpkzDKf4E5PIa1tAq+qEWWN7TRGTRzH0s/puz0WB8SrdWKdov7tIJGefga1PBwIDAQAB
+      MP_JWT_VERIFY_PUBLICKEY_LOCATION: https://keycloak.eseidinger.de/realms/e-commerce-dev/protocol/openid-connect/certs
+      MP_JWT_VERIFY_ISSUER: https://keycloak.eseidinger.de/realms/e-commerce-dev
       JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:9009"
-    command: ["--deploydir", "/opt/payara/deployments", "--contextroot", "/", "--clustermode", "dns:payara:6900,payara2:6900"]
+    command:
+      - "--deploydir"
+      - "/opt/payara/deployments"
+      - "--contextroot"
+      - "/"
+      - "--clustermode"
+      - "dns:payara:6900,payara2:6900"
+      - "--logproperties"
+      - "/opt/payara/logging.properties"
     ports:
       - "8080:8080"
       - "9009:9009"
@@ -85,8 +96,19 @@ services:
       AUTH_REALM: e-commerce-dev
       AUTH_HOST: https://keycloak.eseidinger.de
       BASE_URL: http://localhost:8088
+      MP_JWT_VERIFY_PUBLICKEY: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwrpPX861eLWVX3Z7c2qhs3MB9wP4+Yf/rW8yMkIXvn52kaETdzP4tk5LotTPPyn4+4nVYbIiRCJ/koD2HqKZuORpuMeBaJrYFLQnePzfsOONd6b8giXZ8n4fPRDGrkB2KeXDUaXUBsI55tBprK79ul168rThfhkUJ7JbGoBE1ZYUF8/P5lFAOArmUaGJo9TrrbcMVK8zS1nvwBnu6m2EY5jrvD2xlt6ZfK/oFfUoud/Cgr0yynKcuR6IBn1nHAPjUiy1pQ90H/wAG87cYuwxegDfJpkzDKf4E5PIa1tAq+qEWWN7TRGTRzH0s/puz0WB8SrdWKdov7tIJGefga1PBwIDAQAB
+      MP_JWT_VERIFY_PUBLICKEY_LOCATION: https://keycloak.eseidinger.de/realms/e-commerce-dev/protocol/openid-connect/certs
+      MP_JWT_VERIFY_ISSUER: https://keycloak.eseidinger.de/realms/e-commerce-dev
       JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:9009"
-    command: ["--deploydir", "/opt/payara/deployments", "--contextroot", "/", "--clustermode", "dns:payara:6900,payara2:6900"]
+    command:
+      - "--deploydir"
+      - "/opt/payara/deployments"
+      - "--contextroot"
+      - "/"
+      - "--clustermode"
+      - "dns:payara:6900,payara2:6900"
+      - "--logproperties"
+      - "/opt/payara/logging.properties"
     ports:
       - "8081:8080"
       - "9010:9009"

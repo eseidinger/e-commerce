@@ -1,8 +1,10 @@
-package com.ecommerce.jsf.auth;
+package com.ecommerce.jsf.auth.jsf;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.logging.Logger;
+
+import com.ecommerce.jsf.auth.OpenIdConfigBean;
 
 import jakarta.inject.Inject;
 import jakarta.json.Json;

@@ -119,6 +119,12 @@
       <version>${payara.micro.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.microprofile.jwt</groupId>
+      <artifactId>microprofile-jwt-auth-api</artifactId>
+      <version>${microprofile.jwt.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>

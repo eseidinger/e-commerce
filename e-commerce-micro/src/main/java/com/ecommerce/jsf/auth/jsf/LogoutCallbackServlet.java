@@ -1,4 +1,4 @@
-package com.ecommerce.jsf.auth;
+package com.ecommerce.jsf.auth.jsf;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
