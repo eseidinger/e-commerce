@@ -1,4 +1,4 @@
-package com.ecommerce.jsf.bean;
+package com.ecommerce.jsf.config;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -12,12 +12,14 @@ import org.quartz.TriggerKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 
 import java.net.InetAddress;
-import java.util.logging.Logger;
 
 import jakarta.ejb.DependsOn;
 
@@ -25,7 +27,7 @@ import jakarta.ejb.DependsOn;
 @DependsOn("FlywayMigrationBean")
 @Startup
 public class QuartzLoggerBean {
-    private static final Logger logger = Logger.getLogger(QuartzLoggerBean.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(QuartzLoggerBean.class);
     private Scheduler scheduler;
 
     @PostConstruct
@@ -48,13 +50,13 @@ public class QuartzLoggerBean {
                     .build();
             Trigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity("hostnameLoggerTrigger", "loggerGroup")
-                    .withSchedule(org.quartz.CronScheduleBuilder.cronSchedule("0,10,20,30,40,50 * * * * ?"))
+                    .withSchedule(org.quartz.CronScheduleBuilder.cronSchedule("0 * * * * ?"))
                     .build();
             scheduler.scheduleJob(job, trigger);
             scheduler.start();
             logger.info("QuartzLoggerBean initialized and scheduler started with JNDI datasource config.");
         } catch (SchedulerException e) {
-            logger.severe("Failed to start Quartz scheduler: " + e.getMessage());
+            logger.error("Failed to start Quartz scheduler: " + e.getMessage());
         }
     }
 
@@ -67,7 +69,7 @@ public class QuartzLoggerBean {
                 // Ensure job takes at least 2 seconds
                 Thread.sleep(2000);
             } catch (Exception e) {
-                logger.warning("Failed to get hostname: " + e.getMessage());
+                logger.warn("Failed to get hostname: " + e.getMessage());
             }
         }
     }

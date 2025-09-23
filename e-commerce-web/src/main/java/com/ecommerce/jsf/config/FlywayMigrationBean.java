@@ -1,4 +1,4 @@
-package com.ecommerce.jsf.bean;
+package com.ecommerce.jsf.config;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
@@ -15,10 +15,9 @@ public class FlywayMigrationBean {
             String dbHost = System.getenv().getOrDefault("DB_HOST", "localhost");
             String dbUser = System.getenv().getOrDefault("JDBC_USER", "postgres");
             String dbPassword = System.getenv().getOrDefault("JDBC_PASSWORD", "password");
-            String dbUrl = "jdbc:postgresql://" + dbHost + ":5432/ecommerce";
             Flyway flyway = Flyway.configure()
                 .dataSource(
-                    dbUrl,
+                    "jdbc:postgresql://" + dbHost + ":5432/ecommerce",
                     dbUser,
                     dbPassword
                 )

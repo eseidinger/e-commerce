@@ -49,6 +49,10 @@ public class CustomerBean implements Serializable {
 
     public String save() {
         FacesContext context = FacesContext.getCurrentInstance();
+        if (!context.getExternalContext().isUserInRole("admin")) {
+            logger.warning("Unauthorized save attempt by user without admin role");
+            throw new SecurityException("Access denied: admin role required");
+        }
         try {
             if (!InputValidator.isValidName(customer.getName())) {
                 logger.warning("Invalid customer name");
@@ -83,11 +87,21 @@ public class CustomerBean implements Serializable {
 
     public String edit(Customer c) {
         logger.info("Editing customer with ID: " + c.getCustomerId());
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (!context.getExternalContext().isUserInRole("admin")) {
+            logger.warning("Unauthorized edit attempt by user without admin role");
+            throw new SecurityException("Access denied: admin role required");
+        }
         this.customer = c;
         return null;
     }
 
     public String delete(Customer c) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (!context.getExternalContext().isUserInRole("admin")) {
+            logger.warning("Unauthorized delete attempt by user without admin role");
+            throw new SecurityException("Access denied: admin role required");
+        }
         try {
             logger.info("Deleting customer with ID: " + c.getCustomerId());
             Customer toRemove = em.find(Customer.class, c.getCustomerId());

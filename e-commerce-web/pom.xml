@@ -14,13 +14,15 @@
   <properties>
     <flyway.version>11.11.2</flyway.version>
     <jakartaee.version>10.0.0</jakartaee.version>
-    <postgresql.version>42.7.7</postgresql.version>
     <junit.jupiter.version>5.13.4</junit.jupiter.version>
-    <payara.micro.version>6.2025.9</payara.micro.version>
+    <payara.web.version>6.2025.9</payara.web.version>
     <hazelcast.version>5.5.0</hazelcast.version>
     <glassfish.version>6.2.5</glassfish.version>
     <quartz.version>2.5.0</quartz.version>
     <slf4j.version>2.0.17</slf4j.version>
+    <log4j.version>2.25.1</log4j.version>
+    <microprofile.jwt.version>2.1</microprofile.jwt.version>
+    <jjwt.version>0.13.0</jjwt.version>
     <!-- Plugin versions -->
     <maven.clean.plugin.version>3.3.2</maven.clean.plugin.version>
     <flyway.maven.plugin.version>10.13.0</flyway.maven.plugin.version>
@@ -45,6 +47,36 @@
       <version>${quartz.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-api</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-impl</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-jackson</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <version>${junit.jupiter.version}</version>
@@ -66,6 +98,18 @@
       <groupId>org.glassfish.main.common</groupId>
       <artifactId>glassfish-api</artifactId>
       <version>${glassfish.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>fish.payara.api</groupId>
+      <artifactId>payara-api</artifactId>
+      <version>${payara.web.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.microprofile.jwt</groupId>
+      <artifactId>microprofile-jwt-auth-api</artifactId>
+      <version>${microprofile.jwt.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
