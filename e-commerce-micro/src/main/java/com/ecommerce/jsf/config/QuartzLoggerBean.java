@@ -12,6 +12,7 @@ import org.quartz.TriggerKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
@@ -54,7 +55,7 @@ public class QuartzLoggerBean {
             scheduler.start();
             logger.info("QuartzLoggerBean initialized and scheduler started with JNDI datasource config.");
         } catch (SchedulerException e) {
-            logger.severe("Failed to start Quartz scheduler: " + e.getMessage());
+            logger.warning("Failed to start Quartz scheduler: " + e.getMessage());
         }
     }
 

@@ -1,26 +1,45 @@
 package com.ecommerce.jsf.auth;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 @Named
 @ApplicationScoped
 public class OpenIdConfigBean {
 
+    @Inject
+    @ConfigProperty(name = "auth.client.id", defaultValue = "e-commerce")
+    private String clientId;
+
+    @Inject
+    @ConfigProperty(name = "auth.host", defaultValue = "http://localhost:8084")
+    private String authHost;
+
+    @Inject
+    @ConfigProperty(name = "auth.realm", defaultValue = "e-commerce-dev")
+    private String authRealm;
+
+    @Inject
+    @ConfigProperty(name = "base.url", defaultValue = "http://localhost:8080")
+    private String baseUrl;
+
     public String getClientId() {
-        return System.getenv().getOrDefault("AUTH_CLIENT_ID", "e-commerce");
+        return clientId;
     }
 
     public String getAuthHost() {
-        return System.getenv().getOrDefault("AUTH_HOST", "http://localhost:8084");
+        return authHost;
     }
 
     public String getAuthRealm() {
-        return System.getenv().getOrDefault("AUTH_REALM", "e-commerce-dev");
+        return authRealm;
     }
 
     public String getProviderUri() {
-        return getAuthHost() + "/realms/" + getAuthRealm();
+        return authHost + "/realms/" + authRealm;
     }
 
     public String getLogoutUrl() {
@@ -28,7 +47,7 @@ public class OpenIdConfigBean {
     }
 
     public String getBaseUrl() {
-        return System.getenv().getOrDefault("BASE_URL", "http://localhost:8080");
+        return baseUrl;
     }
 
     public String getLoginRedirectUri() {

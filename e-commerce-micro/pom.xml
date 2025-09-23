@@ -22,7 +22,7 @@
     <quartz.version>2.5.0</quartz.version>
     <slf4j.version>2.0.17</slf4j.version>
     <log4j.version>2.25.1</log4j.version>
-    <microprofile.jwt.version>2.1</microprofile.jwt.version>
+    <microprofile.config.version>3.1</microprofile.config.version>
     <jjwt.version>0.13.0</jjwt.version>
     <!-- Plugin versions -->
     <payara.micro.maven.plugin.version>2.5</payara.micro.maven.plugin.version>
@@ -53,26 +53,6 @@
       <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz</artifactId>
       <version>${quartz.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j2-impl</artifactId>
-      <version>${log4j.version}</version>
     </dependency>
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
@@ -120,9 +100,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.microprofile.jwt</groupId>
-      <artifactId>microprofile-jwt-auth-api</artifactId>
-      <version>${microprofile.jwt.version}</version>
+      <groupId>org.eclipse.microprofile.config</groupId>
+      <artifactId>microprofile-config-api</artifactId>
+      <version>${microprofile.config.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -173,26 +153,6 @@
                   <groupId>org.quartz-scheduler</groupId>
                   <artifactId>quartz</artifactId>
                   <version>${quartz.version}</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.slf4j</groupId>
-                  <artifactId>slf4j-api</artifactId>
-                  <version>${slf4j.version}</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.logging.log4j</groupId>
-                  <artifactId>log4j-api</artifactId>
-                  <version>${log4j.version}</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.logging.log4j</groupId>
-                  <artifactId>log4j-core</artifactId>
-                  <version>${log4j.version}</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.logging.log4j</groupId>
-                  <artifactId>log4j-slf4j2-impl</artifactId>
-                  <version>${log4j.version}</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>io.jsonwebtoken</groupId>

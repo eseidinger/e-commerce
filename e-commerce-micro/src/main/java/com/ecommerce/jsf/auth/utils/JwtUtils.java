@@ -1,4 +1,4 @@
-package com.ecommerce.jsf.auth.jsf;
+package com.ecommerce.jsf.auth.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

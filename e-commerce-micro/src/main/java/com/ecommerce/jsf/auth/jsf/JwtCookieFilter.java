@@ -6,17 +6,16 @@ import java.security.Principal;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.ecommerce.jsf.auth.OpenIdConfigBean;
-import com.ecommerce.jsf.auth.jsf.JwtUtils.TokenInfo;
+import com.ecommerce.jsf.auth.utils.JwtUtils;
+import com.ecommerce.jsf.auth.utils.JwtUtils.TokenInfo;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -40,7 +39,7 @@ import jakarta.ws.rs.core.Response;
 @WebFilter("/jsf/*")
 public class JwtCookieFilter implements Filter {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtCookieFilter.class);
+    private static final Logger logger = Logger.getLogger(JwtCookieFilter.class.getName());
 
     @Inject
     private OpenIdConfigBean openIdConfigBean;
@@ -104,13 +103,13 @@ public class JwtCookieFilter implements Filter {
             ServletRequest request) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         if (isRefreshTokenExpired(refreshToken)) {
-            logger.debug("Refresh token expired");
+            logger.info("Refresh token expired");
             response.sendRedirect(req.getContextPath() + "/login");
             return null;
         }
         TokenPair tokenPair = refreshTokenPair(refreshToken, (HttpServletResponse) response);
         if (tokenPair == null) {
-            logger.debug("Failed to refresh JWT");
+            logger.warning("Failed to refresh JWT");
             return null;
         }
         Cookie newJwtCookie = new Cookie("JWT", tokenPair.getIdToken());
@@ -173,7 +172,7 @@ public class JwtCookieFilter implements Filter {
         try {
             payload = JwtUtils.decodeJwtPayload(jwt);
         } catch (Exception e) {
-            logger.error("Failed to decode JWT payload", e);
+            logger.warning("Failed to decode JWT payload: " + e.getMessage());
             return false;
         }
         if (payload.containsKey("exp")) {
@@ -191,7 +190,7 @@ public class JwtCookieFilter implements Filter {
         String jwt = getCookie("JWT", req.getCookies());
         String refreshToken = getCookie("JWT_REFRESH", req.getCookies());
         if (jwt == null) {
-            logger.debug("No JWT cookie found");
+            logger.info("No JWT cookie found");
             HttpServletRequestWrapper wrapped = handleGuestInfo(req);
             chain.doFilter(wrapped, response);
             return;
@@ -199,21 +198,21 @@ public class JwtCookieFilter implements Filter {
         try {
             verifyIdToken(jwt);
         } catch (ExpiredJwtException e) {
-            logger.debug("JWT expired", e);
+            logger.info("JWT expired");
             if (refreshToken != null) {
                 jwt = handleTokenRefresh(refreshToken, (HttpServletResponse) response, request);
                 if (jwt == null) {
-                    logger.debug("Failed to refresh JWT");
+                    logger.warning("Failed to refresh JWT");
                     chain.doFilter(request, response);
                     return;
                 }
             } else {
-                logger.debug("Token expired and no refresh token available");
+                logger.info("Token expired and no refresh token available");
                 ((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/login");
                 return;
             }
         } catch (Exception e) {
-            logger.error("Failed to decode JWT payload", e);
+            logger.warning("Failed to decode JWT payload: " + e.getMessage());
             chain.doFilter(request, response);
             return;
         }
@@ -224,7 +223,7 @@ public class JwtCookieFilter implements Filter {
             chain.doFilter(wrapped, response);
             return;
         } catch (Exception e) {
-            logger.error("Failed to verify JWT", e);
+            logger.warning("Failed to verify JWT: " + e.getMessage());
             chain.doFilter(request, response);
             return;
         }
