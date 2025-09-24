@@ -1,9 +1,13 @@
 package com.ecommerce.jsf.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.*;
 
 @Entity
-public class OrderItem {
+public class OrderItem implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")

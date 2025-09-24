@@ -1,48 +1,51 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
     <title>Customer CRUD</title>
 </h:head>
 <h:body>
-    <h:form>
-        <h:messages globalOnly="true" style="color:red; margin-bottom:1em;"/>
-        <h:panelGrid columns="2">
-            <h:outputLabel value="Name:" />
-            <h:inputText value="#{customerBean.customer.name}" />
-            <h:outputLabel value="Email:" />
-            <h:inputText value="#{customerBean.customer.email}" />
-            <h:outputLabel value="Address:" />
-            <h:inputText value="#{customerBean.customer.address}" />
-        </h:panelGrid>
-        <h:commandButton value="Save" action="#{customerBean.save}" />
-    </h:form>
-    <h:form>
-        <h:form>
-            <h:dataTable value="#{customerBean.customers}" var="c" border="1">
-                <h:column>
-                    <f:facet name="header">Customer ID</f:facet>
-                    #{c.customerId}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Name</f:facet>
-                    #{c.name}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Email</f:facet>
-                    #{c.email}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Address</f:facet>
-                    #{c.address}
-                </h:column>
-                <h:column>
-                    <h:commandButton value="Edit" action="#{customerBean.edit(c)}" />
-                    <h:commandButton value="Delete" action="#{customerBean.delete(c)}" />
-                </h:column>
-            </h:dataTable>
+    <p:card style="max-width:700px;margin:2em auto;">
+        <f:facet name="title">
+            <span class="pi pi-users" style="margin-right:8px;"></span>Customer CRUD
+        </f:facet>
+        <p:messages id="errors" globalOnly="true" styleClass="ui-messages-error" closable="true" />
+        <h:form id="dataInput">
+            <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" style="margin-bottom:1em;">
+                <p:outputLabel value="Name:" />
+                <p:inputText value="#{customerBean.customer.name}" />
+                <p:outputLabel value="Email:" />
+                <p:inputText value="#{customerBean.customer.email}" />
+                <p:outputLabel value="Address:" />
+                <p:inputText value="#{customerBean.customer.address}" />
+            </p:panelGrid>
+            <p:commandButton value="Save" icon="pi pi-save" action="#{customerBean.save}" styleClass="ui-button-success"
+                update="errors dataTable dataInput" />
         </h:form>
-    </h:form>
+        <h:form id="dataTable">
+            <p:dataTable value="#{customerBean.customers}" var="c" style="margin-top:2em;" paginator="true" rows="10"
+                responsiveLayout="scroll">
+                <p:column headerText="Customer ID">
+                    #{c.customerId}
+                </p:column>
+                <p:column headerText="Name">
+                    #{c.name}
+                </p:column>
+                <p:column headerText="Email">
+                    #{c.email}
+                </p:column>
+                <p:column headerText="Address">
+                    #{c.address}
+                </p:column>
+                <p:column headerText="Actions">
+                    <p:commandButton value="Edit" icon="pi pi-pencil" action="#{customerBean.edit(c)}"
+                        styleClass="ui-button-info" update="errors dataInput" />
+                    <p:commandButton value="Delete" icon="pi pi-trash" action="#{customerBean.delete(c)}"
+                        styleClass="ui-button-danger" update="errors dataTable" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:card>
 </h:body>
 
 </html>

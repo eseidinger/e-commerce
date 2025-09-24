@@ -18,7 +18,8 @@ import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 
 import java.net.InetAddress;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jakarta.ejb.DependsOn;
 
@@ -26,7 +27,7 @@ import jakarta.ejb.DependsOn;
 @DependsOn("FlywayMigrationBean")
 @Startup
 public class QuartzLoggerBean {
-    private static final Logger logger = Logger.getLogger(QuartzLoggerBean.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(QuartzLoggerBean.class);
     private Scheduler scheduler;
 
     @PostConstruct
@@ -55,7 +56,7 @@ public class QuartzLoggerBean {
             scheduler.start();
             logger.info("QuartzLoggerBean initialized and scheduler started with JNDI datasource config.");
         } catch (SchedulerException e) {
-            logger.warning("Failed to start Quartz scheduler: " + e.getMessage());
+            logger.warn("Failed to start Quartz scheduler: {}", e.getMessage());
         }
     }
 
@@ -64,11 +65,11 @@ public class QuartzLoggerBean {
         public void execute(JobExecutionContext context) throws JobExecutionException {
             try {
                 String hostname = InetAddress.getLocalHost().getHostName();
-                logger.info("QuartzLoggerBean: Hostname=" + hostname);
+                logger.info("QuartzLoggerBean: Hostname={}", hostname);
                 // Ensure job takes at least 2 seconds
                 Thread.sleep(2000);
             } catch (Exception e) {
-                logger.warning("Failed to get hostname: " + e.getMessage());
+                logger.warn("Failed to get hostname: {}", e.getMessage());
             }
         }
     }

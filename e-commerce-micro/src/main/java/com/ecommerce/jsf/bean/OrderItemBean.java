@@ -1,4 +1,8 @@
+
 package com.ecommerce.jsf.bean;
+
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.application.FacesMessage;
 
 import com.ecommerce.jsf.model.OrderItem;
 import jakarta.inject.Named;
@@ -9,13 +13,14 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named("orderItemBean")
 @ViewScoped
 @Transactional
 public class OrderItemBean implements Serializable {
-    private static final Logger logger = Logger.getLogger(OrderItemBean.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(OrderItemBean.class);
     private static final long serialVersionUID = 1L;
     private OrderItem orderItem = new OrderItem();
     private List<OrderItem> orderItems;
@@ -39,44 +44,69 @@ public class OrderItemBean implements Serializable {
             }
             return orderItems;
         } catch (Exception e) {
-            logger.severe("Error loading order items: " + e.getMessage());
+            logger.error("Error loading order items: {}", e.getMessage());
             return null;
         }
     }
 
     public String save() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (!context.getExternalContext().isUserInRole("admin")) {
+            logger.warn("Unauthorized save attempt by user without admin role");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
+                    "Access denied: admin role required"));
+            return null;
+        }
         try {
             if (orderItem.getOrderItemId() == null) {
                 logger.info("Persisting new order item");
                 em.persist(orderItem);
             } else {
-                logger.info("Merging existing order item with ID: " + orderItem.getOrderItemId());
+                logger.info("Merging existing order item with ID: {}", orderItem.getOrderItemId());
                 em.merge(orderItem);
             }
             orderItem = new OrderItem();
             orderItems = null;
         } catch (Exception e) {
-            logger.severe("Error saving order item: " + e.getMessage());
+            logger.error("Error saving order item: {}", e.getMessage());
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                    "An error occurred while saving the order item."));
         }
         return null;
     }
 
     public String edit(OrderItem oi) {
-        logger.info("Editing order item with ID: " + oi.getOrderItemId());
+        logger.info("Editing order item with ID: {}", oi.getOrderItemId());
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (!context.getExternalContext().isUserInRole("admin")) {
+            logger.warn("Unauthorized edit attempt by user without admin role");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
+                    "Access denied: admin role required"));
+            return null;
+        }
         this.orderItem = oi;
         return null;
     }
 
     public String delete(OrderItem oi) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (!context.getExternalContext().isUserInRole("admin")) {
+            logger.warn("Unauthorized delete attempt by user without admin role");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
+                    "Access denied: admin role required"));
+            return null;
+        }
         try {
-            logger.info("Deleting order item with ID: " + oi.getOrderItemId());
+            logger.info("Deleting order item with ID: {}", oi.getOrderItemId());
             OrderItem toRemove = em.find(OrderItem.class, oi.getOrderItemId());
             if (toRemove != null) {
                 em.remove(toRemove);
             }
             orderItems = null;
         } catch (Exception e) {
-            logger.severe("Error deleting order item: " + e.getMessage());
+            logger.error("Error deleting order item: {}", e.getMessage());
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                    "An error occurred while deleting the order item."));
         }
         return null;
     }

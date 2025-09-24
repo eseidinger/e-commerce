@@ -1,45 +1,51 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
     <title>Order CRUD</title>
 </h:head>
 <h:body>
-    <h:form>
-        <h:panelGrid columns="2">
-            <h:outputLabel value="Customer ID:" />
-            <h:inputText value="#{orderBean.order.customer.customerId}" />
-            <h:outputLabel value="Order Date:" />
-            <h:inputText value="#{orderBean.order.orderDate}" />
-            <h:outputLabel value="Total Amount:" />
-            <h:inputText value="#{orderBean.order.totalAmount}" />
-        </h:panelGrid>
-        <h:commandButton value="Save" action="#{orderBean.save}" />
-    </h:form>
-    <h:form>
-        <h:dataTable value="#{orderBean.orders}" var="o" border="1">
-            <h:column>
-                <f:facet name="header">Order ID</f:facet>
-                #{o.orderId}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Customer ID</f:facet>
-                #{o.customer.customerId}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Order Date</f:facet>
-                #{o.orderDate}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Total Amount</f:facet>
-                #{o.totalAmount}
-            </h:column>
-            <h:column>
-                <h:commandButton value="Edit" action="#{orderBean.edit(o)}" />
-                <h:commandButton value="Delete" action="#{orderBean.delete(o)}" />
-            </h:column>
-        </h:dataTable>
-    </h:form>
+    <p:card style="max-width:700px;margin:2em auto;">
+        <f:facet name="title">
+            <span class="pi pi-shopping-cart" style="margin-right:8px;"></span>Order CRUD
+        </f:facet>
+        <p:messages id="errors" globalOnly="true" styleClass="ui-messages-error" closable="true" />
+        <h:form>
+            <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" style="margin-bottom:1em;">
+                <p:outputLabel value="Customer ID:" />
+                <p:inputText value="#{orderBean.order.customerId}" />
+                <p:outputLabel value="Order Date:" />
+                <p:inputText value="#{orderBean.order.orderDate}" />
+                <p:outputLabel value="Total Amount:" />
+                <p:inputText value="#{orderBean.order.totalAmount}" />
+            </p:panelGrid>
+            <p:commandButton value="Save" icon="pi pi-save" action="#{orderBean.save}" styleClass="ui-button-success"
+                update="errors dataTable" />
+        </h:form>
+        <h:form>
+            <p:dataTable id="dataTable" value="#{orderBean.orders}" var="o" style="margin-top:2em;" paginator="true" rows="10"
+                responsiveLayout="scroll">
+                <p:column headerText="Order ID">
+                    #{o.orderId}
+                </p:column>
+                <p:column headerText="Customer ID">
+                    #{o.customer.customerId}
+                </p:column>
+                <p:column headerText="Order Date">
+                    #{o.orderDate}
+                </p:column>
+                <p:column headerText="Total Amount">
+                    #{o.totalAmount}
+                </p:column>
+                <p:column headerText="Actions">
+                    <p:commandButton value="Edit" icon="pi pi-pencil" action="#{orderBean.edit(o)}"
+                        styleClass="ui-button-info" update="errors dataInput" />
+                    <p:commandButton value="Delete" icon="pi pi-trash" action="#{orderBean.delete(o)}"
+                        styleClass="ui-button-danger" update="errors dataTable" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:card>
 </h:body>
 
 </html>

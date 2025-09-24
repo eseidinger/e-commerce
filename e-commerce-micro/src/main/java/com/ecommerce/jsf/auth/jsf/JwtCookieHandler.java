@@ -2,16 +2,10 @@ package com.ecommerce.jsf.auth.jsf;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.security.Principal;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
-
-import jakarta.inject.Inject;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ecommerce.jsf.auth.OpenIdConfigBean;
 import com.ecommerce.jsf.auth.utils.JwtUtils;
@@ -19,15 +13,17 @@ import com.ecommerce.jsf.auth.utils.JwtUtils.TokenInfo;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+import jakarta.security.enterprise.AuthenticationStatus;
+import jakarta.security.enterprise.authentication.mechanism.http.HttpMessageContext;
+import jakarta.security.enterprise.identitystore.CredentialValidationResult;
 import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -36,13 +32,13 @@ import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@WebFilter("/jsf/*")
-public class JwtCookieFilter implements Filter {
+@ApplicationScoped
+public class JwtCookieHandler  {
 
-    private static final Logger logger = Logger.getLogger(JwtCookieFilter.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(JwtCookieHandler.class);
 
     @Inject
-    private OpenIdConfigBean openIdConfigBean;
+    OpenIdConfigBean openIdConfigBean;
 
     public static class TokenPair {
         private final String idToken;
@@ -100,16 +96,14 @@ public class JwtCookieFilter implements Filter {
     }
 
     private String handleTokenRefresh(String refreshToken, HttpServletResponse response,
-            ServletRequest request) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
+            ServletRequest request) {
         if (isRefreshTokenExpired(refreshToken)) {
             logger.info("Refresh token expired");
-            response.sendRedirect(req.getContextPath() + "/login");
             return null;
         }
         TokenPair tokenPair = refreshTokenPair(refreshToken, (HttpServletResponse) response);
         if (tokenPair == null) {
-            logger.warning("Failed to refresh JWT");
+            logger.warn("Failed to refresh JWT");
             return null;
         }
         Cookie newJwtCookie = new Cookie("JWT", tokenPair.getIdToken());
@@ -121,40 +115,6 @@ public class JwtCookieFilter implements Filter {
         newRefreshCookie.setHttpOnly(true);
         response.addCookie(newRefreshCookie);
         return tokenPair.getIdToken();
-    }
-
-    private HttpServletRequestWrapper handleExtractUserInfo(TokenInfo tokenInfo,
-            HttpServletRequest req) {
-        // Extract user info from JWT payload
-        String username = tokenInfo.getUsername();
-        Set<String> roles = new HashSet<>(tokenInfo.getRoles());
-
-        return new HttpServletRequestWrapper(req) {
-            @Override
-            public Principal getUserPrincipal() {
-                return () -> username;
-            }
-
-            @Override
-            public boolean isUserInRole(String role) {
-                return roles.contains(role);
-            }
-        };
-    }
-
-    private HttpServletRequestWrapper handleGuestInfo(HttpServletRequest req) {
-        // Extract user info from JWT payload
-        return new HttpServletRequestWrapper(req) {
-            @Override
-            public Principal getUserPrincipal() {
-                return () -> "guest";
-            }
-
-            @Override
-            public boolean isUserInRole(String role) {
-                return "guest".equals(role);
-            }
-        };
     }
 
     private TokenInfo extractIdTokenInfo(String jwt) throws Exception {
@@ -172,7 +132,7 @@ public class JwtCookieFilter implements Filter {
         try {
             payload = JwtUtils.decodeJwtPayload(jwt);
         } catch (Exception e) {
-            logger.warning("Failed to decode JWT payload: " + e.getMessage());
+            logger.warn("Failed to decode JWT payload: {}", e.getMessage());
             return false;
         }
         if (payload.containsKey("exp")) {
@@ -183,17 +143,23 @@ public class JwtCookieFilter implements Filter {
         return false;
     }
 
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    public AuthenticationStatus handleJwtCookie(HttpServletRequest request,
+            HttpServletResponse response,
+            HttpMessageContext context) throws IOException {
         HttpServletRequest req = (HttpServletRequest) request;
         String jwt = getCookie("JWT", req.getCookies());
         String refreshToken = getCookie("JWT_REFRESH", req.getCookies());
+
+        // No token → assign guest role
+        String principal = "guest";
+        CredentialValidationResult result = new CredentialValidationResult(
+                principal,
+                Set.of("guest"));
+
         if (jwt == null) {
             logger.info("No JWT cookie found");
-            HttpServletRequestWrapper wrapped = handleGuestInfo(req);
-            chain.doFilter(wrapped, response);
-            return;
+            context.notifyContainerAboutLogin(result);
+            return AuthenticationStatus.SUCCESS;
         }
         try {
             verifyIdToken(jwt);
@@ -202,30 +168,31 @@ public class JwtCookieFilter implements Filter {
             if (refreshToken != null) {
                 jwt = handleTokenRefresh(refreshToken, (HttpServletResponse) response, request);
                 if (jwt == null) {
-                    logger.warning("Failed to refresh JWT");
-                    chain.doFilter(request, response);
-                    return;
+                    logger.warn("Failed to refresh JWT");
+                    ((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/login");
+                    return AuthenticationStatus.SEND_CONTINUE;
                 }
             } else {
                 logger.info("Token expired and no refresh token available");
                 ((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/login");
-                return;
+                return AuthenticationStatus.SEND_CONTINUE;
             }
         } catch (Exception e) {
-            logger.warning("Failed to decode JWT payload: " + e.getMessage());
-            chain.doFilter(request, response);
-            return;
+            logger.warn("Failed to decode JWT payload: {}", e.getMessage());
+            return AuthenticationStatus.NOT_DONE;
         }
 
         try {
             TokenInfo tokenInfo = extractIdTokenInfo(jwt);
-            HttpServletRequestWrapper wrapped = handleExtractUserInfo(tokenInfo, req);
-            chain.doFilter(wrapped, response);
-            return;
+            result = new CredentialValidationResult(
+                    tokenInfo.getUsername(),
+                    tokenInfo.getRoles() != null ? Set.copyOf(tokenInfo.getRoles()) : Set.of());
+            context.notifyContainerAboutLogin(result);
+            logger.info("JWT verified for user: {} with roles: {}", tokenInfo.getUsername(), result.getCallerGroups());
+            return AuthenticationStatus.SUCCESS;
         } catch (Exception e) {
-            logger.warning("Failed to verify JWT: " + e.getMessage());
-            chain.doFilter(request, response);
-            return;
+            logger.warn("Failed to verify JWT: {}", e.getMessage());
+            return AuthenticationStatus.NOT_DONE;
         }
     }
 }

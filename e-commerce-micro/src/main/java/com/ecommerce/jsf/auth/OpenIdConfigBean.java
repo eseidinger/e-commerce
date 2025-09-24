@@ -15,7 +15,7 @@ public class OpenIdConfigBean {
     private String clientId;
 
     @Inject
-    @ConfigProperty(name = "auth.host", defaultValue = "http://localhost:8084")
+    @ConfigProperty(name = "auth.host", defaultValue = "https://keycloak.eseidinger.de")
     private String authHost;
 
     @Inject

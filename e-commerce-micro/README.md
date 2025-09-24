@@ -13,7 +13,7 @@ or
 
 ```bash
 mvn clean install
-java -jar target/e-commerce-micro-microbundle.jar --nocluster
+java -Xdebug -Xrunjdwp:transport dt_socket,server=y,suspend=n,address=5005 -jar target/e-commerce-micro-microbundle.jar --nocluster
 ```
 
 ## Run in Docker

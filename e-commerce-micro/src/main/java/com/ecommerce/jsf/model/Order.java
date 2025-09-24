@@ -1,12 +1,15 @@
 package com.ecommerce.jsf.model;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Order implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
@@ -26,6 +29,9 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
 
+    @Transient
+    private Long customerId;
+
     public Long getOrderId() {
         return orderId;
     }
@@ -36,6 +42,7 @@ public class Order {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+        this.customerId = customer != null ? customer.getCustomerId() : null;
     }
 
     public Date getOrderDate() {
@@ -62,5 +69,11 @@ public class Order {
         this.orderItems = orderItems;
     }
 
-    // Getters and setters
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
 }

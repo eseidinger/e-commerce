@@ -1,4 +1,8 @@
+
 package com.ecommerce.jsf.bean;
+
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.application.FacesMessage;
 
 import com.ecommerce.jsf.model.Review;
 import jakarta.inject.Named;
@@ -9,13 +13,14 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named("reviewBean")
 @ViewScoped
 @Transactional
 public class ReviewBean implements Serializable {
-    private static final Logger logger = Logger.getLogger(ReviewBean.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(ReviewBean.class);
     private static final long serialVersionUID = 1L;
     private Review review = new Review();
     private List<Review> reviews;
@@ -39,44 +44,69 @@ public class ReviewBean implements Serializable {
             }
             return reviews;
         } catch (Exception e) {
-            logger.severe("Error loading reviews: " + e.getMessage());
+            logger.error("Error loading reviews: {}", e.getMessage());
             return null;
         }
     }
 
     public String save() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (!context.getExternalContext().isUserInRole("admin")) {
+            logger.warn("Unauthorized save attempt by user without admin role");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
+                    "Access denied: admin role required"));
+            return null;
+        }
         try {
             if (review.getReviewId() == null) {
                 logger.info("Persisting new review");
                 em.persist(review);
             } else {
-                logger.info("Merging existing review with ID: " + review.getReviewId());
+                logger.info("Merging existing review with ID: {}", review.getReviewId());
                 em.merge(review);
             }
             review = new Review();
             reviews = null;
         } catch (Exception e) {
-            logger.severe("Error saving review: " + e.getMessage());
+            logger.error("Error saving review: {}", e.getMessage());
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                    "An error occurred while saving the review."));
         }
         return null;
     }
 
     public String edit(Review r) {
-        logger.info("Editing review with ID: " + r.getReviewId());
+        logger.info("Editing review with ID: {}", r.getReviewId());
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (!context.getExternalContext().isUserInRole("admin")) {
+            logger.warn("Unauthorized edit attempt by user without admin role");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
+                    "Access denied: admin role required"));
+            return null;
+        }
         this.review = r;
         return null;
     }
 
     public String delete(Review r) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (!context.getExternalContext().isUserInRole("admin")) {
+            logger.warn("Unauthorized delete attempt by user without admin role");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
+                    "Access denied: admin role required"));
+            return null;
+        }
         try {
-            logger.info("Deleting review with ID: " + r.getReviewId());
+            logger.info("Deleting review with ID: {}", r.getReviewId());
             Review toRemove = em.find(Review.class, r.getReviewId());
             if (toRemove != null) {
                 em.remove(toRemove);
             }
             reviews = null;
         } catch (Exception e) {
-            logger.severe("Error deleting review: " + e.getMessage());
+            logger.error("Error deleting review: {}", e.getMessage());
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                    "An error occurred while deleting the review."));
         }
         return null;
     }

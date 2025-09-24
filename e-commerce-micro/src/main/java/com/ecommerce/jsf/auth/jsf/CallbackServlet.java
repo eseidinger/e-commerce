@@ -2,7 +2,8 @@ package com.ecommerce.jsf.auth.jsf;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ecommerce.jsf.auth.OpenIdConfigBean;
 
@@ -26,7 +27,7 @@ import jakarta.ws.rs.core.Response;
 @WebServlet("/callback")
 public class CallbackServlet extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(CallbackServlet.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(CallbackServlet.class);
 
     @Inject
     private OpenIdConfigBean openIdConfigBean;

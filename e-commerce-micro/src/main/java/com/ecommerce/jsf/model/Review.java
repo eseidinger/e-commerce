@@ -1,10 +1,14 @@
 package com.ecommerce.jsf.model;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Review {
+public class Review implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
