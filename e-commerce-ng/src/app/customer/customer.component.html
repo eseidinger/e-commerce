@@ -1,0 +1,47 @@
+<p-card style="max-width:700px;margin:2em auto;">
+  <ng-template pTemplate="header">
+    <span class="pi pi-users" style="margin-right:8px;"></span>Customer CRUD
+  </ng-template>
+  <p-messages [(value)]="messageService.messages" closable="true"></p-messages>
+  <form (ngSubmit)="saveCustomer()" #dataInput="ngForm">
+    <div class="p-fluid p-formgrid p-grid" style="margin-bottom:1em;">
+      <div class="p-field p-col-12 p-md-6">
+        <label for="name">Name</label>
+        <input pInputText id="name" name="name" [(ngModel)]="customer.name" required />
+      </div>
+      <div class="p-field p-col-12 p-md-6">
+        <label for="email">Email</label>
+        <input pInputText id="email" name="email" [(ngModel)]="customer.email" required />
+      </div>
+      <div class="p-field p-col-12">
+        <label for="address">Address</label>
+        <input pInputText id="address" name="address" [(ngModel)]="customer.address" required />
+      </div>
+    </div>
+    <button pButton type="submit" label="Save" icon="pi pi-save" class="p-button-success"></button>
+    <button pButton type="button" label="Reset" icon="pi pi-refresh" class="p-button-secondary" (click)="resetForm()"></button>
+  </form>
+  <p-table [value]="customers" [paginator]="true" [rows]="10" [loading]="loading" style="margin-top:2em;">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Customer ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Address</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-c>
+      <tr>
+        <td>{{c.customerId}}</td>
+        <td>{{c.name}}</td>
+        <td>{{c.email}}</td>
+        <td>{{c.address}}</td>
+        <td>
+          <button pButton type="button" icon="pi pi-pencil" class="p-button-info p-mr-2" (click)="editCustomer(c)"></button>
+          <button pButton type="button" icon="pi pi-trash" class="p-button-danger" (click)="deleteCustomer(c.customerId)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

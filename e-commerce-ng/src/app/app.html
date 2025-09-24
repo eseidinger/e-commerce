@@ -8,6 +8,14 @@
   @else {
   <button (click)="auth.login()">Login</button>
   }
+
+  <nav>
+    <a routerLink="/products" routerLinkActive="active">Products</a> |
+    <a routerLink="/customers" routerLinkActive="active">Customers</a> |
+    <a routerLink="/orders" routerLinkActive="active">Orders</a> |
+    <a routerLink="/reviews" routerLinkActive="active">Reviews</a>
+  </nav>
+
   <router-outlet></router-outlet>
 </main>
 
