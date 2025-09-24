@@ -1,0 +1,10 @@
+<faces-config version="3.0"
+    xmlns="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_3_0.xsd">
+    <factory>
+        <exception-handler-factory>
+            com.ecommerce.jsf.error.CustomExceptionHandlerFactory
+        </exception-handler-factory>
+    </factory>
+</faces-config>
