@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Entity
 public class Review implements Serializable {
+    
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -42,35 +43,48 @@ public class Review implements Serializable {
         return reviewId;
     }
 
+    public void setReviewId(Long reviewId) {
+        this.reviewId = reviewId;
+    }
+
     public Product getProduct() {
         return product;
     }
+
     public void setProduct(Product product) {
         this.product = product;
         this.productId = (product != null) ? product.getProductId() : null;
     }
+
     public Customer getCustomer() {
         return customer;
     }
+
     public void setCustomer(Customer customer) {
         this.customer = customer;
         this.customerId = (customer != null) ? customer.getCustomerId() : null;
     }
+
     public Integer getRating() {
         return rating;
     }
+
     public void setRating(Integer rating) {
         this.rating = rating;
     }
+
     public String getComment() {
         return comment;
     }
+
     public void setComment(String comment) {
         this.comment = comment;
     }
+
     public Date getReviewDate() {
         return reviewDate;
     }
+
     public void setReviewDate(Date reviewDate) {
         this.reviewDate = reviewDate;
     }

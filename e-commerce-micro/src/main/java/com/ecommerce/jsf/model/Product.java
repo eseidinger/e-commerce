@@ -33,33 +33,46 @@ public class Product implements Serializable {
         return productId;
     }
 
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public Double getPrice() {
         return price;
     }
+
     public void setPrice(Double price) {
         this.price = price;
     }
+
     public List<OrderItem> getOrderItems() {
         return orderItems;
     }
+
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
     }
+
     public List<Review> getReviews() {
         return reviews;
     }
+
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }

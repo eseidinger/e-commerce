@@ -38,6 +38,10 @@ public class OrderItem implements Serializable {
         return orderItemId;
     }
 
+    public void setOrderItemId(Long orderItemId) {
+        this.orderItemId = orderItemId;
+    }
+
     public Order getOrder() {
         return order;
     }

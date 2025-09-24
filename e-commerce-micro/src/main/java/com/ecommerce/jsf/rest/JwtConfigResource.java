@@ -1,6 +1,5 @@
-package com.ecommerce.jsf.api;
+package com.ecommerce.jsf.rest;
 
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;

@@ -36,6 +36,10 @@ public class Order implements Serializable {
         return orderId;
     }
 
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
