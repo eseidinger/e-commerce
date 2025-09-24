@@ -6,11 +6,10 @@ import jakarta.faces.application.FacesMessage;
 
 import com.ecommerce.jsf.model.Product;
 import jakarta.inject.Named;
-import jakarta.faces.view.ViewScoped;
 import jakarta.transaction.Transactional;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
+import jakarta.faces.view.ViewScoped;
+import com.ecommerce.jsf.repository.ProductRepository;
+import jakarta.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
 import org.slf4j.Logger;
@@ -18,14 +17,13 @@ import org.slf4j.LoggerFactory;
 
 @Named("productBean")
 @ViewScoped
-@Transactional
 public class ProductBean implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(ProductBean.class);
     private static final long serialVersionUID = 1L;
     private Product product = new Product();
     private List<Product> products;
-    @PersistenceContext(unitName = "ecommercePU")
-    private EntityManager em;
+    @Inject
+    private ProductRepository productRepository;
 
     public Product getProduct() {
         return product;
@@ -39,8 +37,7 @@ public class ProductBean implements Serializable {
         try {
             if (products == null) {
                 logger.info("Loading product list from database");
-                TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p", Product.class);
-                products = query.getResultList();
+                products = productRepository.findAll();
             }
             return products;
         } catch (Exception e) {
@@ -49,6 +46,7 @@ public class ProductBean implements Serializable {
         }
     }
 
+    @Transactional
     public String save() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
@@ -58,13 +56,7 @@ public class ProductBean implements Serializable {
             return null;
         }
         try {
-            if (product.getProductId() == null) {
-                logger.info("Persisting new product");
-                em.persist(product);
-            } else {
-                logger.info("Merging existing product with ID: {}", product.getProductId());
-                em.merge(product);
-            }
+            productRepository.save(product);
             product = new Product();
             products = null;
         } catch (Exception e) {
@@ -88,6 +80,7 @@ public class ProductBean implements Serializable {
         return null;
     }
 
+    @Transactional
     public String delete(Product p) {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
@@ -98,10 +91,7 @@ public class ProductBean implements Serializable {
         }
         try {
             logger.info("Deleting product with ID: {}", p.getProductId());
-            Product toRemove = em.find(Product.class, p.getProductId());
-            if (toRemove != null) {
-                em.remove(toRemove);
-            }
+            productRepository.delete(p.getProductId());
             products = null;
         } catch (Exception e) {
             logger.error("Error deleting product: {}", e.getMessage());

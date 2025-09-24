@@ -4,15 +4,15 @@ package com.ecommerce.jsf.bean;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.application.FacesMessage;
 
-import com.ecommerce.jsf.model.Customer;
-import com.ecommerce.jsf.model.Product;
 import com.ecommerce.jsf.model.Review;
 import jakarta.inject.Named;
-import jakarta.faces.view.ViewScoped;
 import jakarta.transaction.Transactional;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
+import jakarta.faces.view.ViewScoped;
+
+import com.ecommerce.jsf.repository.CustomerRepository;
+import com.ecommerce.jsf.repository.ProductRepository;
+import com.ecommerce.jsf.repository.ReviewRepository;
+import jakarta.inject.Inject;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
@@ -22,14 +22,23 @@ import org.slf4j.LoggerFactory;
 
 @Named("reviewBean")
 @ViewScoped
-@Transactional
 public class ReviewBean implements Serializable {
+
     private static final Logger logger = LoggerFactory.getLogger(ReviewBean.class);
+
     private static final long serialVersionUID = 1L;
+
     private Review review = new Review();
     private List<Review> reviews;
-    @PersistenceContext(unitName = "ecommercePU")
-    private EntityManager em;
+
+    @Inject
+    private ReviewRepository reviewRepository;
+
+    @Inject
+    private ProductRepository productRepository;
+
+    @Inject
+    private CustomerRepository customerRepository;
 
     public Review getReview() {
         return review;
@@ -43,8 +52,7 @@ public class ReviewBean implements Serializable {
         try {
             if (reviews == null) {
                 logger.info("Loading review list from database");
-                TypedQuery<Review> query = em.createQuery("SELECT r FROM Review r", Review.class);
-                reviews = query.getResultList();
+                reviews = reviewRepository.findAll();
             }
             return reviews;
         } catch (Exception e) {
@@ -53,24 +61,7 @@ public class ReviewBean implements Serializable {
         }
     }
 
-    private Product getProductById(Long productId) {
-        try {
-            return em.find(Product.class, productId);
-        } catch (Exception e) {
-            logger.error("Error finding product by ID {}: {}", productId, e.getMessage());
-            throw e;
-        }
-    }
-
-    private Customer getCustomerById(Long customerId) {
-        try {
-            return em.find(Customer.class, customerId);
-        } catch (Exception e) {
-            logger.error("Error finding customer by ID {}: {}", customerId, e.getMessage());
-            throw e;
-        }
-    }
-
+    @Transactional
     public String save() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
@@ -80,16 +71,10 @@ public class ReviewBean implements Serializable {
             return null;
         }
         try {
-            review.setProduct(getProductById(review.getProductId()));
-            review.setCustomer(getCustomerById(review.getCustomerId()));
+            review.setProduct(productRepository.findById(review.getProductId()));
+            review.setCustomer(customerRepository.findById(review.getCustomerId()));
             review.setReviewDate(Date.from(Instant.now()));
-            if (review.getReviewId() == null) {
-                logger.info("Persisting new review");
-                em.persist(review);
-            } else {
-                logger.info("Merging existing review with ID: {}", review.getReviewId());
-                em.merge(review);
-            }
+            reviewRepository.save(review);
             review = new Review();
             reviews = null;
         } catch (Exception e) {
@@ -113,6 +98,7 @@ public class ReviewBean implements Serializable {
         return null;
     }
 
+    @Transactional
     public String delete(Review r) {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
@@ -123,10 +109,7 @@ public class ReviewBean implements Serializable {
         }
         try {
             logger.info("Deleting review with ID: {}", r.getReviewId());
-            Review toRemove = em.find(Review.class, r.getReviewId());
-            if (toRemove != null) {
-                em.remove(toRemove);
-            }
+            reviewRepository.delete(r.getReviewId());
             reviews = null;
         } catch (Exception e) {
             logger.error("Error deleting review: {}", e.getMessage());

@@ -4,14 +4,14 @@ package com.ecommerce.jsf.bean;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.application.FacesMessage;
 
-import com.ecommerce.jsf.model.Customer;
 import com.ecommerce.jsf.model.Order;
 import jakarta.inject.Named;
-import jakarta.faces.view.ViewScoped;
 import jakarta.transaction.Transactional;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
+import jakarta.faces.view.ViewScoped;
+
+import com.ecommerce.jsf.repository.CustomerRepository;
+import com.ecommerce.jsf.repository.OrderRepository;
+import jakarta.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
 import org.slf4j.Logger;
@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 
 @Named("orderBean")
 @ViewScoped
-@Transactional
 public class OrderBean implements Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderBean.class);
@@ -29,8 +28,11 @@ public class OrderBean implements Serializable {
     private Order order = new Order();
     private List<Order> orders;
 
-    @PersistenceContext(unitName = "ecommercePU")
-    private EntityManager em;
+    @Inject
+    private OrderRepository orderRepository;
+
+    @Inject
+    private CustomerRepository customerRepository;
 
     public Order getOrder() {
         return order;
@@ -44,8 +46,7 @@ public class OrderBean implements Serializable {
         try {
             if (orders == null) {
                 logger.info("Loading order list from database");
-                TypedQuery<Order> query = em.createQuery("SELECT o FROM Order o", Order.class);
-                orders = query.getResultList();
+                orders = orderRepository.findAll();
             }
             return orders;
         } catch (Exception e) {
@@ -54,15 +55,7 @@ public class OrderBean implements Serializable {
         }
     }
 
-    private Customer getCustomerById(Long customerId) {
-        try {
-            return em.find(Customer.class, customerId);
-        } catch (Exception e) {
-            logger.error("Error finding customer with ID {}: {}", customerId, e.getMessage());
-            throw e;
-        }
-    }
-
+    @Transactional
     public String save() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
@@ -72,14 +65,8 @@ public class OrderBean implements Serializable {
             return null;
         }
         try {
-            order.setCustomer(getCustomerById(order.getCustomerId()));
-            if (order.getOrderId() == null) {
-                logger.info("Persisting new order");
-                em.persist(order);
-            } else {
-                logger.info("Merging existing order with ID: {}", order.getOrderId());
-                em.merge(order);
-            }
+            order.setCustomer(customerRepository.findById(order.getCustomerId()));
+            orderRepository.save(order);
             order = new Order();
             orders = null;
         } catch (Exception e) {
@@ -103,6 +90,7 @@ public class OrderBean implements Serializable {
         return null;
     }
 
+    @Transactional
     public String delete(Order o) {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
@@ -113,10 +101,7 @@ public class OrderBean implements Serializable {
         }
         try {
             logger.info("Deleting order with ID: {}", o.getOrderId());
-            Order toRemove = em.find(Order.class, o.getOrderId());
-            if (toRemove != null) {
-                em.remove(toRemove);
-            }
+            orderRepository.delete(o.getOrderId());
             orders = null;
         } catch (Exception e) {
             logger.error("Error deleting order: {}", e.getMessage());

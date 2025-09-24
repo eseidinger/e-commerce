@@ -2,14 +2,12 @@ package com.ecommerce.jsf.bean;
 
 import com.ecommerce.jsf.model.Customer;
 import jakarta.inject.Named;
+import jakarta.transaction.Transactional;
 import jakarta.faces.view.ViewScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.transaction.Transactional;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Transient;
-import jakarta.persistence.TypedQuery;
+import com.ecommerce.jsf.repository.CustomerRepository;
+import jakarta.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
 import org.slf4j.Logger;
@@ -18,7 +16,6 @@ import com.ecommerce.jsf.util.InputValidator;
 
 @Named("customerBean")
 @ViewScoped
-@Transactional
 public class CustomerBean implements Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerBean.class);
@@ -28,9 +25,8 @@ public class CustomerBean implements Serializable {
     private Customer customer = new Customer();
     private List<Customer> customers;
 
-    @PersistenceContext(unitName = "ecommercePU")
-    @Transient
-    private EntityManager em;
+    @Inject
+    private CustomerRepository customerRepository;
 
     public Customer getCustomer() {
         return customer;
@@ -44,8 +40,7 @@ public class CustomerBean implements Serializable {
         try {
             if (customers == null) {
                 logger.info("Loading customer list from database");
-                TypedQuery<Customer> query = em.createQuery("SELECT c FROM Customer c", Customer.class);
-                customers = query.getResultList();
+                customers = customerRepository.findAll();
             }
             return customers;
         } catch (Exception e) {
@@ -54,6 +49,7 @@ public class CustomerBean implements Serializable {
         }
     }
 
+    @Transactional
     public String save() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
@@ -81,13 +77,7 @@ public class CustomerBean implements Serializable {
             return null;
         }
         try {
-            if (customer.getCustomerId() == null) {
-                logger.info("Persisting new customer");
-                em.persist(customer);
-            } else {
-                logger.info("Merging existing customer with ID: {}", customer.getCustomerId());
-                em.merge(customer);
-            }
+            customerRepository.save(customer);
             customer = new Customer();
             customers = null;
         } catch (Exception e) {
@@ -111,6 +101,7 @@ public class CustomerBean implements Serializable {
         return null;
     }
 
+    @Transactional
     public String delete(Customer c) {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
@@ -121,10 +112,7 @@ public class CustomerBean implements Serializable {
         }
         try {
             logger.info("Deleting customer with ID: {}", c.getCustomerId());
-            Customer toRemove = em.find(Customer.class, c.getCustomerId());
-            if (toRemove != null) {
-                em.remove(toRemove);
-            }
+            customerRepository.delete(c.getCustomerId());
             customers = null;
         } catch (Exception e) {
             logger.error("Error deleting customer: {}", e.getMessage());
