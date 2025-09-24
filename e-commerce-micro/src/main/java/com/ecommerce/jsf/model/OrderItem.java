@@ -5,6 +5,7 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "order_item")
 public class OrderItem implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -23,8 +24,15 @@ public class OrderItem implements Serializable {
 
     @Column(name = "quantity")
     private Integer quantity;
+
     @Column(name = "price")
     private Double price;
+
+    @Transient
+    private Long orderId;
+
+    @Transient
+    private Long productId;
 
     public Long getOrderItemId() {
         return orderItemId;
@@ -36,6 +44,7 @@ public class OrderItem implements Serializable {
 
     public void setOrder(Order order) {
         this.order = order;
+        this.orderId = (order != null) ? order.getOrderId() : null;
     }
 
     public Product getProduct() {
@@ -44,6 +53,7 @@ public class OrderItem implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
+        this.productId = (product != null) ? product.getProductId() : null;
     }
 
     public Integer getQuantity() {
@@ -60,5 +70,21 @@ public class OrderItem implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }

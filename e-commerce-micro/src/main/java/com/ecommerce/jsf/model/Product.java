@@ -8,6 +8,7 @@ import java.util.List;
 @Entity
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
@@ -15,8 +16,10 @@ public class Product implements Serializable {
 
     @Column(name = "name")
     private String name;
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "price")
     private Double price;
 

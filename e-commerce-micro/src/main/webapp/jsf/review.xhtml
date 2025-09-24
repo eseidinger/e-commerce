@@ -9,22 +9,22 @@
         <f:facet name="title">
             <span class="pi pi-comments" style="margin-right:8px;"></span>Review CRUD
         </f:facet>
-        <h:form>
-            <p:messages id="errors" globalOnly="true" styleClass="ui-messages-error" closable="true" />
+        <p:messages id="errors" globalOnly="true" styleClass="ui-messages-error" closable="true" />
+        <h:form id="dataInput">
             <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" style="margin-bottom:1em;">
                 <p:outputLabel value="Product ID:" />
-                <p:inputText value="#{reviewBean.review.product.productId}" />
+                <p:inputText value="#{reviewBean.review.productId}" />
                 <p:outputLabel value="Customer ID:" />
-                <p:inputText value="#{reviewBean.review.customer.customerId}" />
+                <p:inputText value="#{reviewBean.review.customerId}" />
                 <p:outputLabel value="Rating:" />
                 <p:inputText value="#{reviewBean.review.rating}" />
                 <p:outputLabel value="Comment:" />
                 <p:inputText value="#{reviewBean.review.comment}" />
             </p:panelGrid>
             <p:commandButton value="Save" icon="pi pi-save" action="#{reviewBean.save}" styleClass="ui-button-success"
-                update="errors" />
+                update="errors dataTable dataInput" />
         </h:form>
-        <h:form>
+        <h:form id="dataTable">
             <p:dataTable value="#{reviewBean.reviews}" var="r" style="margin-top:2em;" paginator="true" rows="10"
                 responsiveLayout="scroll">
                 <p:column headerText="Review ID">
@@ -44,9 +44,9 @@
                 </p:column>
                 <p:column headerText="Actions">
                     <p:commandButton value="Edit" icon="pi pi-pencil" action="#{reviewBean.edit(r)}"
-                        styleClass="ui-button-info" update="errors" />
+                        styleClass="ui-button-info" update="errors dataInput" />
                     <p:commandButton value="Delete" icon="pi pi-trash" action="#{reviewBean.delete(r)}"
-                        styleClass="ui-button-danger" update="errors" />
+                        styleClass="ui-button-danger" update="errors dataTable" />
                 </p:column>
             </p:dataTable>
         </h:form>

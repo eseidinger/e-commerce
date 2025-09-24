@@ -9,21 +9,22 @@
         <f:facet name="title">
             <span class="pi pi-list" style="margin-right:8px;"></span>Order Item CRUD
         </f:facet>
-        <h:form>
-            <p:messages id="errors" globalOnly="true" styleClass="ui-messages-error" closable="true" />
+        <p:messages id="errors" globalOnly="true" styleClass="ui-messages-error" closable="true" />
+        <h:form id="dataInput">
             <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" style="margin-bottom:1em;">
                 <p:outputLabel value="Order ID:" />
-                <p:inputText value="#{orderItemBean.orderItem.order.orderId}" />
+                <p:inputText value="#{orderItemBean.orderItem.orderId}" />
                 <p:outputLabel value="Product ID:" />
-                <p:inputText value="#{orderItemBean.orderItem.product.productId}" />
+                <p:inputText value="#{orderItemBean.orderItem.productId}" />
                 <p:outputLabel value="Quantity:" />
                 <p:inputText value="#{orderItemBean.orderItem.quantity}" />
                 <p:outputLabel value="Price:" />
                 <p:inputText value="#{orderItemBean.orderItem.price}" />
             </p:panelGrid>
-            <p:commandButton value="Save" icon="pi pi-save" action="#{orderItemBean.save}" styleClass="ui-button-success" update="errors" />
+            <p:commandButton value="Save" icon="pi pi-save" action="#{orderItemBean.save}"
+                styleClass="ui-button-success" update="errors dataTable dataInput" />
         </h:form>
-        <h:form>
+        <h:form id="dataTable">
             <p:dataTable value="#{orderItemBean.orderItems}" var="oi" style="margin-top:2em;" paginator="true" rows="10"
                 responsiveLayout="scroll">
                 <p:column headerText="OrderItem ID">
@@ -43,9 +44,9 @@
                 </p:column>
                 <p:column headerText="Actions">
                     <p:commandButton value="Edit" icon="pi pi-pencil" action="#{orderItemBean.edit(oi)}"
-                        styleClass="ui-button-info" update="errors" />
+                        styleClass="ui-button-info" update="errors dataInput" />
                     <p:commandButton value="Delete" icon="pi pi-trash" action="#{orderItemBean.delete(oi)}"
-                        styleClass="ui-button-danger" update="errors" />
+                        styleClass="ui-button-danger" update="errors dataTable" />
                 </p:column>
             </p:dataTable>
         </h:form>

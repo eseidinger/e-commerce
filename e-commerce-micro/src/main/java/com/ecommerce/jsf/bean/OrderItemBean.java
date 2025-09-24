@@ -4,7 +4,10 @@ package com.ecommerce.jsf.bean;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.application.FacesMessage;
 
+import com.ecommerce.jsf.model.Order;
 import com.ecommerce.jsf.model.OrderItem;
+import com.ecommerce.jsf.model.Product;
+
 import jakarta.inject.Named;
 import jakarta.faces.view.ViewScoped;
 import jakarta.transaction.Transactional;
@@ -49,6 +52,24 @@ public class OrderItemBean implements Serializable {
         }
     }
 
+    private Order getOrderById(Long orderId) {
+        try {
+            return em.find(Order.class, orderId);
+        } catch (Exception e) {
+            logger.error("Error finding order by ID {}: {}", orderId, e.getMessage());
+            throw e;
+        }
+    }
+
+    private Product getProductById(Long productId) {
+        try {
+            return em.find(Product.class, productId);
+        } catch (Exception e) {
+            logger.error("Error finding product by ID {}: {}", productId, e.getMessage());
+            throw e;
+        }
+    }
+
     public String save() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
@@ -58,6 +79,8 @@ public class OrderItemBean implements Serializable {
             return null;
         }
         try {
+            orderItem.setOrder(getOrderById(orderItem.getOrderId()));
+            orderItem.setProduct(getProductById(orderItem.getProductId()));
             if (orderItem.getOrderItemId() == null) {
                 logger.info("Persisting new order item");
                 em.persist(orderItem);

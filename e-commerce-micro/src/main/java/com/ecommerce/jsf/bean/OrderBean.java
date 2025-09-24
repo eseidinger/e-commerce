@@ -59,7 +59,7 @@ public class OrderBean implements Serializable {
             return em.find(Customer.class, customerId);
         } catch (Exception e) {
             logger.error("Error finding customer with ID {}: {}", customerId, e.getMessage());
-            return null;
+            throw e;
         }
     }
 
@@ -72,10 +72,9 @@ public class OrderBean implements Serializable {
             return null;
         }
         try {
+            order.setCustomer(getCustomerById(order.getCustomerId()));
             if (order.getOrderId() == null) {
                 logger.info("Persisting new order");
-                Customer customer = getCustomerById(order.getCustomerId());
-                order.setCustomer(customer);
                 em.persist(order);
             } else {
                 logger.info("Merging existing order with ID: {}", order.getOrderId());

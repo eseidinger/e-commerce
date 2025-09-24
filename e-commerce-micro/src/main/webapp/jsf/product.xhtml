@@ -9,8 +9,8 @@
         <f:facet name="title">
             <span class="pi pi-box" style="margin-right:8px;"></span>Product CRUD
         </f:facet>
-        <h:form>
-            <p:messages id="errors" globalOnly="true" styleClass="ui-messages-error" closable="true" />
+        <p:messages id="errors" globalOnly="true" styleClass="ui-messages-error" closable="true" />
+        <h:form id="dataInput">
             <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" style="margin-bottom:1em;">
                 <p:outputLabel value="Name:" />
                 <p:inputText value="#{productBean.product.name}" />
@@ -20,9 +20,9 @@
                 <p:inputText value="#{productBean.product.price}" />
             </p:panelGrid>
             <p:commandButton value="Save" icon="pi pi-save" action="#{productBean.save}" styleClass="ui-button-success"
-                update="errors" />
+                update="errors dataTable dataInput" />
         </h:form>
-        <h:form>
+        <h:form id="dataTable">
             <p:dataTable value="#{productBean.products}" var="p" style="margin-top:2em;" paginator="true" rows="10"
                 responsiveLayout="scroll">
                 <p:column headerText="Product ID">
@@ -39,9 +39,9 @@
                 </p:column>
                 <p:column headerText="Actions">
                     <p:commandButton value="Edit" icon="pi pi-pencil" action="#{productBean.edit(p)}"
-                        styleClass="ui-button-info" update="errors" />
+                        styleClass="ui-button-info" update="errors dataInput" />
                     <p:commandButton value="Delete" icon="pi pi-trash" action="#{productBean.delete(p)}"
-                        styleClass="ui-button-danger" update="errors" />
+                        styleClass="ui-button-danger" update="errors dataTable" />
                 </p:column>
             </p:dataTable>
         </h:form>
