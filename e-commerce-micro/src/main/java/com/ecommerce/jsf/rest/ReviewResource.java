@@ -1,7 +1,7 @@
 package com.ecommerce.jsf.rest;
 
 import com.ecommerce.jsf.model.Review;
-import com.ecommerce.jsf.repository.ReviewRepository;
+import com.ecommerce.jsf.service.ReviewService;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -14,24 +14,25 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ReviewResource {
+
     @Inject
-    private ReviewRepository reviewRepository;
+    private ReviewService reviewService;
 
     @GET
     public List<Review> getAll() {
-        return reviewRepository.findAll();
+        return reviewService.findAll();
     }
 
     @GET
     @Path("/{id}")
     public Review getById(@PathParam("id") Long id) {
-        return reviewRepository.findById(id);
+        return reviewService.findById(id);
     }
 
     @POST
     @RolesAllowed("admin")
     public Response create(Review review) {
-        reviewRepository.save(review);
+        reviewService.save(review);
         return Response.status(Response.Status.CREATED).entity(review).build();
     }
 
@@ -40,7 +41,7 @@ public class ReviewResource {
     @RolesAllowed("admin")
     public Response update(@PathParam("id") Long id, Review review) {
         review.setReviewId(id);
-        reviewRepository.save(review);
+        reviewService.save(review);
         return Response.ok(review).build();
     }
 
@@ -48,7 +49,7 @@ public class ReviewResource {
     @Path("/{id}")
     @RolesAllowed("admin")
     public Response delete(@PathParam("id") Long id) {
-        reviewRepository.delete(id);
+        reviewService.delete(id);
         return Response.noContent().build();
     }
 }

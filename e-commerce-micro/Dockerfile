@@ -11,6 +11,6 @@ COPY ./config/logging.properties /opt/payara/logging.properties
 ENV JVM_ARGS="-Djdk.util.zip.disableZip64ExtraFieldValidation=true"
 
 # Expose HTTP and debug ports
-EXPOSE 8080 9009
+EXPOSE 8080 5005
 
 # Entrypoint is inherited from payara/micro

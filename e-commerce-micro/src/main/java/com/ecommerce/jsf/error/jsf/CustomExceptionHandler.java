@@ -1,4 +1,4 @@
-package com.ecommerce.jsf.error;
+package com.ecommerce.jsf.error.jsf;
 
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -27,17 +27,23 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
         while (i.hasNext()) {
             ExceptionQueuedEvent event = i.next();
             ExceptionQueuedEventContext context = event.getContext();
-            Throwable t = context.getException();
+            Throwable root = context.getException();
+            while (root.getCause() != null && root != root.getCause()) {
+                root = root.getCause();
+            }
 
             try {
-                logger.error("Unhandled exception", t);
+                logger.error("Unhandled exception", root);
+
+                String exceptionName = root.getClass().getSimpleName();
+                logger.debug("Exception class: {}", exceptionName);
 
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 if (facesContext != null && facesContext.getExternalContext().getRequestMap() != null) {
                     facesContext.addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            "An unexpected error occurred",
-                            t.getMessage()));
+                            exceptionName,
+                            root.getMessage()));
                 }
             } finally {
                 i.remove(); // remove the handled exception

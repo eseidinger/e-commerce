@@ -2,16 +2,13 @@
 package com.ecommerce.jsf.bean;
 
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.application.FacesMessage;
 
 import com.ecommerce.jsf.model.OrderItem;
 
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 import jakarta.faces.view.ViewScoped;
-import com.ecommerce.jsf.repository.OrderItemRepository;
-import com.ecommerce.jsf.repository.OrderRepository;
-import com.ecommerce.jsf.repository.ProductRepository;
+import com.ecommerce.jsf.service.OrderItemService;
 
 import jakarta.inject.Inject;
 import java.io.Serializable;
@@ -31,13 +28,7 @@ public class OrderItemBean implements Serializable {
     private List<OrderItem> orderItems;
 
     @Inject
-    private OrderItemRepository orderItemRepository;
-
-    @Inject
-    private ProductRepository productRepository;
-
-    @Inject
-    private OrderRepository orderRepository;
+    private OrderItemService orderItemService;
 
     public OrderItem getOrderItem() {
         return orderItem;
@@ -48,16 +39,11 @@ public class OrderItemBean implements Serializable {
     }
 
     public List<OrderItem> getOrderItems() {
-        try {
-            if (orderItems == null) {
-                logger.info("Loading order item list from database");
-                orderItems = orderItemRepository.findAll();
-            }
-            return orderItems;
-        } catch (Exception e) {
-            logger.error("Error loading order items: {}", e.getMessage());
-            return null;
+        if (orderItems == null) {
+            logger.info("Loading order item list from service");
+            orderItems = orderItemService.findAll();
         }
+        return orderItems;
     }
 
     @Transactional
@@ -65,21 +51,12 @@ public class OrderItemBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
             logger.warn("Unauthorized save attempt by user without admin role");
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
-                    "Access denied: admin role required"));
-            return null;
+            throw new SecurityException("Access denied: admin role required");
         }
-        try {
-            orderItem.setOrder(orderRepository.findById(orderItem.getOrderId()));
-            orderItem.setProduct(productRepository.findById(orderItem.getProductId()));
-            orderItemRepository.save(orderItem);
-            orderItem = new OrderItem();
-            orderItems = null;
-        } catch (Exception e) {
-            logger.error("Error saving order item: {}", e.getMessage());
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-                    "An error occurred while saving the order item."));
-        }
+        logger.info("Saving order item: {}", orderItem);
+        orderItemService.save(orderItem);
+        orderItem = new OrderItem();
+        orderItems = null;
         return null;
     }
 
@@ -88,9 +65,7 @@ public class OrderItemBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
             logger.warn("Unauthorized edit attempt by user without admin role");
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
-                    "Access denied: admin role required"));
-            return null;
+            throw new SecurityException("Access denied: admin role required");
         }
         this.orderItem = oi;
         return null;
@@ -101,19 +76,11 @@ public class OrderItemBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
             logger.warn("Unauthorized delete attempt by user without admin role");
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
-                    "Access denied: admin role required"));
-            return null;
+            throw new SecurityException("Access denied: admin role required");
         }
-        try {
-            logger.info("Deleting order item with ID: {}", oi.getOrderItemId());
-            orderItemRepository.delete(oi.getOrderItemId());
-            orderItems = null;
-        } catch (Exception e) {
-            logger.error("Error deleting order item: {}", e.getMessage());
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-                    "An error occurred while deleting the order item."));
-        }
+        logger.info("Deleting order item with ID: {}", oi.getOrderItemId());
+        orderItemService.delete(oi.getOrderItemId());
+        orderItems = null;
         return null;
     }
 }

@@ -1,4 +1,4 @@
-package com.ecommerce.jsf.error;
+package com.ecommerce.jsf.error.jsf;
 
 import jakarta.faces.context.ExceptionHandler;
 import jakarta.faces.context.ExceptionHandlerFactory;

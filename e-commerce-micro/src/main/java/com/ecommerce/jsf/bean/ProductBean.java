@@ -2,13 +2,12 @@
 package com.ecommerce.jsf.bean;
 
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.application.FacesMessage;
 
 import com.ecommerce.jsf.model.Product;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 import jakarta.faces.view.ViewScoped;
-import com.ecommerce.jsf.repository.ProductRepository;
+import com.ecommerce.jsf.service.ProductService;
 import jakarta.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
@@ -23,7 +22,7 @@ public class ProductBean implements Serializable {
     private Product product = new Product();
     private List<Product> products;
     @Inject
-    private ProductRepository productRepository;
+    private ProductService productService;
 
     public Product getProduct() {
         return product;
@@ -34,16 +33,11 @@ public class ProductBean implements Serializable {
     }
 
     public List<Product> getProducts() {
-        try {
-            if (products == null) {
-                logger.info("Loading product list from database");
-                products = productRepository.findAll();
-            }
-            return products;
-        } catch (Exception e) {
-            logger.error("Error loading products: {}", e.getMessage());
-            return null;
+        if (products == null) {
+            logger.info("Loading product list from service");
+            products = productService.findAll();
         }
+        return products;
     }
 
     @Transactional
@@ -51,19 +45,12 @@ public class ProductBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
             logger.warn("Unauthorized save attempt by user without admin role");
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
-                    "Access denied: admin role required"));
-            return null;
+            throw new SecurityException("Access denied: admin role required");
         }
-        try {
-            productRepository.save(product);
-            product = new Product();
-            products = null;
-        } catch (Exception e) {
-            logger.error("Error saving product: {}", e.getMessage());
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-                    "An error occurred while saving the product."));
-        }
+        logger.info("Saving product: {}", product);
+        productService.save(product);
+        product = new Product();
+        products = null;
         return null;
     }
 
@@ -72,9 +59,7 @@ public class ProductBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
             logger.warn("Unauthorized edit attempt by user without admin role");
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
-                    "Access denied: admin role required"));
-            return null;
+            throw new SecurityException("Access denied: admin role required");
         }
         this.product = p;
         return null;
@@ -85,19 +70,11 @@ public class ProductBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!context.getExternalContext().isUserInRole("admin")) {
             logger.warn("Unauthorized delete attempt by user without admin role");
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Error",
-                    "Access denied: admin role required"));
-            return null;
+            throw new SecurityException("Access denied: admin role required");
         }
-        try {
-            logger.info("Deleting product with ID: {}", p.getProductId());
-            productRepository.delete(p.getProductId());
-            products = null;
-        } catch (Exception e) {
-            logger.error("Error deleting product: {}", e.getMessage());
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-                    "An error occurred while deleting the product."));
-        }
+        logger.info("Deleting product with ID: {}", p.getProductId());
+        productService.delete(p.getProductId());
+        products = null;
         return null;
     }
 }

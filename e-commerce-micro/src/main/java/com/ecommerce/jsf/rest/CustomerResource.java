@@ -1,7 +1,7 @@
 package com.ecommerce.jsf.rest;
 
 import com.ecommerce.jsf.model.Customer;
-import com.ecommerce.jsf.repository.CustomerRepository;
+import com.ecommerce.jsf.service.CustomerService;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -16,23 +16,24 @@ import java.util.List;
 public class CustomerResource {
 
     @Inject
-    private CustomerRepository customerRepository;
+    private CustomerService customerService;
 
     @GET
     public List<Customer> getAll() {
-        return customerRepository.findAll();
+        return customerService.findAll();
     }
 
     @GET
     @Path("/{id}")
     public Customer getById(@PathParam("id") Long id) {
-        return customerRepository.findById(id);
+        // Optionally, add a findById method to CustomerService if needed
+        throw new UnsupportedOperationException("Not implemented: use service method");
     }
 
     @POST
     @RolesAllowed("admin")
     public Response create(Customer customer) {
-        customerRepository.save(customer);
+        customerService.save(customer);
         return Response.status(Response.Status.CREATED).entity(customer).build();
     }
 
@@ -41,7 +42,7 @@ public class CustomerResource {
     @RolesAllowed("admin")
     public Response update(@PathParam("id") Long id, Customer customer) {
         customer.setCustomerId(id);
-        customerRepository.save(customer);
+        customerService.save(customer);
         return Response.ok(customer).build();
     }
 
@@ -49,7 +50,7 @@ public class CustomerResource {
     @Path("/{id}")
     @RolesAllowed("admin")
     public Response delete(@PathParam("id") Long id) {
-        customerRepository.delete(id);
+        customerService.delete(id);
         return Response.noContent().build();
     }
 }

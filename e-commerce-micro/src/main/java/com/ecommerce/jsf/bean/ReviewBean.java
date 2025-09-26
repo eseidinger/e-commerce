@@ -9,13 +9,9 @@ import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 import jakarta.faces.view.ViewScoped;
 
-import com.ecommerce.jsf.repository.CustomerRepository;
-import com.ecommerce.jsf.repository.ProductRepository;
-import com.ecommerce.jsf.repository.ReviewRepository;
+import com.ecommerce.jsf.service.ReviewService;
 import jakarta.inject.Inject;
 import java.io.Serializable;
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +28,7 @@ public class ReviewBean implements Serializable {
     private List<Review> reviews;
 
     @Inject
-    private ReviewRepository reviewRepository;
-
-    @Inject
-    private ProductRepository productRepository;
-
-    @Inject
-    private CustomerRepository customerRepository;
+    private ReviewService reviewService;
 
     public Review getReview() {
         return review;
@@ -51,8 +41,8 @@ public class ReviewBean implements Serializable {
     public List<Review> getReviews() {
         try {
             if (reviews == null) {
-                logger.info("Loading review list from database");
-                reviews = reviewRepository.findAll();
+                logger.info("Loading review list from service");
+                reviews = reviewService.findAll();
             }
             return reviews;
         } catch (Exception e) {
@@ -71,10 +61,7 @@ public class ReviewBean implements Serializable {
             return null;
         }
         try {
-            review.setProduct(productRepository.findById(review.getProductId()));
-            review.setCustomer(customerRepository.findById(review.getCustomerId()));
-            review.setReviewDate(Date.from(Instant.now()));
-            reviewRepository.save(review);
+            reviewService.save(review);
             review = new Review();
             reviews = null;
         } catch (Exception e) {
@@ -109,7 +96,7 @@ public class ReviewBean implements Serializable {
         }
         try {
             logger.info("Deleting review with ID: {}", r.getReviewId());
-            reviewRepository.delete(r.getReviewId());
+            reviewService.delete(r.getReviewId());
             reviews = null;
         } catch (Exception e) {
             logger.error("Error deleting review: {}", e.getMessage());

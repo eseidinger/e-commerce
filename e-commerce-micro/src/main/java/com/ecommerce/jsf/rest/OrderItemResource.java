@@ -1,7 +1,7 @@
 package com.ecommerce.jsf.rest;
 
 import com.ecommerce.jsf.model.OrderItem;
-import com.ecommerce.jsf.repository.OrderItemRepository;
+import com.ecommerce.jsf.service.OrderItemService;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -14,24 +14,25 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class OrderItemResource {
+
     @Inject
-    private OrderItemRepository orderItemRepository;
+    private OrderItemService orderItemService;
 
     @GET
     public List<OrderItem> getAll() {
-        return orderItemRepository.findAll();
+        return orderItemService.findAll();
     }
 
     @GET
     @Path("/{id}")
     public OrderItem getById(@PathParam("id") Long id) {
-        return orderItemRepository.findById(id);
+        return orderItemService.findById(id);
     }
 
     @POST
     @RolesAllowed("admin")
     public Response create(OrderItem orderItem) {
-        orderItemRepository.save(orderItem);
+        orderItemService.save(orderItem);
         return Response.status(Response.Status.CREATED).entity(orderItem).build();
     }
 
@@ -40,7 +41,7 @@ public class OrderItemResource {
     @RolesAllowed("admin")
     public Response update(@PathParam("id") Long id, OrderItem orderItem) {
         orderItem.setOrderItemId(id);
-        orderItemRepository.save(orderItem);
+        orderItemService.save(orderItem);
         return Response.ok(orderItem).build();
     }
 
@@ -48,7 +49,7 @@ public class OrderItemResource {
     @Path("/{id}")
     @RolesAllowed("admin")
     public Response delete(@PathParam("id") Long id) {
-        orderItemRepository.delete(id);
+        orderItemService.delete(id);
         return Response.noContent().build();
     }
 }

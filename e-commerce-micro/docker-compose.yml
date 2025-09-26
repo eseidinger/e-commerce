@@ -63,7 +63,7 @@ services:
       AUTH_REALM: e-commerce-dev
       AUTH_HOST: https://keycloak.eseidinger.de
       BASE_URL: http://localhost:8088
-      JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:9009"
+      JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
     command:
       - "--deploydir"
       - "/opt/payara/deployments"
@@ -75,7 +75,7 @@ services:
       - "/opt/payara/logging.properties"
     ports:
       - "8080:8080"
-      - "9009:9009"
+      - "5005:5005"
     depends_on:
       - db
 
@@ -93,7 +93,7 @@ services:
       AUTH_REALM: e-commerce-dev
       AUTH_HOST: https://keycloak.eseidinger.de
       BASE_URL: http://localhost:8088
-      JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:9009"
+      JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
     command:
       - "--deploydir"
       - "/opt/payara/deployments"
@@ -105,7 +105,7 @@ services:
       - "/opt/payara/logging.properties"
     ports:
       - "8081:8080"
-      - "9010:9009"
+      - "5006:5005"
     depends_on:
       - db
 
