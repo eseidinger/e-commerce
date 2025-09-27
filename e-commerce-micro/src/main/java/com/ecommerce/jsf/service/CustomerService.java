@@ -24,7 +24,7 @@ public class CustomerService {
         if (!InputValidator.isValidEmail(customer.getEmail())) {
             throw new ValidationException("Invalid email");
         }
-        if (!InputValidator.isValidName(customer.getName())) {
+        if (!InputValidator.isNonEmptyString(customer.getName())) {
             throw new ValidationException("Invalid name");
         }
     }

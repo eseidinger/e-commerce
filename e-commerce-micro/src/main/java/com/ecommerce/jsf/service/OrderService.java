@@ -4,6 +4,7 @@ import com.ecommerce.jsf.exception.ValidationException;
 import com.ecommerce.jsf.model.Customer;
 import com.ecommerce.jsf.model.Order;
 import com.ecommerce.jsf.repository.OrderRepository;
+import com.ecommerce.jsf.util.InputValidator;
 import com.ecommerce.jsf.repository.CustomerRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,6 +31,9 @@ public class OrderService {
 
     @Transactional
     public void save(Order order) {
+        if (!InputValidator.isValidPrice(order.getTotalAmount())) {
+            throw new ValidationException("Invalid total amount");
+        }
         if (order.getCustomerId() == null) {
             throw new ValidationException("Customer ID cannot be null");
         }

@@ -3,7 +3,9 @@
     <span class="pi pi-box" style="margin-right:8px;"></span>Product CRUD
   </ng-template>
   @for (msg of msgs; track msg) {
-  <p-message [severity]="msg.severity" [text]="msg.text" [closable]="true"></p-message>
+  <div style="margin-bottom:1.25em;">
+    <p-message [severity]="msg.severity" [text]="msg.text" [closable]="true"></p-message>
+  </div>
   }
   <form (ngSubmit)="saveProduct()">
     <p-fluid style="margin-bottom:1em;">
@@ -17,7 +19,8 @@
         <p-inputgroup-addon>
           <i class="pi pi-align-left"></i>
         </p-inputgroup-addon>
-        <input pInputText id="description" name="description" [(ngModel)]="product.description" placeholder="Description" />
+        <input pInputText id="description" name="description" [(ngModel)]="product.description"
+          placeholder="Description" />
       </p-inputgroup>
       <p-inputgroup style="margin-bottom: 1.25em;">
         <p-inputgroup-addon>

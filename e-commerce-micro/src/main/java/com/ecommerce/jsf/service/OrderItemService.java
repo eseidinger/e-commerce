@@ -6,6 +6,7 @@ import com.ecommerce.jsf.model.Order;
 import com.ecommerce.jsf.model.Product;
 import com.ecommerce.jsf.repository.OrderItemRepository;
 import com.ecommerce.jsf.repository.ProductRepository;
+import com.ecommerce.jsf.util.InputValidator;
 import com.ecommerce.jsf.repository.OrderRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,6 +38,9 @@ public class OrderItemService {
     public void save(OrderItem orderItem) {
         if (orderItem.getQuantity() == null || orderItem.getQuantity() <= 0) {
             throw new ValidationException("Quantity must be greater than zero");
+        }
+        if (!InputValidator.isValidPrice(orderItem.getPrice())) {
+            throw new ValidationException("Invalid price");
         }
         if (orderItem.getOrderId() == null) {
             throw new ValidationException("Order ID cannot be null");

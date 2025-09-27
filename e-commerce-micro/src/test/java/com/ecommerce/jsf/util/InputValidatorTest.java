@@ -14,10 +14,10 @@ public class InputValidatorTest {
 
     @Test
     public void testValidName() {
-        assertTrue(InputValidator.isValidName("John"));
-        assertFalse(InputValidator.isValidName("J"));
-        assertFalse(InputValidator.isValidName("") );
-        assertFalse(InputValidator.isValidName(null));
+        assertTrue(InputValidator.isNonEmptyString("John"));
+        assertFalse(InputValidator.isNonEmptyString("J"));
+        assertFalse(InputValidator.isNonEmptyString("") );
+        assertFalse(InputValidator.isNonEmptyString(null));
     }
 
     @Test

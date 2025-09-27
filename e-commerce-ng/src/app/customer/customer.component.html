@@ -3,7 +3,9 @@
     <span class="pi pi-users" style="margin-right:8px;"></span>Customer CRUD
   </ng-template>
   @for (msg of msgs; track msg) {
-  <p-message [severity]="msg.severity" [text]="msg.text" [closable]="true"></p-message>
+  <div style="margin-bottom: 1.25em;">
+    <p-message [severity]="msg.severity" [text]="msg.text" [closable]="true"></p-message>
+  </div>
   }
   <form (ngSubmit)="saveCustomer()">
     <p-fluid style="margin-bottom:1em;">

@@ -2,6 +2,7 @@ package com.ecommerce.jsf.service;
 
 import com.ecommerce.jsf.model.Review;
 import com.ecommerce.jsf.repository.ReviewRepository;
+import com.ecommerce.jsf.util.InputValidator;
 import com.ecommerce.jsf.model.Customer;
 import com.ecommerce.jsf.model.Product;
 import com.ecommerce.jsf.repository.ProductRepository;
@@ -37,8 +38,11 @@ public class ReviewService {
 
     @Transactional
     public void save(Review review) {
-        if (review.getRating() < 1 || review.getRating() > 5) {
+        if (!InputValidator.isValidRating(review.getRating())) {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
+        }
+        if (!InputValidator.isNonEmptyString(review.getComment())) {
+            throw new IllegalArgumentException("Comment cannot be empty");
         }
         if (review.getProductId() == null) {    
             throw new IllegalArgumentException("Product ID cannot be null");
