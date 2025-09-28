@@ -7,8 +7,11 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.transaction.Transactional;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +50,6 @@ public class ReviewBean implements Serializable {
     }
   }
 
-  @Transactional
   public String save() {
     FacesContext context = FacesContext.getCurrentInstance();
     if (!context.getExternalContext().isUserInRole("admin")) {
@@ -84,10 +86,11 @@ public class ReviewBean implements Serializable {
       return null;
     }
     this.review = r;
+    this.review.setCustomerId(r.getCustomer().getCustomerId());
+    this.review.setProductId(r.getProduct().getProductId());
     return null;
   }
 
-  @Transactional
   public String delete(Review r) {
     FacesContext context = FacesContext.getCurrentInstance();
     if (!context.getExternalContext().isUserInRole("admin")) {
@@ -112,5 +115,15 @@ public class ReviewBean implements Serializable {
               "An error occurred while deleting the review."));
     }
     return null;
+  }
+
+  public String getUtcDateInLocalDateFormat(Review review) {
+    if (review.getReviewDate() == null) {
+      return "";
+    }
+    LocalDateTime utcDateTime =
+        LocalDateTime.ofInstant(review.getReviewDate().toInstant(), ZoneOffset.UTC);
+    DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+    return utcDateTime.format(formatter);
   }
 }

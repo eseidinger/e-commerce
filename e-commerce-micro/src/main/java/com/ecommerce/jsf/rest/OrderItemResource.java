@@ -1,5 +1,6 @@
 package com.ecommerce.jsf.rest;
 
+import com.ecommerce.jsf.dto.OrderItemDto;
 import com.ecommerce.jsf.model.OrderItem;
 import com.ecommerce.jsf.service.OrderItemService;
 import jakarta.annotation.security.RolesAllowed;
@@ -17,21 +18,23 @@ public class OrderItemResource {
   @Inject private OrderItemService orderItemService;
 
   @GET
-  public List<OrderItem> getAll() {
-    return orderItemService.findAll();
+  public List<OrderItemDto> getAll() {
+    return orderItemService.findAll().stream().map(OrderItem::toDto).toList();
   }
 
   @GET
   @Path("/{id}")
-  public OrderItem getById(@PathParam("id") Long id) {
-    return orderItemService.findById(id);
+  public OrderItemDto getById(@PathParam("id") Long id) {
+    return orderItemService.findById(id) != null
+        ? OrderItem.toDto(orderItemService.findById(id))
+        : null;
   }
 
   @POST
   @RolesAllowed("admin")
   public Response create(OrderItem orderItem) {
     orderItemService.save(orderItem);
-    return Response.status(Response.Status.CREATED).entity(orderItem).build();
+    return Response.status(Response.Status.CREATED).entity(OrderItem.toDto(orderItem)).build();
   }
 
   @PUT
@@ -40,7 +43,7 @@ public class OrderItemResource {
   public Response update(@PathParam("id") Long id, OrderItem orderItem) {
     orderItem.setOrderItemId(id);
     orderItemService.save(orderItem);
-    return Response.ok(orderItem).build();
+    return Response.ok(OrderItem.toDto(orderItem)).build();
   }
 
   @DELETE

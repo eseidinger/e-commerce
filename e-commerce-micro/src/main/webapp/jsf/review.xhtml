@@ -20,6 +20,8 @@
                 <p:inputText value="#{reviewBean.review.rating}" />
                 <p:outputLabel value="Comment:" />
                 <p:inputText value="#{reviewBean.review.comment}" />
+                <p:outputLabel value="Review Date:" />
+                <p:datePicker value="#{reviewBean.review.reviewDate}" pattern="yyyy-MM-dd" showIcon="true" timeZone="UTC" />
             </p:panelGrid>
             <p:commandButton value="Save" icon="pi pi-save" action="#{reviewBean.save}" styleClass="ui-button-success"
                 update="errors dataTable dataInput" />
@@ -41,6 +43,9 @@
                 </p:column>
                 <p:column headerText="Comment">
                     #{r.comment}
+                </p:column>
+                <p:column headerText="Review Date">
+                    #{reviewBean.getUtcDateInLocalDateFormat(r)}
                 </p:column>
                 <p:column headerText="Actions">
                     <p:commandButton value="Edit" icon="pi pi-pencil" action="#{reviewBean.edit(r)}"

@@ -1,4 +1,4 @@
-package com.ecommerce.jsf.rest;
+package com.ecommerce.jsf.config;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

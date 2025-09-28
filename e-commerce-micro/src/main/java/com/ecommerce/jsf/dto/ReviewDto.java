@@ -1,6 +1,6 @@
 package com.ecommerce.jsf.dto;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 public record ReviewDto(
     Long reviewId,
@@ -8,4 +8,4 @@ public record ReviewDto(
     Long customerId,
     int rating,
     String comment,
-    LocalDate reviewDate) {}
+    OffsetDateTime reviewDate) {}

@@ -110,10 +110,6 @@ export class OrderComponent implements OnInit {
     this.order = { orderId: 0, customerId: 0, orderDate: new Date(), totalAmount: 0 };
   }
 
-  dateInLocalFormat(o: Order): string {
-    return o.orderDate.toLocaleDateString();
-  }
-
   showSuccess(msg: string) {
     this.msgs = [{ severity: 'success', text: msg }];
   }

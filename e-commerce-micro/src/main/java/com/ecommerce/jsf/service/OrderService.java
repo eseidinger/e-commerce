@@ -31,6 +31,9 @@ public class OrderService {
     if (!InputValidator.isValidPrice(order.getTotalAmount())) {
       throw new ValidationException("Invalid total amount");
     }
+    if (order.getOrderDate() == null) {
+      throw new ValidationException("Order date cannot be null");
+    }
     if (order.getCustomerId() == null) {
       throw new ValidationException("Customer ID cannot be null");
     }

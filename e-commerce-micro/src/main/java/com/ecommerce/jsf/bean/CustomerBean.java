@@ -6,7 +6,6 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 import org.slf4j.Logger;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 @Named("customerBean")
 @ViewScoped
-@Transactional
 public class CustomerBean implements Serializable {
 
   private static final Logger logger = LoggerFactory.getLogger(CustomerBean.class);

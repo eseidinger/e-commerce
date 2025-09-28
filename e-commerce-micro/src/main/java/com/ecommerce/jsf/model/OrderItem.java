@@ -16,7 +16,17 @@ public class OrderItem implements Serializable {
     orderItem.setOrderId(dto.orderId());
     orderItem.setProductId(dto.productId());
     orderItem.setQuantity(dto.quantity());
+    orderItem.setPrice(dto.price());
     return orderItem;
+  }
+
+  public static OrderItemDto toDto(OrderItem orderItem) {
+    return new OrderItemDto(
+        orderItem.getOrderItemId(),
+        (orderItem.getOrder() != null) ? orderItem.getOrder().getOrderId() : null,
+        (orderItem.getProduct() != null) ? orderItem.getProduct().getProductId() : null,
+        orderItem.getQuantity(),
+        orderItem.getPrice());
   }
 
   @Id

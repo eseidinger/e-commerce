@@ -1,5 +1,6 @@
 package com.ecommerce.jsf.rest;
 
+import com.ecommerce.jsf.dto.ReviewDto;
 import com.ecommerce.jsf.model.Review;
 import com.ecommerce.jsf.service.ReviewService;
 import jakarta.annotation.security.RolesAllowed;
@@ -17,21 +18,21 @@ public class ReviewResource {
   @Inject private ReviewService reviewService;
 
   @GET
-  public List<Review> getAll() {
-    return reviewService.findAll();
+  public List<ReviewDto> getAll() {
+    return reviewService.findAll().stream().map(Review::toDto).toList();
   }
 
   @GET
   @Path("/{id}")
-  public Review getById(@PathParam("id") Long id) {
-    return reviewService.findById(id);
+  public ReviewDto getById(@PathParam("id") Long id) {
+    return reviewService.findById(id) != null ? Review.toDto(reviewService.findById(id)) : null;
   }
 
   @POST
   @RolesAllowed("admin")
   public Response create(Review review) {
     reviewService.save(review);
-    return Response.status(Response.Status.CREATED).entity(review).build();
+    return Response.status(Response.Status.CREATED).entity(Review.toDto(review)).build();
   }
 
   @PUT
@@ -40,7 +41,7 @@ public class ReviewResource {
   public Response update(@PathParam("id") Long id, Review review) {
     review.setReviewId(id);
     reviewService.save(review);
-    return Response.ok(review).build();
+    return Response.ok(Review.toDto(review)).build();
   }
 
   @DELETE

@@ -4,6 +4,6 @@ export interface Review {
   customerId: number;
   rating: number;
   comment: string;
-  reviewDate: string;
+  reviewDate: Date;
   // Add other fields as needed
 }

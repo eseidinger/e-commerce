@@ -18,11 +18,29 @@ public class Review implements Serializable {
     review.setRating(dto.rating());
     review.setComment(dto.comment());
     if (dto.reviewDate() != null) {
-      review.setReviewDate(java.sql.Date.valueOf(dto.reviewDate()));
+      review.setReviewDate(Date.from(dto.reviewDate().toInstant()));
     } else {
       review.setReviewDate(null);
     }
     return review;
+  }
+
+  public static ReviewDto toDto(Review review) {
+    Long productId = review.getProduct() != null ? review.getProduct().getProductId() : null;
+    Long customerId = review.getCustomer() != null ? review.getCustomer().getCustomerId() : null;
+    return new ReviewDto(
+        review.getReviewId(),
+        productId,
+        customerId,
+        review.getRating(),
+        review.getComment(),
+        review.getReviewDate() != null
+            ? review
+                .getReviewDate()
+                .toInstant()
+                .atZone(java.time.ZoneId.of("UTC"))
+                .toOffsetDateTime()
+            : null);
   }
 
   @Id

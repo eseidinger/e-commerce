@@ -6,7 +6,6 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 import org.slf4j.Logger;
@@ -41,7 +40,6 @@ public class OrderItemBean implements Serializable {
     return orderItems;
   }
 
-  @Transactional
   public String save() {
     FacesContext context = FacesContext.getCurrentInstance();
     if (!context.getExternalContext().isUserInRole("admin")) {
@@ -63,10 +61,11 @@ public class OrderItemBean implements Serializable {
       throw new SecurityException("Access denied: admin role required");
     }
     this.orderItem = oi;
+    this.orderItem.setOrderId(oi.getOrder().getOrderId());
+    this.orderItem.setProductId(oi.getProduct().getProductId());
     return null;
   }
 
-  @Transactional
   public String delete(OrderItem oi) {
     FacesContext context = FacesContext.getCurrentInstance();
     if (!context.getExternalContext().isUserInRole("admin")) {

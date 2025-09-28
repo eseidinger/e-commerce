@@ -11,6 +11,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { FluidModule } from 'primeng/fluid';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-review',
@@ -27,6 +28,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     FluidModule,
     InputGroupModule,
     InputGroupAddonModule,
+    DatePickerModule,
   ],
 })
 export class ReviewComponent implements OnInit {
@@ -37,7 +39,7 @@ export class ReviewComponent implements OnInit {
     customerId: 0,
     rating: 0,
     comment: '',
-    reviewDate: '',
+    reviewDate: new Date(),
   };
   loading = false;
   msgs: any[] = [];
@@ -52,7 +54,7 @@ export class ReviewComponent implements OnInit {
     this.loading = true;
     this.reviewService.getAll().subscribe({
       next: (data) => {
-        this.reviews = data;
+        this.reviews = data.map((item) => ({ ...item, reviewDate: new Date(item.reviewDate) }));
         this.loading = false;
       },
       error: (err) => {
@@ -105,7 +107,7 @@ export class ReviewComponent implements OnInit {
       customerId: 0,
       rating: 0,
       comment: '',
-      reviewDate: '',
+      reviewDate: new Date(),
     };
   }
 

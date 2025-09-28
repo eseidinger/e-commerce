@@ -6,7 +6,6 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 import org.slf4j.Logger;
@@ -37,7 +36,6 @@ public class ProductBean implements Serializable {
     return products;
   }
 
-  @Transactional
   public String save() {
     FacesContext context = FacesContext.getCurrentInstance();
     if (!context.getExternalContext().isUserInRole("admin")) {
@@ -62,7 +60,6 @@ public class ProductBean implements Serializable {
     return null;
   }
 
-  @Transactional
   public String delete(Product p) {
     FacesContext context = FacesContext.getCurrentInstance();
     if (!context.getExternalContext().isUserInRole("admin")) {

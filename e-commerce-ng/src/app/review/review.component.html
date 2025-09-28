@@ -3,7 +3,9 @@
     <span class="pi pi-star" style="margin-right: 8px"></span>Review CRUD
   </ng-template>
   @for (msg of msgs; track msg) {
-    <p-message [severity]="msg.severity" [text]="msg.text" [closable]="true"></p-message>
+    <div style="margin-bottom: 1.25em">
+      <p-message [severity]="msg.severity" [text]="msg.text" [closable]="true"></p-message>
+    </div>
   }
   <form (ngSubmit)="saveReview()">
     <p-fluid style="margin-bottom: 1em">
@@ -59,12 +61,11 @@
         <p-inputgroup-addon>
           <i class="pi pi-calendar"></i>
         </p-inputgroup-addon>
-        <input
-          pInputText
-          id="reviewDate"
-          name="reviewDate"
+        <p-datepicker
+          name="date"
+          #dateModel="ngModel"
           [(ngModel)]="review.reviewDate"
-          placeholder="Review Date"
+          dateFormat="dd.mm.yy"
         />
       </p-inputgroup>
     </p-fluid>
@@ -104,7 +105,7 @@
         <td>{{ r.customerId }}</td>
         <td>{{ r.rating }}</td>
         <td>{{ r.comment }}</td>
-        <td>{{ r.reviewDate }}</td>
+        <td>{{ r.reviewDate.toLocaleDateString() }}</td>
         <td>
           <button
             pButton

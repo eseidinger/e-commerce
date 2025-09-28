@@ -64,6 +64,7 @@ public class OrderBean implements Serializable {
       throw new SecurityException("Access denied: admin role required");
     }
     this.order = o;
+    this.order.setCustomerId(o.getCustomer().getCustomerId());
     return null;
   }
 

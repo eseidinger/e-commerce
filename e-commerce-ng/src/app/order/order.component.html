@@ -76,7 +76,7 @@
       <tr>
         <td>{{ o.orderId }}</td>
         <td>{{ o.customerId }}</td>
-        <td>{{ dateInLocalFormat(o) }}</td>
+        <td>{{ o.orderDate.toLocaleDateString() }}</td>
         <td>{{ o.totalAmount }}</td>
         <td>
           <button

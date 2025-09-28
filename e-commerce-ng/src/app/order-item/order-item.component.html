@@ -3,7 +3,9 @@
     <span class="pi pi-list" style="margin-right: 8px"></span>Order Item CRUD
   </ng-template>
   @for (msg of msgs; track msg) {
-    <p-message [severity]="msg.severity" [text]="msg.text" [closable]="true"></p-message>
+    <div style="margin-bottom: 1.25em">
+      <p-message [severity]="msg.severity" [text]="msg.text" [closable]="true"></p-message>
+    </div>
   }
   <form (ngSubmit)="saveOrderItem()">
     <p-fluid style="margin-bottom: 1em">
