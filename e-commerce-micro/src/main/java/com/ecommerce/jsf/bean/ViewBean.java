@@ -30,7 +30,7 @@ public class ViewBean implements Serializable {
     }
 
     public boolean isLoggedIn() {
-        return getUsername() != null;
+        return getUsername() != null && !getUsername().equals("guest");
     }
 
     public String getUsername() {
@@ -41,5 +41,4 @@ public class ViewBean implements Serializable {
         Principal principal = request.getUserPrincipal();
         return principal != null ? principal.getName() : null;
     }
-
 }
