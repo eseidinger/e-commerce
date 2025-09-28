@@ -21,12 +21,16 @@
     <glassfish.version>6.2.5</glassfish.version>
     <quartz.version>2.5.0</quartz.version>
     <slf4j.version>2.0.17</slf4j.version>
+    <jackson.version>2.20.0</jackson.version>
     <microprofile.config.version>3.1</microprofile.config.version>
     <jjwt.version>0.13.0</jjwt.version>
     <primefaces.version>15.0.0</primefaces.version>
     <!-- Plugin versions -->
     <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
     <java.version>21</java.version>
+    <spotless.version>3.0.0</spotless.version>
+    <google.java.format.version>1.28.0</google.java.format.version>
+    <maven.exec.plugin.version>3.5.1</maven.exec.plugin.version>
     <payara.micro.maven.plugin.version>2.5</payara.micro.maven.plugin.version>
     <maven.clean.plugin.version>3.3.2</maven.clean.plugin.version>
     <flyway.maven.plugin.version>10.13.0</flyway.maven.plugin.version>
@@ -136,6 +140,50 @@
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>${spotless.version}</version>
+        <configuration>
+          <java>
+            <googleJavaFormat>
+              <version>${google.java.format.version}</version>
+            </googleJavaFormat>
+          </java>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>apply</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${maven.exec.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>debug</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>java</executable>
+          <arguments>
+            <argument>-Xdebug</argument>
+            <argument>-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005</argument>
+            <argument>-jar</argument>
+            <argument>${project.basedir}/target/e-commerce-micro-microbundle.jar</argument>
+            <argument>--nocluster</argument>
+          </arguments>
         </configuration>
       </plugin>
 

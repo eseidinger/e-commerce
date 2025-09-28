@@ -10,18 +10,18 @@ import java.util.Enumeration;
 
 @WebListener
 public class JdbcDriverCleanupListener implements ServletContextListener {
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-        Enumeration<Driver> drivers = DriverManager.getDrivers();
-        while (drivers.hasMoreElements()) {
-            Driver driver = drivers.nextElement();
-            if (driver.getClass().getName().equals("org.postgresql.Driver")) {
-                try {
-                    DriverManager.deregisterDriver(driver);
-                } catch (SQLException e) {
-                    sce.getServletContext().log("Error deregistering JDBC driver: " + driver, e);
-                }
-            }
+  @Override
+  public void contextDestroyed(ServletContextEvent sce) {
+    Enumeration<Driver> drivers = DriverManager.getDrivers();
+    while (drivers.hasMoreElements()) {
+      Driver driver = drivers.nextElement();
+      if (driver.getClass().getName().equals("org.postgresql.Driver")) {
+        try {
+          DriverManager.deregisterDriver(driver);
+        } catch (SQLException e) {
+          sce.getServletContext().log("Error deregistering JDBC driver: " + driver, e);
         }
+      }
     }
+  }
 }

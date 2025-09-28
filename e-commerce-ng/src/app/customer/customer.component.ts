@@ -16,7 +16,18 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
   selector: 'app-customer',
   templateUrl: './customer.component.html',
   styleUrls: ['./customer.component.scss'],
-  imports: [CardModule, Message, FormsModule, TableModule, ButtonModule, InputTextModule, StyleClassModule, FluidModule, InputGroupModule, InputGroupAddonModule]
+  imports: [
+    CardModule,
+    Message,
+    FormsModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    StyleClassModule,
+    FluidModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+  ],
 })
 export class CustomerComponent implements OnInit {
   customers: Customer[] = [];
@@ -24,7 +35,7 @@ export class CustomerComponent implements OnInit {
   loading = false;
   msgs: any[] = [];
 
-  constructor(private customerService: CustomerService) { }
+  constructor(private customerService: CustomerService) {}
 
   ngOnInit() {
     this.loadCustomers();
@@ -33,24 +44,35 @@ export class CustomerComponent implements OnInit {
   loadCustomers() {
     this.loading = true;
     this.customerService.getAll().subscribe({
-      next: data => { this.customers = data; this.loading = false; },
-      error: err => {
+      next: (data) => {
+        this.customers = data;
+        this.loading = false;
+      },
+      error: (err) => {
         this.handleHttpError(err, 'loading customers');
         this.loading = false;
-      }
+      },
     });
   }
 
   saveCustomer() {
     if (this.customer.customerId) {
       this.customerService.update(this.customer.customerId, this.customer).subscribe({
-        next: () => { this.showSuccess('Customer updated'); this.resetForm(); this.loadCustomers(); },
-        error: err => this.handleHttpError(err, 'updating customer')
+        next: () => {
+          this.showSuccess('Customer updated');
+          this.resetForm();
+          this.loadCustomers();
+        },
+        error: (err) => this.handleHttpError(err, 'updating customer'),
       });
     } else {
       this.customerService.create(this.customer).subscribe({
-        next: () => { this.showSuccess('Customer created'); this.resetForm(); this.loadCustomers(); },
-        error: err => this.handleHttpError(err, 'creating customer')
+        next: () => {
+          this.showSuccess('Customer created');
+          this.resetForm();
+          this.loadCustomers();
+        },
+        error: (err) => this.handleHttpError(err, 'creating customer'),
       });
     }
   }
@@ -61,8 +83,11 @@ export class CustomerComponent implements OnInit {
 
   deleteCustomer(id: number) {
     this.customerService.delete(id).subscribe({
-      next: () => { this.showSuccess('Customer deleted'); this.loadCustomers(); },
-      error: err => this.handleHttpError(err, 'deleting customer')
+      next: () => {
+        this.showSuccess('Customer deleted');
+        this.loadCustomers();
+      },
+      error: (err) => this.handleHttpError(err, 'deleting customer'),
     });
   }
 

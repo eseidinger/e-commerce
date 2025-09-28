@@ -1,104 +1,120 @@
 package com.ecommerce.jsf.model;
 
+import com.ecommerce.jsf.dto.ReviewDto;
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 public class Review implements Serializable {
-    
-    private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
-    private Long reviewId;
+  private static final long serialVersionUID = 1L;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
-
-    @Column(name = "rating")
-    private Integer rating;
-
-    @Column(name = "comment")
-    private String comment;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "review_date")
-    private Date reviewDate;
-
-    @Transient
-    private Long productId;
-
-    @Transient
-    private Long customerId;
-
-    public Long getReviewId() {
-        return reviewId;
+  public static Review fromDto(ReviewDto dto) {
+    Review review = new Review();
+    review.setReviewId(dto.reviewId());
+    review.setProductId(dto.productId());
+    review.setCustomerId(dto.customerId());
+    review.setRating(dto.rating());
+    review.setComment(dto.comment());
+    if (dto.reviewDate() != null) {
+      review.setReviewDate(java.sql.Date.valueOf(dto.reviewDate()));
+    } else {
+      review.setReviewDate(null);
     }
+    return review;
+  }
 
-    public void setReviewId(Long reviewId) {
-        this.reviewId = reviewId;
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "review_id")
+  private Long reviewId;
 
-    public Product getProduct() {
-        return product;
-    }
+  @ManyToOne
+  @JoinColumn(name = "product_id")
+  private Product product;
 
-    public void setProduct(Product product) {
-        this.product = product;
-        this.productId = (product != null) ? product.getProductId() : null;
-    }
+  @ManyToOne
+  @JoinColumn(name = "customer_id")
+  private Customer customer;
 
-    public Customer getCustomer() {
-        return customer;
-    }
+  @Column(name = "rating")
+  private Integer rating;
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-        this.customerId = (customer != null) ? customer.getCustomerId() : null;
-    }
+  @Column(name = "comment")
+  private String comment;
 
-    public Integer getRating() {
-        return rating;
-    }
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "review_date")
+  private Date reviewDate;
 
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
+  @Transient private Long productId;
 
-    public String getComment() {
-        return comment;
-    }
+  @Transient private Long customerId;
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+  public Long getReviewId() {
+    return reviewId;
+  }
 
-    public Date getReviewDate() {
-        return reviewDate;
-    }
+  public void setReviewId(Long reviewId) {
+    this.reviewId = reviewId;
+  }
 
-    public void setReviewDate(Date reviewDate) {
-        this.reviewDate = reviewDate;
-    }
+  public Product getProduct() {
+    return product;
+  }
 
-    public Long getProductId() {
-        return productId;
-    }
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-    public Long getCustomerId() {
-        return customerId;
-    }
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
+  public void setProduct(Product product) {
+    this.product = product;
+    this.productId = (product != null) ? product.getProductId() : null;
+  }
+
+  public Customer getCustomer() {
+    return customer;
+  }
+
+  public void setCustomer(Customer customer) {
+    this.customer = customer;
+    this.customerId = (customer != null) ? customer.getCustomerId() : null;
+  }
+
+  public Integer getRating() {
+    return rating;
+  }
+
+  public void setRating(Integer rating) {
+    this.rating = rating;
+  }
+
+  public String getComment() {
+    return comment;
+  }
+
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
+
+  public Date getReviewDate() {
+    return reviewDate;
+  }
+
+  public void setReviewDate(Date reviewDate) {
+    this.reviewDate = reviewDate;
+  }
+
+  public Long getProductId() {
+    return productId;
+  }
+
+  public void setProductId(Long productId) {
+    this.productId = productId;
+  }
+
+  public Long getCustomerId() {
+    return customerId;
+  }
+
+  public void setCustomerId(Long customerId) {
+    this.customerId = customerId;
+  }
 }

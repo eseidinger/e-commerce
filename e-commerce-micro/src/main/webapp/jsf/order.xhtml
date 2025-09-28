@@ -15,7 +15,7 @@
                 <p:outputLabel value="Customer ID:" />
                 <p:inputText value="#{orderBean.order.customerId}" />
                 <p:outputLabel value="Order Date:" />
-                <p:datePicker value="#{orderBean.order.orderDate}" pattern="yyyy-MM-dd" showIcon="true" />
+                <p:datePicker value="#{orderBean.order.orderDate}" pattern="yyyy-MM-dd" showIcon="true" timeZone="UTC" />
                 <p:outputLabel value="Total Amount:" />
                 <p:inputText value="#{orderBean.order.totalAmount}" />
             </p:panelGrid>
@@ -32,7 +32,7 @@
                     #{o.customer.customerId}
                 </p:column>
                 <p:column headerText="Order Date">
-                    #{o.orderDate}
+                    #{orderBean.getUtcDateInLocalDateFormat(o)}
                 </p:column>
                 <p:column headerText="Total Amount">
                     #{o.totalAmount}

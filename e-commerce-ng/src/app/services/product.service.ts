@@ -8,7 +8,10 @@ import { AuthService } from '../auth.service';
 export class ProductService {
   private apiUrl = '/api/products';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {}
 
   private getAuthHeaders(): Record<string, string> {
     const token = this.authService.getToken();
@@ -28,7 +31,9 @@ export class ProductService {
   }
 
   update(id: number, product: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/${id}`, product, { headers: this.getAuthHeaders() });
+    return this.http.put<Product>(`${this.apiUrl}/${id}`, product, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
   delete(id: number): Observable<void> {

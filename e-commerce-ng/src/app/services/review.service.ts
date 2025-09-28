@@ -9,7 +9,10 @@ import { AuthService } from '../auth.service';
 export class ReviewService {
   private apiUrl = '/api/reviews';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {}
 
   private getAuthHeaders(): { headers: HttpHeaders } | {} {
     const token = this.authService.getToken();

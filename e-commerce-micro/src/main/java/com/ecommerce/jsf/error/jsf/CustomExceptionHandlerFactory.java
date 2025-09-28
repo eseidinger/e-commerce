@@ -5,12 +5,12 @@ import jakarta.faces.context.ExceptionHandlerFactory;
 
 public class CustomExceptionHandlerFactory extends ExceptionHandlerFactory {
 
-    public CustomExceptionHandlerFactory(ExceptionHandlerFactory parent) {
-        super(parent);
-    }
+  public CustomExceptionHandlerFactory(ExceptionHandlerFactory parent) {
+    super(parent);
+  }
 
-    @Override
-    public ExceptionHandler getExceptionHandler() {
-        return new CustomExceptionHandler(getWrapped().getExceptionHandler());
-    }
+  @Override
+  public ExceptionHandler getExceptionHandler() {
+    return new CustomExceptionHandler(getWrapped().getExceptionHandler());
+  }
 }

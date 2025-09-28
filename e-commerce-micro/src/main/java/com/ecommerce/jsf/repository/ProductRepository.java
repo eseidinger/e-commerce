@@ -9,30 +9,30 @@ import java.util.List;
 
 @ApplicationScoped
 public class ProductRepository {
-    @PersistenceContext(unitName = "ecommercePU")
-    private EntityManager em;
+  @PersistenceContext(unitName = "ecommercePU")
+  private EntityManager em;
 
-    public List<Product> findAll() {
-        TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p", Product.class);
-        return query.getResultList();
-    }
+  public List<Product> findAll() {
+    TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p", Product.class);
+    return query.getResultList();
+  }
 
-    public Product findById(Long id) {
-        return em.find(Product.class, id);
-    }
+  public Product findById(Long id) {
+    return em.find(Product.class, id);
+  }
 
-    public void save(Product product) {
-        if (product.getProductId() == null) {
-            em.persist(product);
-        } else {
-            em.merge(product);
-        }
+  public void save(Product product) {
+    if (product.getProductId() == null) {
+      em.persist(product);
+    } else {
+      em.merge(product);
     }
+  }
 
-    public void delete(Long id) {
-        Product toRemove = em.find(Product.class, id);
-        if (toRemove != null) {
-            em.remove(toRemove);
-        }
+  public void delete(Long id) {
+    Product toRemove = em.find(Product.class, id);
+    if (toRemove != null) {
+      em.remove(toRemove);
     }
+  }
 }

@@ -1,24 +1,40 @@
 <p-menubar [model]="menuItems">
   <ng-template #start>
     <div class="flex align-items-center">
-      <i class="pi pi-shopping-cart" style="font-size: 2em; margin-right: .5em"></i>
+      <i class="pi pi-shopping-cart" style="font-size: 2em; margin-right: 0.5em"></i>
       <span class="text-2xl font-bold">{{ title() }}</span>
     </div>
   </ng-template>
   <ng-template #item let-item let-root="root">
-    <a pRipple class="flex items-center p-menubar-item-link" [routerLink]="item.routerLink" routerLinkActive="active">
+    <a
+      pRipple
+      class="flex items-center p-menubar-item-link"
+      [routerLink]="item.routerLink"
+      routerLinkActive="active"
+    >
       <span>{{ item.label }}</span>
-      <i class="{{ item.icon }}" style="margin-left: .5em"></i>
+      <i class="{{ item.icon }}" style="margin-left: 0.5em"></i>
     </a>
   </ng-template>
   <ng-template #end>
     <div class="flex items-center gap-2">
       <p>Username: {{ username }}</p>
       @if (auth.isLoggedIn()) {
-        <p-button type="button" class="p-button-rounded p-button-danger" icon="pi pi-sign-out" label="Logout" (click)="auth.logout()"></p-button>
-      }
-      @else {
-        <p-button type="button" class="p-button-rounded p-button-success" icon="pi pi-sign-in" label="Login" (click)="auth.login()"></p-button>
+        <p-button
+          type="button"
+          class="p-button-rounded p-button-danger"
+          icon="pi pi-sign-out"
+          label="Logout"
+          (click)="auth.logout()"
+        ></p-button>
+      } @else {
+        <p-button
+          type="button"
+          class="p-button-rounded p-button-success"
+          icon="pi pi-sign-in"
+          label="Login"
+          (click)="auth.login()"
+        ></p-button>
       }
     </div>
   </ng-template>

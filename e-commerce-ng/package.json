@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "prettier": "prettier --write \"src/**/*.{ts,js,json,css,scss,html}\""
   },
   "prettier": {
     "printWidth": 100,
@@ -30,6 +31,7 @@
     "@angular/router": "^20.3.0",
     "@primeuix/themes": "^1.2.3",
     "keycloak-js": "^26.2.0",
+    "prettier": "^3.6.2",
     "primeicons": "^7.0.0",
     "primeng": "^20.1.2",
     "rxjs": "~7.8.0",

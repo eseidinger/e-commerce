@@ -5,9 +5,8 @@ import org.glassfish.api.jdbc.SQLTraceRecord;
 
 public class DummySqlTraceListener implements SQLTraceListener {
 
-    @Override
-    public void sqlTrace(SQLTraceRecord record) {
-        // TODO Auto-generated method stub
-    }
-
+  @Override
+  public void sqlTrace(SQLTraceRecord record) {
+    // TODO Auto-generated method stub
+  }
 }

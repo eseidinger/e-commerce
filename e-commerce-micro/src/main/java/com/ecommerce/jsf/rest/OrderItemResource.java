@@ -2,7 +2,6 @@ package com.ecommerce.jsf.rest;
 
 import com.ecommerce.jsf.model.OrderItem;
 import com.ecommerce.jsf.service.OrderItemService;
-
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -15,41 +14,40 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class OrderItemResource {
 
-    @Inject
-    private OrderItemService orderItemService;
+  @Inject private OrderItemService orderItemService;
 
-    @GET
-    public List<OrderItem> getAll() {
-        return orderItemService.findAll();
-    }
+  @GET
+  public List<OrderItem> getAll() {
+    return orderItemService.findAll();
+  }
 
-    @GET
-    @Path("/{id}")
-    public OrderItem getById(@PathParam("id") Long id) {
-        return orderItemService.findById(id);
-    }
+  @GET
+  @Path("/{id}")
+  public OrderItem getById(@PathParam("id") Long id) {
+    return orderItemService.findById(id);
+  }
 
-    @POST
-    @RolesAllowed("admin")
-    public Response create(OrderItem orderItem) {
-        orderItemService.save(orderItem);
-        return Response.status(Response.Status.CREATED).entity(orderItem).build();
-    }
+  @POST
+  @RolesAllowed("admin")
+  public Response create(OrderItem orderItem) {
+    orderItemService.save(orderItem);
+    return Response.status(Response.Status.CREATED).entity(orderItem).build();
+  }
 
-    @PUT
-    @Path("/{id}")
-    @RolesAllowed("admin")
-    public Response update(@PathParam("id") Long id, OrderItem orderItem) {
-        orderItem.setOrderItemId(id);
-        orderItemService.save(orderItem);
-        return Response.ok(orderItem).build();
-    }
+  @PUT
+  @Path("/{id}")
+  @RolesAllowed("admin")
+  public Response update(@PathParam("id") Long id, OrderItem orderItem) {
+    orderItem.setOrderItemId(id);
+    orderItemService.save(orderItem);
+    return Response.ok(orderItem).build();
+  }
 
-    @DELETE
-    @Path("/{id}")
-    @RolesAllowed("admin")
-    public Response delete(@PathParam("id") Long id) {
-        orderItemService.delete(id);
-        return Response.noContent().build();
-    }
+  @DELETE
+  @Path("/{id}")
+  @RolesAllowed("admin")
+  public Response delete(@PathParam("id") Long id) {
+    orderItemService.delete(id);
+    return Response.noContent().build();
+  }
 }

@@ -1,7 +1,7 @@
 export interface Order {
   orderId: number;
   customerId: number;
-  orderDate: string;
+  orderDate: Date;
   totalAmount: number;
   // Add other fields as needed
 }

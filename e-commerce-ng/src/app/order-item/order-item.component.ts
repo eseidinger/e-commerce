@@ -16,7 +16,18 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
   selector: 'app-order-item',
   templateUrl: './order-item.component.html',
   styleUrls: ['./order-item.component.scss'],
-  imports: [CardModule, Message, FormsModule, TableModule, ButtonModule, InputTextModule, StyleClassModule, FluidModule, InputGroupModule, InputGroupAddonModule]
+  imports: [
+    CardModule,
+    Message,
+    FormsModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    StyleClassModule,
+    FluidModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+  ],
 })
 export class OrderItemComponent implements OnInit {
   orderItems: OrderItem[] = [];
@@ -24,7 +35,7 @@ export class OrderItemComponent implements OnInit {
   loading = false;
   msgs: any[] = [];
 
-  constructor(private orderItemService: OrderItemService) { }
+  constructor(private orderItemService: OrderItemService) {}
 
   ngOnInit() {
     this.loadOrderItems();
@@ -33,24 +44,35 @@ export class OrderItemComponent implements OnInit {
   loadOrderItems() {
     this.loading = true;
     this.orderItemService.getAll().subscribe({
-      next: data => { this.orderItems = data; this.loading = false; },
-      error: err => {
+      next: (data) => {
+        this.orderItems = data;
+        this.loading = false;
+      },
+      error: (err) => {
         this.handleHttpError(err, 'loading order items');
         this.loading = false;
-      }
+      },
     });
   }
 
   saveOrderItem() {
     if (this.orderItem.orderItemId) {
       this.orderItemService.update(this.orderItem.orderItemId, this.orderItem).subscribe({
-        next: () => { this.showSuccess('Order item updated'); this.resetForm(); this.loadOrderItems(); },
-        error: err => this.handleHttpError(err, 'updating order item')
+        next: () => {
+          this.showSuccess('Order item updated');
+          this.resetForm();
+          this.loadOrderItems();
+        },
+        error: (err) => this.handleHttpError(err, 'updating order item'),
       });
     } else {
       this.orderItemService.create(this.orderItem).subscribe({
-        next: () => { this.showSuccess('Order item created'); this.resetForm(); this.loadOrderItems(); },
-        error: err => this.handleHttpError(err, 'creating order item')
+        next: () => {
+          this.showSuccess('Order item created');
+          this.resetForm();
+          this.loadOrderItems();
+        },
+        error: (err) => this.handleHttpError(err, 'creating order item'),
       });
     }
   }
@@ -61,8 +83,11 @@ export class OrderItemComponent implements OnInit {
 
   deleteOrderItem(id: number) {
     this.orderItemService.delete(id).subscribe({
-      next: () => { this.showSuccess('Order item deleted'); this.loadOrderItems(); },
-      error: err => this.handleHttpError(err, 'deleting order item')
+      next: () => {
+        this.showSuccess('Order item deleted');
+        this.loadOrderItems();
+      },
+      error: (err) => this.handleHttpError(err, 'deleting order item'),
     });
   }
 

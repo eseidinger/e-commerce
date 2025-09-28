@@ -5,5 +5,5 @@ import jakarta.ws.rs.core.Application;
 
 @ApplicationPath("/api")
 public class ApplicationConfig extends Application {
-    // No implementation needed, just activates JAX-RS
+  // No implementation needed, just activates JAX-RS
 }

@@ -1,94 +1,102 @@
 package com.ecommerce.jsf.model;
 
-import java.io.Serializable;
-
+import com.ecommerce.jsf.dto.OrderItemDto;
 import jakarta.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "order_item")
 public class OrderItem implements Serializable {
-    private static final long serialVersionUID = 1L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_item_id")
-    private Long orderItemId;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+  private static final long serialVersionUID = 1L;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+  public static OrderItem fromDto(OrderItemDto dto) {
+    OrderItem orderItem = new OrderItem();
+    orderItem.setOrderItemId(dto.orderItemId());
+    orderItem.setOrderId(dto.orderId());
+    orderItem.setProductId(dto.productId());
+    orderItem.setQuantity(dto.quantity());
+    return orderItem;
+  }
 
-    @Column(name = "quantity")
-    private Integer quantity;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "order_item_id")
+  private Long orderItemId;
 
-    @Column(name = "price")
-    private Double price;
+  @ManyToOne
+  @JoinColumn(name = "order_id")
+  private Order order;
 
-    @Transient
-    private Long orderId;
+  @ManyToOne
+  @JoinColumn(name = "product_id")
+  private Product product;
 
-    @Transient
-    private Long productId;
+  @Column(name = "quantity")
+  private Integer quantity;
 
-    public Long getOrderItemId() {
-        return orderItemId;
-    }
+  @Column(name = "price")
+  private Double price;
 
-    public void setOrderItemId(Long orderItemId) {
-        this.orderItemId = orderItemId;
-    }
+  @Transient private Long orderId;
 
-    public Order getOrder() {
-        return order;
-    }
+  @Transient private Long productId;
 
-    public void setOrder(Order order) {
-        this.order = order;
-        this.orderId = (order != null) ? order.getOrderId() : null;
-    }
+  public Long getOrderItemId() {
+    return orderItemId;
+  }
 
-    public Product getProduct() {
-        return product;
-    }
+  public void setOrderItemId(Long orderItemId) {
+    this.orderItemId = orderItemId;
+  }
 
-    public void setProduct(Product product) {
-        this.product = product;
-        this.productId = (product != null) ? product.getProductId() : null;
-    }
+  public Order getOrder() {
+    return order;
+  }
 
-    public Integer getQuantity() {
-        return quantity;
-    }
+  public void setOrder(Order order) {
+    this.order = order;
+    this.orderId = (order != null) ? order.getOrderId() : null;
+  }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
+  public Product getProduct() {
+    return product;
+  }
 
-    public Double getPrice() {
-        return price;
-    }
+  public void setProduct(Product product) {
+    this.product = product;
+    this.productId = (product != null) ? product.getProductId() : null;
+  }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
+  public Integer getQuantity() {
+    return quantity;
+  }
 
-    public Long getOrderId() {
-        return orderId;
-    }
+  public void setQuantity(Integer quantity) {
+    this.quantity = quantity;
+  }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
+  public Double getPrice() {
+    return price;
+  }
 
-    public Long getProductId() {
-        return productId;
-    }
+  public void setPrice(Double price) {
+    this.price = price;
+  }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
+  public Long getOrderId() {
+    return orderId;
+  }
+
+  public void setOrderId(Long orderId) {
+    this.orderId = orderId;
+  }
+
+  public Long getProductId() {
+    return productId;
+  }
+
+  public void setProductId(Long productId) {
+    this.productId = productId;
+  }
 }

@@ -8,19 +8,19 @@ export class AuthService {
   private keycloak?: Keycloak;
   private configUrl = '/api/auth/config';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   async init(): Promise<void> {
     const config = await firstValueFrom(this.http.get<any>(this.configUrl));
     const keycloakConfig: KeycloakConfig = {
       url: config.authHost,
       realm: config.realm,
-      clientId: config.clientId
+      clientId: config.clientId,
     };
     this.keycloak = new Keycloak(keycloakConfig);
     const options: KeycloakInitOptions = {
       onLoad: 'check-sso',
-      checkLoginIframe: false
+      checkLoginIframe: false,
     };
     await this.keycloak.init(options);
   }

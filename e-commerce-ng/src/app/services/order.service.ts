@@ -8,7 +8,10 @@ import { AuthService } from '../auth.service';
 export class OrderService {
   private apiUrl = '/api/orders';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {}
 
   private getAuthHeaders(): Record<string, string> {
     const token = this.authService.getToken();

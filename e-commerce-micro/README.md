@@ -13,7 +13,7 @@ or
 
 ```bash
 mvn clean install
-java -Xdebug -Xrunjdwp:transport dt_socket,server=y,suspend=n,address=5005 -jar target/e-commerce-micro-microbundle.jar --nocluster
+java exec:exec@debug
 ```
 
 ## Run in Docker
@@ -21,4 +21,11 @@ java -Xdebug -Xrunjdwp:transport dt_socket,server=y,suspend=n,address=5005 -jar 
 ```bash
 mvn clean package
 docker compose --profile app up
+```
+
+## Linting and Code Formatting
+
+```bash
+mvn spotless:check
+mvn spotless:apply
 ```

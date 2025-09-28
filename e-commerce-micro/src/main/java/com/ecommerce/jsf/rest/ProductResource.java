@@ -1,8 +1,8 @@
 package com.ecommerce.jsf.rest;
 
+import com.ecommerce.jsf.dto.ProductDto;
 import com.ecommerce.jsf.model.Product;
 import com.ecommerce.jsf.service.ProductService;
-
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -15,41 +15,41 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProductResource {
 
-    @Inject
-    private ProductService productService;
+  @Inject private ProductService productService;
 
-    @GET
-    public List<Product> getAll() {
-        return productService.findAll();
-    }
+  @GET
+  public List<ProductDto> getAll() {
+    return productService.findAll().stream().map(Product::toDto).toList();
+  }
 
-    @GET
-    @Path("/{id}")
-    public Product getById(@PathParam("id") Long id) {
-        return productService.findById(id);
-    }
+  @GET
+  @Path("/{id}")
+  public ProductDto getById(@PathParam("id") Long id) {
+    return productService.findById(id) != null ? Product.toDto(productService.findById(id)) : null;
+  }
 
-    @POST
-    @RolesAllowed("admin")
-    public Response create(Product product) {
-        productService.save(product);
-        return Response.status(Response.Status.CREATED).entity(product).build();
-    }
+  @POST
+  @RolesAllowed("admin")
+  public Response create(ProductDto product) {
+    productService.save(Product.fromDto(product));
+    return Response.status(Response.Status.CREATED).entity(product).build();
+  }
 
-    @PUT
-    @Path("/{id}")
-    @RolesAllowed("admin")
-    public Response update(@PathParam("id") Long id, Product product) {
-        product.setProductId(id);
-        productService.save(product);
-        return Response.ok(product).build();
-    }
+  @PUT
+  @Path("/{id}")
+  @RolesAllowed("admin")
+  public Response update(@PathParam("id") Long id, ProductDto productDto) {
+    Product product = Product.fromDto(productDto);
+    product.setProductId(id);
+    productService.save(product);
+    return Response.ok(product).build();
+  }
 
-    @DELETE
-    @Path("/{id}")
-    @RolesAllowed("admin")
-    public Response delete(@PathParam("id") Long id) {
-        productService.delete(id);
-        return Response.noContent().build();
-    }
+  @DELETE
+  @Path("/{id}")
+  @RolesAllowed("admin")
+  public Response delete(@PathParam("id") Long id) {
+    productService.delete(id);
+    return Response.noContent().build();
+  }
 }

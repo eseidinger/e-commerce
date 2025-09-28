@@ -16,7 +16,18 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
-  imports: [CardModule, Message, FormsModule, TableModule, ButtonModule, InputTextModule, StyleClassModule, FluidModule, InputGroupModule, InputGroupAddonModule]
+  imports: [
+    CardModule,
+    Message,
+    FormsModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    StyleClassModule,
+    FluidModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+  ],
 })
 export class ProductComponent implements OnInit {
   products: Product[] = [];
@@ -24,7 +35,7 @@ export class ProductComponent implements OnInit {
   loading = false;
   msgs: any[] = [];
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService) {}
 
   ngOnInit() {
     this.loadProducts();
@@ -33,24 +44,35 @@ export class ProductComponent implements OnInit {
   loadProducts() {
     this.loading = true;
     this.productService.getAll().subscribe({
-      next: data => { this.products = data; this.loading = false; },
-      error: err => {
+      next: (data) => {
+        this.products = data;
+        this.loading = false;
+      },
+      error: (err) => {
         this.handleHttpError(err, 'loading products');
         this.loading = false;
-      }
+      },
     });
   }
 
   saveProduct() {
     if (this.product.productId) {
       this.productService.update(this.product.productId, this.product).subscribe({
-        next: () => { this.showSuccess('Product updated'); this.resetForm(); this.loadProducts(); },
-        error: err => this.handleHttpError(err, 'updating product')
+        next: () => {
+          this.showSuccess('Product updated');
+          this.resetForm();
+          this.loadProducts();
+        },
+        error: (err) => this.handleHttpError(err, 'updating product'),
       });
     } else {
       this.productService.create(this.product).subscribe({
-        next: () => { this.showSuccess('Product created'); this.resetForm(); this.loadProducts(); },
-        error: err => this.handleHttpError(err, 'creating product')
+        next: () => {
+          this.showSuccess('Product created');
+          this.resetForm();
+          this.loadProducts();
+        },
+        error: (err) => this.handleHttpError(err, 'creating product'),
       });
     }
   }
@@ -61,8 +83,11 @@ export class ProductComponent implements OnInit {
 
   deleteProduct(id: number) {
     this.productService.delete(id).subscribe({
-      next: () => { this.showSuccess('Product deleted'); this.loadProducts(); },
-      error: err => this.handleHttpError(err, 'deleting product')
+      next: () => {
+        this.showSuccess('Product deleted');
+        this.loadProducts();
+      },
+      error: (err) => this.handleHttpError(err, 'deleting product'),
     });
   }
 

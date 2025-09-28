@@ -1,80 +1,94 @@
 package com.ecommerce.jsf.model;
 
+import com.ecommerce.jsf.dto.CustomerDto;
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 public class Customer implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_id")
-    private Long customerId;
+  public static Customer fromDto(CustomerDto dto) {
+    Customer customer = new Customer();
+    customer.setCustomerId(dto.customerId());
+    customer.setName(dto.name());
+    customer.setEmail(dto.email());
+    customer.setAddress(dto.address());
+    return customer;
+  }
 
-    @Column(name = "name")
-    private String name;
+  public static CustomerDto toDto(Customer customer) {
+    return new CustomerDto(
+        customer.getCustomerId(), customer.getName(), customer.getEmail(), customer.getAddress());
+  }
 
-    @Column(name = "email")
-    private String email;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "customer_id")
+  private Long customerId;
 
-    @Column(name = "address")
-    private String address;
+  @Column(name = "name")
+  private String name;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
+  @Column(name = "email")
+  private String email;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Review> reviews;
+  @Column(name = "address")
+  private String address;
 
-    public Long getCustomerId() {
-        return customerId;
-    }
+  @OneToMany(mappedBy = "customer")
+  private List<Order> orders;
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
+  @OneToMany(mappedBy = "customer")
+  private List<Review> reviews;
 
-    public String getName() {
-        return name;
-    }
+  public Long getCustomerId() {
+    return customerId;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setCustomerId(Long customerId) {
+    this.customerId = customerId;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getAddress() {
-        return address;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
+  public List<Order> getOrders() {
+    return orders;
+  }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
+  public void setOrders(List<Order> orders) {
+    this.orders = orders;
+  }
+
+  public List<Review> getReviews() {
+    return reviews;
+  }
+
+  public void setReviews(List<Review> reviews) {
+    this.reviews = reviews;
+  }
 }

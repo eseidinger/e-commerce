@@ -11,28 +11,31 @@ import { ButtonModule } from 'primeng/button';
   selector: 'app-root',
   imports: [RouterOutlet, RouterModule, MenubarModule, ButtonModule],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App implements OnInit {
   protected readonly title = signal('e-commerce-ng');
   username: string | null = null;
 
   menuItems: MenuItem[] = [
-    { label: 'Products', icon: 'pi pi-fw pi-box', routerLink: '/products' },
     { label: 'Customers', icon: 'pi pi-fw pi-users', routerLink: '/customers' },
+    { label: 'Products', icon: 'pi pi-fw pi-box', routerLink: '/products' },
     { label: 'Orders', icon: 'pi pi-fw pi-shopping-cart', routerLink: '/orders' },
     { label: 'Order Items', icon: 'pi pi-fw pi-shopping-cart', routerLink: '/order-items' },
-    { label: 'Reviews', icon: 'pi pi-fw pi-star', routerLink: '/reviews' }
+    { label: 'Reviews', icon: 'pi pi-fw pi-star', routerLink: '/reviews' },
   ];
 
   // Make auth public for template access
-  constructor(public auth: AuthService, private whoAmI: WhoAmIService) { }
+  constructor(
+    public auth: AuthService,
+    private whoAmI: WhoAmIService,
+  ) {}
 
   async ngOnInit() {
     await this.auth.init();
     this.whoAmI.getUsername().subscribe({
-      next: (name) => this.username = name,
-      error: () => this.username = null
+      next: (name) => (this.username = name),
+      error: () => (this.username = null),
     });
   }
 }

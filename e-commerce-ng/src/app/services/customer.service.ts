@@ -8,9 +8,12 @@ import { AuthService } from '../auth.service';
 export class CustomerService {
   private apiUrl = '/api/customers';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {}
 
-    private getAuthHeaders(): { headers: HttpHeaders } | {} {
+  private getAuthHeaders(): { headers: HttpHeaders } | {} {
     const token = this.authService.getToken();
     return token ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) } : {};
   }

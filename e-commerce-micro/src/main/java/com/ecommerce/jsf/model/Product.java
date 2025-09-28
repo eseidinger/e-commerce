@@ -1,79 +1,94 @@
 package com.ecommerce.jsf.model;
 
+import com.ecommerce.jsf.dto.ProductDto;
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 public class Product implements Serializable {
-    private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private Long productId;
+  private static final long serialVersionUID = 1L;
 
-    @Column(name = "name")
-    private String name;
+  public static Product fromDto(ProductDto dto) {
+    Product product = new Product();
+    product.setProductId(dto.productId());
+    product.setName(dto.name());
+    product.setDescription(dto.description());
+    product.setPrice(dto.price());
+    return product;
+  }
 
-    @Column(name = "description")
-    private String description;
+  public static ProductDto toDto(Product product) {
+    return new ProductDto(
+        product.getProductId(), product.getName(), product.getDescription(), product.getPrice());
+  }
 
-    @Column(name = "price")
-    private Double price;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "product_id")
+  private Long productId;
 
-    @OneToMany(mappedBy = "product")
-    private List<OrderItem> orderItems;
+  @Column(name = "name")
+  private String name;
 
-    @OneToMany(mappedBy = "product")
-    private List<Review> reviews;
+  @Column(name = "description")
+  private String description;
 
-    public Long getProductId() {
-        return productId;
-    }
+  @Column(name = "price")
+  private Double price;
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
+  @OneToMany(mappedBy = "product")
+  private List<OrderItem> orderItems;
 
-    public String getName() {
-        return name;
-    }
+  @OneToMany(mappedBy = "product")
+  private List<Review> reviews;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public Long getProductId() {
+    return productId;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setProductId(Long productId) {
+    this.productId = productId;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Double getPrice() {
-        return price;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
+  public Double getPrice() {
+    return price;
+  }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
+  public void setPrice(Double price) {
+    this.price = price;
+  }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
+  public List<OrderItem> getOrderItems() {
+    return orderItems;
+  }
+
+  public void setOrderItems(List<OrderItem> orderItems) {
+    this.orderItems = orderItems;
+  }
+
+  public List<Review> getReviews() {
+    return reviews;
+  }
+
+  public void setReviews(List<Review> reviews) {
+    this.reviews = reviews;
+  }
 }

@@ -16,15 +16,33 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
   selector: 'app-review',
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.scss'],
-  imports: [CardModule, Message, FormsModule, TableModule, ButtonModule, InputTextModule, StyleClassModule, FluidModule, InputGroupModule, InputGroupAddonModule]
+  imports: [
+    CardModule,
+    Message,
+    FormsModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    StyleClassModule,
+    FluidModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+  ],
 })
 export class ReviewComponent implements OnInit {
   reviews: Review[] = [];
-  review: Review = { reviewId: 0, productId: 0, customerId: 0, rating: 0, comment: '', reviewDate: '' };
+  review: Review = {
+    reviewId: 0,
+    productId: 0,
+    customerId: 0,
+    rating: 0,
+    comment: '',
+    reviewDate: '',
+  };
   loading = false;
   msgs: any[] = [];
 
-  constructor(private reviewService: ReviewService) { }
+  constructor(private reviewService: ReviewService) {}
 
   ngOnInit() {
     this.loadReviews();
@@ -33,24 +51,35 @@ export class ReviewComponent implements OnInit {
   loadReviews() {
     this.loading = true;
     this.reviewService.getAll().subscribe({
-      next: data => { this.reviews = data; this.loading = false; },
-      error: err => {
+      next: (data) => {
+        this.reviews = data;
+        this.loading = false;
+      },
+      error: (err) => {
         this.handleHttpError(err, 'loading reviews');
         this.loading = false;
-      }
+      },
     });
   }
 
   saveReview() {
     if (this.review.reviewId) {
       this.reviewService.update(this.review.reviewId, this.review).subscribe({
-        next: () => { this.showSuccess('Review updated'); this.resetForm(); this.loadReviews(); },
-        error: err => this.handleHttpError(err, 'updating review')
+        next: () => {
+          this.showSuccess('Review updated');
+          this.resetForm();
+          this.loadReviews();
+        },
+        error: (err) => this.handleHttpError(err, 'updating review'),
       });
     } else {
       this.reviewService.create(this.review).subscribe({
-        next: () => { this.showSuccess('Review created'); this.resetForm(); this.loadReviews(); },
-        error: err => this.handleHttpError(err, 'creating review')
+        next: () => {
+          this.showSuccess('Review created');
+          this.resetForm();
+          this.loadReviews();
+        },
+        error: (err) => this.handleHttpError(err, 'creating review'),
       });
     }
   }
@@ -61,13 +90,23 @@ export class ReviewComponent implements OnInit {
 
   deleteReview(id: number) {
     this.reviewService.delete(id).subscribe({
-      next: () => { this.showSuccess('Review deleted'); this.loadReviews(); },
-      error: err => this.handleHttpError(err, 'deleting review')
+      next: () => {
+        this.showSuccess('Review deleted');
+        this.loadReviews();
+      },
+      error: (err) => this.handleHttpError(err, 'deleting review'),
     });
   }
 
   resetForm() {
-    this.review = { reviewId: 0, productId: 0, customerId: 0, rating: 0, comment: '', reviewDate: '' };
+    this.review = {
+      reviewId: 0,
+      productId: 0,
+      customerId: 0,
+      rating: 0,
+      comment: '',
+      reviewDate: '',
+    };
   }
 
   showSuccess(msg: string) {
