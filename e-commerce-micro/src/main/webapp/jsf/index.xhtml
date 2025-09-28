@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>E-Commerce Micro - Home</title>
+    <style>
+        .content {
+            padding: 2em;
+        }
+    </style>
+</h:head>
+<h:body>
+    <p:toolbar>
+        <p:toolbarGroup>
+            <h:outputText value="E-Commerce Micro" style="font-size:1.2em; margin-right:2em; font-weight:bold;" />
+            <h:form>
+                <p:commandButton value="Customers" action="#{viewBean.show('customer')}" update="includedView"
+                    styleClass="ui-button-flat" />
+                <p:commandButton value="Orders" action="#{viewBean.show('order')}" update="includedView"
+                    styleClass="ui-button-flat" />
+                <p:commandButton value="Order Items" action="#{viewBean.show('orderitem')}" update="includedView"
+                    styleClass="ui-button-flat" />
+                <p:commandButton value="Products" action="#{viewBean.show('product')}" update="includedView"
+                    styleClass="ui-button-flat" />
+                <p:commandButton value="Reviews" action="#{viewBean.show('review')}" update="includedView"
+                    styleClass="ui-button-flat" />
+                <p:commandButton value="Who Am I" action="#{viewBean.show('whoami')}" update="includedView"
+                    styleClass="ui-button-flat" />
+                <p:commandButton value="Instance Info" action="#{viewBean.show('instance-info')}" update="includedView"
+                    styleClass="ui-button-flat" />
+            </h:form>
+        </p:toolbarGroup>
+        <p:toolbarGroup align="right">
+            <h:outputText value="User: #{viewBean.username}" />
+            <p:commandButton value="Login" rendered="#{!viewBean.loggedIn}"
+                onclick="window.location.href='/login'; return false;" styleClass="ui-button-flat" />
+            <p:commandButton value="Logout" rendered="#{viewBean.loggedIn}"
+                onclick="window.location.href='/logout'; return false;" styleClass="ui-button-flat" />
+        </p:toolbarGroup>
+    </p:toolbar>
+    <h:panelGroup id="includedView" class="content">
+        <ui:include src="#{viewBean.currentView}" />
+    </h:panelGroup>
+</h:body>
+
+</html>

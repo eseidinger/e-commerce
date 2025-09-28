@@ -76,6 +76,6 @@ public class CallbackServlet extends HttpServlet {
         resp.addCookie(refreshCookie);
       }
     }
-    resp.sendRedirect(req.getContextPath() + "/index.html");
+    resp.sendRedirect(req.getContextPath() + "/jsf/index.xhtml");
   }
 }
