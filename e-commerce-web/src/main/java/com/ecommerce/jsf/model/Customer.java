@@ -1,7 +1,6 @@
 package com.ecommerce.jsf.model;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 public class Customer {
@@ -16,12 +15,6 @@ public class Customer {
     private String email;
     @Column(name = "address")
     private String address;
-
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
-
-    @OneToMany(mappedBy = "customer")
-    private List<Review> reviews;
 
     public Long getCustomerId() {
         return customerId;
@@ -44,17 +37,5 @@ public class Customer {
     }
     public void setAddress(String address) {
         this.address = address;
-    }
-    public List<Order> getOrders() {
-        return orders;
-    }
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-    public List<Review> getReviews() {
-        return reviews;
-    }
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
     }
 }
