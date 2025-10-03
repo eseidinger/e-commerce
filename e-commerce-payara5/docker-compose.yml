@@ -1,0 +1,91 @@
+services:
+  db:
+    profiles:
+      - dev
+      - app
+    image: postgres:17.6
+    container_name: ecommerce-db
+    environment:
+      POSTGRES_DB: ecommerce
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    profiles:
+      - dev
+      - app
+    image: dpage/pgadmin4:9.7.0
+    container_name: ecommerce-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+  nginx:
+    profiles:
+      - app
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    container_name: ecommerce-nginx
+    ports:
+      - "8088:80"
+    depends_on:
+      - payara
+      - payara2
+
+  payara:
+    profiles:
+      - app
+    build: .
+    container_name: ecommerce-payara
+    hostname: payara
+    environment:
+      DB_HOST: db
+      JDBC_USER: postgres
+      JDBC_PASSWORD: password
+      HAZELCAST_MEMBERS: "payara:4900,payara2:4900"
+      PAYARA_ARGS: "--debug"
+    ports:
+      - "8080:8080"
+      - "4848:4848"
+      - "9009:9009"
+    depends_on:
+      - db
+
+  payara2:
+    profiles:
+      - app
+    build: .
+    container_name: ecommerce-payara2
+    hostname: payara2
+    environment:
+      DB_HOST: db
+      JDBC_USER: postgres
+      JDBC_PASSWORD: password
+      HAZELCAST_MEMBERS: "payara:4900,payara2:4900"
+      PAYARA_ARGS: "--debug"
+    ports:
+      - "8081:8080"
+      - "4849:4848"
+      - "9010:9009"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+  pgadmin_data:

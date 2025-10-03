@@ -4,49 +4,26 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>de.eseidinger</groupId>
-  <artifactId>e-commerce-micro</artifactId>
+  <artifactId>e-commerce-payara5</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
 
-  <name>e-commerce-micro Maven Webapp</name>
+  <name>e-commerce-payara5 Maven Webapp</name>
   <url>http://maven.apache.org</url>
 
   <properties>
-    <flyway.version>11.11.2</flyway.version>
-    <jakartaee.version>10.0.0</jakartaee.version>
-    <junit.jupiter.version>5.13.4</junit.jupiter.version>
-    <payara.web.version>6.2025.9</payara.web.version>
-    <hazelcast.version>5.5.0</hazelcast.version>
-    <glassfish.version>6.2.5</glassfish.version>
-    <quartz.version>2.5.0</quartz.version>
+    <jakartaee.version>8.0.0</jakartaee.version>
+    <payara.web.version>5.2022.5</payara.web.version>
     <slf4j.version>2.0.17</slf4j.version>
     <log4j.version>2.25.1</log4j.version>
-    <primefaces.version>15.0.0</primefaces.version>
     <!-- Plugin versions -->
     <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
-    <java.version>21</java.version>
+    <java.version>17</java.version>
     <maven.clean.plugin.version>3.3.2</maven.clean.plugin.version>
-    <flyway.maven.plugin.version>10.13.0</flyway.maven.plugin.version>
     <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>org.flywaydb</groupId>
-      <artifactId>flyway-core</artifactId>
-      <version>${flyway.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.flywaydb</groupId>
-      <artifactId>flyway-database-postgresql</artifactId>
-      <version>${flyway.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.quartz-scheduler</groupId>
-      <artifactId>quartz</artifactId>
-      <version>${quartz.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -63,45 +40,15 @@
       <version>${slf4j.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.primefaces</groupId>
-      <artifactId>primefaces</artifactId>
-      <version>${primefaces.version}</version>
-      <classifier>jakarta</classifier>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>${junit.jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.hazelcast</groupId>
-      <artifactId>hazelcast</artifactId>
-      <version>${hazelcast.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>jakarta.platform</groupId>
       <artifactId>jakarta.jakartaee-api</artifactId>
       <version>${jakartaee.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.glassfish.main.common</groupId>
-      <artifactId>glassfish-api</artifactId>
-      <version>${glassfish.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>fish.payara.api</groupId>
-      <artifactId>payara-api</artifactId>
-      <version>${payara.web.version}</version>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
 
   <build>
-    <finalName>e-commerce-web</finalName>
+    <finalName>e-commerce-payara5</finalName>
 
     <plugins>
 
@@ -129,17 +76,6 @@
               <followSymlinks>false</followSymlinks>
             </fileset>
           </filesets>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.flywaydb</groupId>
-        <artifactId>flyway-maven-plugin</artifactId>
-        <version>${flyway.maven.plugin.version}</version>
-        <configuration>
-          <url>jdbc:postgresql://localhost:5432/ecommerce</url>
-          <user>postgres</user>
-          <password>password</password>
         </configuration>
       </plugin>
 
