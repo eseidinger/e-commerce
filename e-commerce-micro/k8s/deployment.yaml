@@ -17,7 +17,14 @@ spec:
         image: localhost:32000/ecommerce-micro:latest
         ports:
         - containerPort: 8080
-        args: ["--deploydir", "/opt/payara/deployments", "--clustermode", "dns:payara-headless:6900"]
+        - containerPort: 6900
+        args: 
+          - "--deploydir"
+          - "/opt/payara/deployments"
+          - "--contextroot"
+          - "/"
+          - "--clustermode"
+          - "dns:payara-headless:6900"
         env:
         - name: DB_HOST
           value: postgres
@@ -36,8 +43,8 @@ spec:
     app: payara-app
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: 6900
+      targetPort: 6900
 ---
 apiVersion: v1
 kind: Service
