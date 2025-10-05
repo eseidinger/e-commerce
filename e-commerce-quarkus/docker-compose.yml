@@ -1,0 +1,105 @@
+services:
+  db:
+    profiles:
+      - dev
+      - app
+    image: postgres:17.6
+    container_name: ecommerce-db
+    environment:
+      POSTGRES_DB: ecommerce
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    profiles:
+      - dev
+      - app
+    image: dpage/pgadmin4:9.7.0
+    container_name: ecommerce-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+  nginx:
+    profiles:
+      - app
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    container_name: ecommerce-nginx
+    hostname: nginx
+    ports:
+      - "8088:8088"
+    depends_on:
+      - quarkus
+      - quarkus2
+
+  quarkus:
+    profiles:
+      - app
+    build: src/main/docker/Dockerfile.jvm
+    container_name: ecommerce-quarkus
+    hostname: quarkus
+    environment:
+      DB_HOST: db
+      JDBC_USER: postgres
+      JDBC_PASSWORD: password
+      AUTH_CLIENT_ID: e-commerce
+      AUTH_REALM: e-commerce-dev
+      AUTH_HOST: https://keycloak.eseidinger.de
+      BASE_URL: http://localhost:8088
+      JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    command:
+      - "--deploydir"
+      - "/opt/payara/deployments"
+      - "--contextroot"
+      - "/"
+      - "--clustermode"
+      - "dns:payara:6900,payara2:6900"
+      - "--logproperties"
+      - "/opt/payara/logging.properties"
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    depends_on:
+      - db
+
+  quarkus2:
+    profiles:
+      - app
+    build: src/main/docker/Dockerfile.jvm
+    container_name: ecommerce-quarkus-2
+    hostname: quarkus2
+    environment:
+      DB_HOST: db
+      JDBC_USER: postgres
+      JDBC_PASSWORD: password
+      AUTH_CLIENT_ID: e-commerce
+      AUTH_REALM: e-commerce-dev
+      AUTH_HOST: https://keycloak.eseidinger.de
+      BASE_URL: http://localhost:8088
+      JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    ports:
+      - "8081:8080"
+      - "5006:5005"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+  pgadmin_data:
