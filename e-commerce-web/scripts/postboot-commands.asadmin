@@ -1,3 +1,3 @@
-set-hazelcast-configuration --clustermode dns --dnsmembers ${ENV=HAZELCAST_MEMBERS} --dynamic=true
-
 deploy --availabilityenabled=true --contextroot / ${ENV=HOME_DIR}/e-commerce-web.war
+
+set-hazelcast-configuration --clustermode dns --dnsmembers ${ENV=HAZELCAST_MEMBERS} --dynamic=true
