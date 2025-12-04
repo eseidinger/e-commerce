@@ -1,0 +1,1 @@
+ora2pg --no_start_scn -t COPY -o data.sql -b ./data -c ./config/ora2pg.conf
