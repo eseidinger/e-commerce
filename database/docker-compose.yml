@@ -1,0 +1,34 @@
+services:
+
+  oracle:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    environment:
+      - ORACLE_PWD=admin123
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo 'SELECT 1 FROM dual;' | sqlplus -s system/admin123@localhost:1521/XEPDB1 | grep '1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+
+  postgres:
+    image: postgres:18.1-trixie
+    environment:
+      - POSTGRES_PASSWORD=admin123
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "admin"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    volumes:
+      - ./postgres-data:/var/lib/postgresql
+
+volumes:
+  oracle-data:
+  postgres-data:
