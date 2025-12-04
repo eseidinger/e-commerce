@@ -1,0 +1,23 @@
+[1] TABLE CATEGORIES (owner: ECOMMERCE, 1 rows)
+[2] TABLE CUSTOMERS (owner: ECOMMERCE, 1 rows)
+[3] TABLE ORDERS (owner: ECOMMERCE, 1 rows)
+[4] TABLE ORDER_ITEMS (owner: ECOMMERCE, 1 rows)
+[5] TABLE PRODUCTS (owner: ECOMMERCE, 1 rows)
+----------------------------------------------------------
+Total number of rows: 5
+
+Global Temporary Tables:
+
+
+Top 10 of tables sorted by number of rows:
+	[1] TABLE PRODUCTS has 1 rows
+	[2] TABLE CATEGORIES has 1 rows
+	[3] TABLE ORDER_ITEMS has 1 rows
+	[4] TABLE CUSTOMERS has 1 rows
+	[5] TABLE ORDERS has 1 rows
+Top 10 of largest tables:
+	[1] TABLE CUSTOMERS: 0 MB (1 rows)
+	[2] TABLE ORDERS: 0 MB (1 rows)
+	[3] TABLE PRODUCTS: 0 MB (1 rows)
+	[4] TABLE ORDER_ITEMS: 0 MB (1 rows)
+	[5] TABLE CATEGORIES: 0 MB (1 rows)
