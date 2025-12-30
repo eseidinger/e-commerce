@@ -58,6 +58,10 @@ services:
       DB_HOST: db
       JDBC_USER: postgres
       JDBC_PASSWORD: password
+      AUTH_CLIENT_ID: e-commerce
+      AUTH_REALM: e-commerce-dev
+      AUTH_HOST: https://keycloak.eseidinger.de
+      BASE_URL: http://localhost:8080
       HAZELCAST_MEMBERS: "payara:4900,payara2:4900"
       PAYARA_ARGS: "--debug"
     ports:
@@ -77,6 +81,10 @@ services:
       DB_HOST: db
       JDBC_USER: postgres
       JDBC_PASSWORD: password
+      AUTH_CLIENT_ID: e-commerce
+      AUTH_REALM: e-commerce-dev
+      AUTH_HOST: https://keycloak.eseidinger.de
+      BASE_URL: http://localhost:8081
       HAZELCAST_MEMBERS: "payara:4900,payara2:4900"
       PAYARA_ARGS: "--debug"
     ports:
