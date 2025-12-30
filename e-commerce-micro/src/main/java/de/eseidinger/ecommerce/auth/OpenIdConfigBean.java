@@ -12,8 +12,12 @@ public class OpenIdConfigBean {
   private String clientId;
 
   @Inject
-  @ConfigProperty(name = "auth.host", defaultValue = "https://keycloak.eseidinger.de")
+  @ConfigProperty(name = "auth.host", defaultValue = "http://localhost:8084")
   private String authHost;
+
+  @Inject
+  @ConfigProperty(name = "auth.host.internal", defaultValue = "http://localhost:8084")
+  private String authHostInternal;
 
   @Inject
   @ConfigProperty(name = "auth.realm", defaultValue = "e-commerce-dev")
@@ -39,6 +43,10 @@ public class OpenIdConfigBean {
     return authHost + "/realms/" + authRealm;
   }
 
+  public String getProviderUriInternal() {
+    return authHostInternal + "/realms/" + authRealm;
+  }
+
   public String getLogoutUrl() {
     return getProviderUri() + "/protocol/openid-connect/logout";
   }
@@ -60,10 +68,10 @@ public class OpenIdConfigBean {
   }
 
   public String getTokenUrl() {
-    return getProviderUri() + "/protocol/openid-connect/token";
+    return getProviderUriInternal() + "/protocol/openid-connect/token";
   }
 
   public String getJwksUrl() {
-    return getProviderUri() + "/protocol/openid-connect/certs";
+    return getProviderUriInternal() + "/protocol/openid-connect/certs";
   }
 }

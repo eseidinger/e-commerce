@@ -698,7 +698,8 @@
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
         "http://localhost:8080/*",
-        "http://localhost:3000/*"
+        "http://localhost:8088/*",
+        "http://localhost:4200/*"
       ],
       "webOrigins": [
         "+"
@@ -715,7 +716,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "request.object.signature.alg": "any",
-        "post.logout.redirect.uris": "/*",
+        "post.logout.redirect.uris": "http://localhost:8080/*##http://localhost:8088/*##http://localhost:4200/*",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false",
         "use.refresh.tokens": "true",
@@ -1501,7 +1502,7 @@
     "referrerPolicy": "no-referrer",
     "xRobotsTag": "none",
     "xFrameOptions": "SAMEORIGIN",
-    "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self' http://localhost:3000 http://localhost:8080; object-src 'none';",
+    "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self' http://localhost:3000 http://localhost:8088; object-src 'none';",
     "xXSSProtection": "1; mode=block",
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },

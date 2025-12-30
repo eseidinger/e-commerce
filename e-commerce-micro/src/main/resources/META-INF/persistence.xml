@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.0">
     <persistence-unit name="ecommercePU" transaction-type="JTA">
-        <class>com.ecommerce.jsf.model.Customer</class>
-        <class>com.ecommerce.jsf.model.Product</class>
-        <class>com.ecommerce.jsf.model.Order</class>
-        <class>com.ecommerce.jsf.model.OrderItem</class>
-        <class>com.ecommerce.jsf.model.Review</class>
+        <class>de.eseidinger.ecommerce.model.Customer</class>
+        <class>de.eseidinger.ecommerce.model.Product</class>
+        <class>de.eseidinger.ecommerce.model.Order</class>
+        <class>de.eseidinger.ecommerce.model.OrderItem</class>
+        <class>de.eseidinger.ecommerce.model.Review</class>
         <jta-data-source>java:global/ecommerceDS</jta-data-source>
     </persistence-unit>
 </persistence>

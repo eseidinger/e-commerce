@@ -38,7 +38,7 @@
     </property>
     <property>
       <name>fish.payara.sql-trace-listeners</name>
-      <value>com.ecommerce.jsf.listener.DummySqlTraceListener</value>
+      <value>de.eseidinger.ecommerce.listener.DummySqlTraceListener</value>
     </property>
     <!-- <property>
       <name>fish.payara.is-connection-validation-required</name>

@@ -13,7 +13,7 @@ or
 
 ```bash
 mvn clean install
-java exec:exec@debug
+mvn exec:exec@debug
 ```
 
 ## Run in Docker
