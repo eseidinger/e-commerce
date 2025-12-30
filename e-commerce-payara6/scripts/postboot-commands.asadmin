@@ -1,3 +1,0 @@
-deploy --availabilityenabled=true --contextroot / ${ENV=HOME_DIR}/e-commerce-payara6.war
-
-set-hazelcast-configuration --clustermode dns --dnsmembers ${ENV=HAZELCAST_MEMBERS} --dynamic=true
