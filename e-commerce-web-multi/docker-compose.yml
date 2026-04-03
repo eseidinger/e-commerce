@@ -1,8 +1,5 @@
 services:
   db:
-    profiles:
-      - dev
-      - app
     image: postgres:17.6
     container_name: ecommerce-db
     environment:
@@ -20,9 +17,6 @@ services:
       retries: 5
 
   pgadmin:
-    profiles:
-      - dev
-      - app
     image: dpage/pgadmin4:9.7.0
     container_name: ecommerce-pgadmin
     environment:
@@ -36,8 +30,6 @@ services:
       - pgadmin_data:/var/lib/pgadmin
 
   nginx:
-    profiles:
-      - app
     build:
       context: nginx
       dockerfile: Dockerfile
@@ -49,8 +41,6 @@ services:
       - payara2
 
   payara:
-    profiles:
-      - app
     build: .
     container_name: ecommerce-payara
     hostname: payara
@@ -61,7 +51,7 @@ services:
       AUTH_CLIENT_ID: e-commerce
       AUTH_REALM: e-commerce-dev
       AUTH_HOST: https://keycloak.eseidinger.de
-      BASE_URL: http://localhost:8080
+      BASE_URL: http://localhost:8088
       HAZELCAST_MEMBERS: "payara:4900,payara2:4900"
       PAYARA_ARGS: "--debug"
     ports:
@@ -72,8 +62,6 @@ services:
       - db
 
   payara2:
-    profiles:
-      - app
     build: .
     container_name: ecommerce-payara2
     hostname: payara2
@@ -84,7 +72,7 @@ services:
       AUTH_CLIENT_ID: e-commerce
       AUTH_REALM: e-commerce-dev
       AUTH_HOST: https://keycloak.eseidinger.de
-      BASE_URL: http://localhost:8081
+      BASE_URL: http://localhost:8088
       HAZELCAST_MEMBERS: "payara:4900,payara2:4900"
       PAYARA_ARGS: "--debug"
     ports:

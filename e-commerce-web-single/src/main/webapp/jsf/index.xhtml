@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>E-Commerce Micro - Home</title>
+    <style>
+        .content {
+            padding: 2em;
+        }
+    </style>
+</h:head>
+<h:body>
+    <p:toolbar>
+        <p:toolbarGroup>
+            <h:outputText value="E-Commerce Micro" style="font-size:1.2em; margin-right:2em; font-weight:bold;" />
+            <h:form>
+                <p:commandButton value="Customers" action="#{viewBean.show('customer')}" update="includedView"
+                    styleClass="ui-button-flat" />
+                <p:commandButton value="Instance Info" action="#{viewBean.show('instance-info')}" update="includedView"
+                    styleClass="ui-button-flat" />
+            </h:form>
+        </p:toolbarGroup>
+    </p:toolbar>
+    <h:panelGroup id="includedView" class="content">
+        <ui:include src="#{viewBean.currentView}" />
+    </h:panelGroup>
+</h:body>
+
+</html>
