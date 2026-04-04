@@ -12,22 +12,22 @@
   <url>http://maven.apache.org</url>
 
   <properties>
-    <flyway.version>11.11.2</flyway.version>
-    <jakartaee.version>10.0.0</jakartaee.version>
-    <junit.jupiter.version>5.13.4</junit.jupiter.version>
-    <payara.web.version>6.2025.9</payara.web.version>
-    <hazelcast.version>5.5.0</hazelcast.version>
-    <glassfish.version>6.2.5</glassfish.version>
-    <quartz.version>2.5.0</quartz.version>
+    <flyway.version>12.3.0</flyway.version>
+    <jakartaee.version>11.0.0</jakartaee.version>
+    <junit.jupiter.version>6.0.3</junit.jupiter.version>
+    <payara.web.version>7.2026.3</payara.web.version>
+    <hazelcast.version>5.6.0</hazelcast.version>
+    <glassfish.version>8.0.1</glassfish.version>
+    <quartz.version>2.5.2</quartz.version>
     <slf4j.version>2.0.17</slf4j.version>
     <log4j.version>2.25.1</log4j.version>
-    <primefaces.version>15.0.0</primefaces.version>
+    <primefaces.version>15.0.14</primefaces.version>
     <!-- Plugin versions -->
-    <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
-    <java.version>21</java.version>
-    <maven.clean.plugin.version>3.3.2</maven.clean.plugin.version>
-    <flyway.maven.plugin.version>10.13.0</flyway.maven.plugin.version>
-    <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
+    <maven.compiler.plugin.version>3.15.0</maven.compiler.plugin.version>
+    <java.version>25</java.version>
+    <maven.clean.plugin.version>3.5.0</maven.clean.plugin.version>
+    <flyway.maven.plugin.version>12.3.0</flyway.maven.plugin.version>
+    <maven.antrun.plugin.version>3.2.0</maven.antrun.plugin.version>
   </properties>
 
   <dependencies>
