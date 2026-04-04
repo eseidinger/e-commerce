@@ -1,12 +1,34 @@
- # A scrape configuration containing exactly one endpoint to scrape from node_exporter running on a host:
- scrape_configs:
-     # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-     - job_name: 'quarkus'
+# A scrape configuration containing exactly one endpoint to scrape from node_exporter running on a host:
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "localhost"
 
-     # metrics_path defaults to '/metrics'
-     # scheme defaults to 'http'.
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
 
-       metrics_path: '/q/metrics/prometheus'
+    metrics_path: "/metrics"
 
-       static_configs:
-       - targets: ['localhost:8080']
+    static_configs:
+      - targets: ["host.docker.internal:8080"]
+
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "payara"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    metrics_path: "/metrics"
+
+    static_configs:
+      - targets: ["payara:8080"]
+
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "payara2"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    metrics_path: "/metrics"
+
+    static_configs:
+      - targets: ["payara2:8080"]

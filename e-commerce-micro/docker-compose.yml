@@ -50,8 +50,6 @@ services:
       - payara2
 
   payara:
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     profiles:
       - app
     build: .
@@ -64,7 +62,7 @@ services:
       AUTH_CLIENT_ID: e-commerce
       AUTH_REALM: e-commerce-dev
       AUTH_HOST: http://localhost:8084
-      AUTH_HOST_INTERNAL: http://host.docker.internal:8084
+      AUTH_HOST_INTERNAL: http://keycloak:8084
       BASE_URL: http://localhost:8088
       JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
     command:
@@ -83,8 +81,6 @@ services:
       - db
 
   payara2:
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     profiles:
       - app
     build: .
@@ -97,7 +93,7 @@ services:
       AUTH_CLIENT_ID: e-commerce
       AUTH_REALM: e-commerce-dev
       AUTH_HOST: http://localhost:8084
-      AUTH_HOST_INTERNAL: http://host.docker.internal:8084
+      AUTH_HOST_INTERNAL: http://keycloak:8084
       BASE_URL: http://localhost:8088
       JVM_ARGS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
     command:
@@ -118,3 +114,8 @@ services:
 volumes:
   db_data:
   pgadmin_data:
+
+networks:
+  default:
+    name: ecommerce-shared
+    external: true
