@@ -32,9 +32,8 @@ public class CustomJwtAuthentication implements HttpAuthenticationMechanism {
     String path = request.getRequestURI();
 
     if (path.startsWith("/api")) {
-      return jwtHeaderHandler.handleJwtHandler(request, response, context);
+      return jwtHeaderHandler.handleJwt(request, response, context);
     } else if (path.startsWith("/jsf")) {
-      // Public paths, allow access
       try {
         return jwtCookieHandler.handleJwtCookie(request, response, context);
       } catch (IOException e) {

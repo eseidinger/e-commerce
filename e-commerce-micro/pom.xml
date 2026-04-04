@@ -12,29 +12,29 @@
   <url>http://maven.apache.org</url>
 
   <properties>
-    <flyway.version>11.11.2</flyway.version>
-    <jakartaee.version>10.0.0</jakartaee.version>
-    <postgresql.version>42.7.7</postgresql.version>
-    <junit.jupiter.version>5.13.4</junit.jupiter.version>
-    <payara.micro.version>6.2025.9</payara.micro.version>
-    <hazelcast.version>5.5.0</hazelcast.version>
-    <glassfish.version>6.2.5</glassfish.version>
-    <quartz.version>2.5.0</quartz.version>
+    <flyway.version>12.3.0</flyway.version>
+    <jakartaee.version>11.0.0</jakartaee.version>
+    <postgresql.version>42.7.10</postgresql.version>
+    <junit.jupiter.version>6.0.3</junit.jupiter.version>
+    <payara.micro.version>7.2026.3</payara.micro.version>
+    <hazelcast.version>5.6.0</hazelcast.version>
+    <glassfish.version>8.0.1</glassfish.version>
+    <quartz.version>2.5.2</quartz.version>
     <slf4j.version>2.0.17</slf4j.version>
     <jackson.version>2.20.0</jackson.version>
     <microprofile.config.version>3.1</microprofile.config.version>
     <jjwt.version>0.13.0</jjwt.version>
-    <primefaces.version>15.0.0</primefaces.version>
+    <primefaces.version>15.0.14</primefaces.version>
     <!-- Plugin versions -->
-    <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
+    <maven.compiler.plugin.version>3.15.0</maven.compiler.plugin.version>
     <java.version>21</java.version>
-    <spotless.version>3.0.0</spotless.version>
+    <spotless.version>3.4.0</spotless.version>
     <google.java.format.version>1.28.0</google.java.format.version>
-    <maven.exec.plugin.version>3.5.1</maven.exec.plugin.version>
+    <maven.exec.plugin.version>3.6.3</maven.exec.plugin.version>
     <payara.micro.maven.plugin.version>2.5</payara.micro.maven.plugin.version>
-    <maven.clean.plugin.version>3.3.2</maven.clean.plugin.version>
-    <flyway.maven.plugin.version>10.13.0</flyway.maven.plugin.version>
-    <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
+    <maven.clean.plugin.version>3.5.0</maven.clean.plugin.version>
+    <flyway.maven.plugin.version>12.3.0</flyway.maven.plugin.version>
+    <maven.antrun.plugin.version>3.2.0</maven.antrun.plugin.version>
   </properties>
 
   <dependencies>

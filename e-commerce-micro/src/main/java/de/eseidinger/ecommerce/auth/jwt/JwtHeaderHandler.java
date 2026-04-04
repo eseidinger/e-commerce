@@ -23,7 +23,7 @@ public class JwtHeaderHandler {
 
   @Inject OpenIdConfigBean openIdConfigBean;
 
-  public AuthenticationStatus handleJwtHandler(
+  public AuthenticationStatus handleJwt(
       HttpServletRequest request, HttpServletResponse response, HttpMessageContext context) {
     String authHeader = request.getHeader("Authorization");
 
