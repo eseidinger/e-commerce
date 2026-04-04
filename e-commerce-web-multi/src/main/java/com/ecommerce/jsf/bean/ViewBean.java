@@ -13,7 +13,7 @@ import java.security.Principal;
 public class ViewBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String currentView = "/jsf/instance-info.xhtml";
+    private String currentView = "/jsf/whoami.xhtml";
 
     public String getCurrentView() {
         return currentView;
@@ -27,6 +27,11 @@ public class ViewBean implements Serializable {
     public String show(String view) {
         this.currentView = "/jsf/" + view + ".xhtml";
         return null;
+    }
+
+    public boolean isLoggedIn() {
+        String username = getUsername();
+        return username != null && !username.equals("guest");
     }
 
     public String getUsername() {

@@ -16,9 +16,18 @@
             <h:form>
                 <p:commandButton value="Customers" action="#{viewBean.show('customer')}" update="includedView"
                     styleClass="ui-button-flat" />
+                <p:commandButton value="Who Am I" action="#{viewBean.show('whoami')}" update="includedView"
+                    styleClass="ui-button-flat" />
                 <p:commandButton value="Instance Info" action="#{viewBean.show('instance-info')}" update="includedView"
                     styleClass="ui-button-flat" />
             </h:form>
+        </p:toolbarGroup>
+        <p:toolbarGroup align="right">
+            <h:outputText value="User: #{viewBean.username}" />
+            <p:commandButton value="Login" rendered="#{!viewBean.loggedIn}"
+                onclick="window.location.href='/login'; return false;" styleClass="ui-button-flat" />
+            <p:commandButton value="Logout" rendered="#{viewBean.loggedIn}"
+                onclick="window.location.href='/logout'; return false;" styleClass="ui-button-flat" />
         </p:toolbarGroup>
     </p:toolbar>
     <h:panelGroup id="includedView" class="content">

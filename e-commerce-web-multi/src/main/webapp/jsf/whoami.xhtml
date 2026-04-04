@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Who Am I</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/primeicons/primeicons.css" />
+</h:head>
+<h:body>
+    <p:card style="max-width:400px;margin:2em auto;">
+        <f:facet name="title">
+            <span class="pi pi-user" style="margin-right:8px;"></span>Who Am I
+        </f:facet>
+        <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" style="margin-top:1em;">
+            <p:outputLabel value="Username:" />
+            <p:outputLabel value="#{whoAmIBean.username}" />
+        </p:panelGrid>
+    </p:card>
+</h:body>
+
+</html>
