@@ -1,0 +1,35 @@
+package de.eseidinger.ecommerce.auth.jsf;
+
+import jakarta.inject.Inject;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+import de.eseidinger.ecommerce.auth.OpenIdConfigBean;
+
+@WebServlet("/logout-callback")
+public class LogoutCallbackServlet extends HttpServlet {
+
+  @Inject private OpenIdConfigBean openIdConfigBean;
+
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException {
+    // Clear JWT cookie
+    Cookie jwtCookie = new Cookie("JWT", "");
+    jwtCookie.setPath("/");
+    jwtCookie.setMaxAge(0); // Expire immediately
+    resp.addCookie(jwtCookie);
+    // Clear JWT_REFRESH cookie
+    Cookie jwtRefreshCookie = new Cookie("JWT_REFRESH", "");
+    jwtRefreshCookie.setPath("/");
+    jwtRefreshCookie.setMaxAge(0); // Expire immediately
+    resp.addCookie(jwtRefreshCookie);
+    // Redirect to index.html
+    resp.sendRedirect(openIdConfigBean.getBaseUrl() + "/index.html");
+  }
+}

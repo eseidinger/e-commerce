@@ -4,7 +4,7 @@
     xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_0.xsd">
     <factory>
         <exception-handler-factory>
-            com.ecommerce.jsf.error.jsf.CustomExceptionHandlerFactory
+            de.eseidinger.ecommerce.error.jsf.CustomExceptionHandlerFactory
         </exception-handler-factory>
     </factory>
 </faces-config>
