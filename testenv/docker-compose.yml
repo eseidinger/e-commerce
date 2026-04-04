@@ -41,12 +41,6 @@ services:
       - ./grafana/provisioning:/var/lib/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
 
-  jaeger:
-    image: jaegertracing/all-in-one:1.73.0
-    ports:
-      - "16686:16686"
-      - "4317:4317"
-
 networks:
   default:
     name: ecommerce-shared
