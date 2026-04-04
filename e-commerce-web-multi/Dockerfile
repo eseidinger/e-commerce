@@ -1,9 +1,9 @@
-FROM alpine/curl:8.14.1 AS build
+FROM alpine/curl:8.17.0 AS build
 
 # Download PostgresSQL driver
-RUN curl -o /postgresql.jar https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.7/postgresql-42.7.7.jar
+RUN curl -o /postgresql.jar https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.10/postgresql-42.7.10.jar
 
-FROM payara/server-web:6.2025.9-jdk21
+FROM payara/server-web:7.2026.3-jdk25
 
 # Copy preboot and postboot scripts
 COPY scripts/preboot-commands.asadmin $PREBOOT_COMMANDS
