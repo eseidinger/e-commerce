@@ -1,5 +1,5 @@
 # Payara Micro Dockerfile
-FROM payara/micro:6.2025.8-jdk21
+FROM payara/micro:7.2026.3-jdk25
 
 # Copy application artifacts (WAR or EAR) to deployments folder
 COPY ./deploy /opt/payara/deployments

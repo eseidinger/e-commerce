@@ -31,7 +31,7 @@
     <spotless.version>3.4.0</spotless.version>
     <google.java.format.version>1.28.0</google.java.format.version>
     <maven.exec.plugin.version>3.6.3</maven.exec.plugin.version>
-    <payara.micro.maven.plugin.version>2.5</payara.micro.maven.plugin.version>
+    <payara.micro.maven.plugin.version>2.5.1</payara.micro.maven.plugin.version>
     <maven.clean.plugin.version>3.5.0</maven.clean.plugin.version>
     <flyway.maven.plugin.version>12.3.0</flyway.maven.plugin.version>
     <maven.antrun.plugin.version>3.2.0</maven.antrun.plugin.version>
