@@ -65,7 +65,7 @@ metadata:
   name: payara-ingress
 spec:
   rules:
-  - host: 172.25.228.188.nip.io
+  - host: 172.26.254.176.nip.io
     http:
       paths:
       - path: /
