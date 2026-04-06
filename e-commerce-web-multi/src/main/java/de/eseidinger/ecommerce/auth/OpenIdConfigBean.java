@@ -3,6 +3,9 @@ package de.eseidinger.ecommerce.auth;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+/**
+ * Supplies OpenID Connect endpoint and redirect configuration values for authentication flows.
+ */
 @ApplicationScoped
 public class OpenIdConfigBean {
 

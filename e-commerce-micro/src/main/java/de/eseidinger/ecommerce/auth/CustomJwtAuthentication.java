@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import de.eseidinger.ecommerce.auth.jsf.JwtCookieHandler;
 import de.eseidinger.ecommerce.auth.jwt.JwtHeaderHandler;
 
+/**
+ * Authentication mechanism that routes requests to JWT handlers based on path prefixes.
+ */
 @ApplicationScoped
 public class CustomJwtAuthentication implements HttpAuthenticationMechanism {
 

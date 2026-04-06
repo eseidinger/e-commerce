@@ -20,6 +20,9 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Configures and starts a Quartz scheduler that periodically logs the current hostname.
+ */
 @Singleton
 @DependsOn("FlywayMigrationBean")
 @Startup
@@ -60,6 +63,9 @@ public class QuartzLoggerBean {
     }
   }
 
+  /**
+   * Quartz job that logs the runtime hostname for basic cluster visibility.
+   */
   public static class HostnameLoggerJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {

@@ -7,6 +7,9 @@ import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.flywaydb.core.Flyway;
 
+/**
+ * Runs Flyway database migrations during application startup.
+ */
 @Singleton
 @Startup
 public class FlywayMigrationBean {

@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import de.eseidinger.ecommerce.auth.jsf.JwtCookieHandler;
 
+/**
+ * Authentication mechanism that delegates JSF requests to cookie-based JWT validation.
+ */
 @ApplicationScoped
 public class CustomJwtAuthentication implements HttpAuthenticationMechanism {
 
