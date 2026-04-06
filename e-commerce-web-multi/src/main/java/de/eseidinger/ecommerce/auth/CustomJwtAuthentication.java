@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.eseidinger.ecommerce.auth.jsf.JwtCookieHandler;
-import de.eseidinger.ecommerce.auth.jwt.JwtHeaderHandler;
 
 @ApplicationScoped
 public class CustomJwtAuthentication implements HttpAuthenticationMechanism {
@@ -22,8 +21,6 @@ public class CustomJwtAuthentication implements HttpAuthenticationMechanism {
 
   @Inject JwtCookieHandler jwtCookieHandler;
 
-  @Inject JwtHeaderHandler jwtHeaderHandler;
-
   @Override
   public AuthenticationStatus validateRequest(
       HttpServletRequest request, HttpServletResponse response, HttpMessageContext context)
@@ -31,10 +28,7 @@ public class CustomJwtAuthentication implements HttpAuthenticationMechanism {
     logger.info("CustomJwtAuthentication triggered");
     String path = request.getRequestURI();
 
-    if (path.startsWith("/api")) {
-      return jwtHeaderHandler.handleJwtHandler(request, response, context);
-    } else if (path.startsWith("/jsf")) {
-      // Public paths, allow access
+    if (path.startsWith("/jsf")) {
       try {
         return jwtCookieHandler.handleJwtCookie(request, response, context);
       } catch (IOException e) {
