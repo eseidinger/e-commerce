@@ -47,6 +47,7 @@ export class OrderComponent implements OnInit {
     this.loading = true;
     this.orderService.getAll().subscribe({
       next: (data) => {
+        // API returns ISO strings; convert to Date objects for DatePicker binding.
         this.orders = data.map((item) => ({ ...item, orderDate: new Date(item.orderDate) }));
         this.loading = false;
       },
@@ -59,7 +60,7 @@ export class OrderComponent implements OnInit {
 
   saveOrder() {
     console.log('Original order date:', this.order.orderDate);
-    //Convert order date to UTC
+    // Normalize to UTC midnight so server-side date rendering is timezone-stable.
     if (this.order.orderDate) {
       const utcDate = new Date(
         Date.UTC(

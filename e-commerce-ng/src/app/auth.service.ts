@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private keycloak?: Keycloak;
+  // Backend exposes environment-specific OIDC settings so frontend builds stay static.
   private configUrl = '/api/auth/config';
 
   constructor(private http: HttpClient) {}
@@ -19,6 +20,7 @@ export class AuthService {
     };
     this.keycloak = new Keycloak(keycloakConfig);
     const options: KeycloakInitOptions = {
+      // check-sso keeps existing sessions without forcing an interactive redirect on app load.
       onLoad: 'check-sso',
       checkLoginIframe: false,
     };

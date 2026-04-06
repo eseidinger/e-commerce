@@ -14,11 +14,13 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    // Coalescing reduces redundant change detection cycles under frequent DOM events.
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
     provideAnimationsAsync(),
     providePrimeNG({
+      // PrimeNG theme is configured globally so standalone components inherit it automatically.
       theme: {
         preset: Aura,
         options: {

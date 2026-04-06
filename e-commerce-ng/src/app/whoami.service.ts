@@ -14,6 +14,7 @@ export class WhoAmIService {
 
   getUsername(): Observable<string> {
     const token = this.auth.getToken();
+    // Endpoint also supports anonymous fallback; send token only when available.
     const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : undefined;
     return this.http.get(this.whoamiUrl, { responseType: 'text', headers });
   }
