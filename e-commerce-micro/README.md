@@ -54,8 +54,7 @@ Run with remote debug enabled (port 5005):
 Build and start all services:
 
 ```bash
-mvn clean package
-docker compose --profile app up
+docker compose --profile app up --build
 ```
 
 The application will be available at <http://localhost:8088> via the nginx load balancer.

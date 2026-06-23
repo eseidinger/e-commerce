@@ -1,0 +1,9 @@
+target
+deploy
+.git
+.github
+.settings
+.classpath
+.project
+Dockerfile
+README.md

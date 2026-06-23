@@ -36,6 +36,29 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
+## Docker
+
+To build and run the production image:
+
+```bash
+docker build -t e-commerce-ng .
+docker run --rm -p 4200:80 e-commerce-ng
+```
+
+The container serves the Angular build with nginx. Requests to `/api/` are proxied to `API_UPSTREAM`, which defaults to `http://host.docker.internal:8080`.
+
+On Linux, pass the host gateway alias when the backend is running on the host:
+
+```bash
+docker run --rm -p 4200:80 --add-host host.docker.internal:host-gateway e-commerce-ng
+```
+
+You can also point the frontend at a different backend without rebuilding the image:
+
+```bash
+docker run --rm -p 4200:80 -e API_UPSTREAM=http://backend:8080 e-commerce-ng
+```
+
 ## Running unit tests
 
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:

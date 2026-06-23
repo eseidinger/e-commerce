@@ -1,0 +1,15 @@
+services:
+
+  angular:
+    build: .
+    container_name: ecommerce-angular
+    hostname: angular
+    ports:
+      - "4200:80"
+    environment:
+      - API_UPSTREAM=http://nginx:8088
+
+networks:
+  default:
+    name: ecommerce-shared
+    external: true
